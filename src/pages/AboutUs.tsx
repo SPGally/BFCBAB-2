@@ -40,7 +40,7 @@ const AboutUs = () => {
               <img
                 src={member.image_url}
                 alt={member.name}
-                className="w-full h-64 object-cover"
+                className="w-full h-80 md:h-96 lg:h-[450px] object-cover"
               />
             )}
             <div className="p-6">
