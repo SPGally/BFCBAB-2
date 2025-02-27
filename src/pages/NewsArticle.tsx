@@ -4,7 +4,6 @@ import { supabase } from '../lib/supabase';
 import { format } from 'date-fns';
 import { ChevronLeft, Loader2 } from 'lucide-react';
 import { Helmet } from 'react-helmet';
-import SocialShare from '../components/SocialShare';
 
 interface NewsArticle {
   id: string;
@@ -150,8 +149,6 @@ export default function NewsArticle() {
               className="prose max-w-none mb-8"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
-
-            <SocialShare article={article} url={articleUrl} />
           </div>
         </article>
       </div>
