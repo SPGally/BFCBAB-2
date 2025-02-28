@@ -18,6 +18,7 @@ import FAQ from './pages/FAQ';
 import FAQDetails from './pages/FAQDetails';
 import SubmitButton from './components/SubmitButton';
 import ErrorBoundary from './components/ErrorBoundary';
+import VisualHistory from './pages/VisualHistory';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
                     </RequireAuth>
                   }
                 />
+                <Route path="/visual-history" element={<VisualHistory />} />
               </Routes>
             </ErrorBoundary>
             <SubmitButton />

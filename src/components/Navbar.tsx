@@ -83,6 +83,13 @@ const Navbar = () => {
                   >
                     FAQ
                   </Link>
+                  <Link 
+                    to="/visual-history" 
+                    className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
+                    role="menuitem"
+                  >
+                    People's Visual History
+                  </Link>
                 </div>
               </div>
             </div>
@@ -161,6 +168,13 @@ const Navbar = () => {
               onClick={() => setIsOpen(false)}
             >
               FAQ
+            </Link>
+            <Link
+              to="/visual-history"
+              className="block px-3 py-2 text-base font-medium text-gray-900 hover:text-barnsley-red uppercase"
+              onClick={() => setIsOpen(false)}
+            >
+              People's Visual History
             </Link>
           </div>
         </div>
