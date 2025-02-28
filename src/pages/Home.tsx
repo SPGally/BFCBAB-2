@@ -83,12 +83,6 @@ const Home = () => {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Hero Section */}
-      <div className="bg-barnsley-red text-white rounded-lg p-8 mb-12" role="banner">
-        <h1 className="text-4xl font-bold mb-4">Barnsley FC Fan Advisory Board</h1>
-        <p className="text-xl">Your voice in shaping the future of our club</p>
-      </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* News Section */}
         <section className="lg:col-span-2" aria-labelledby="news-heading">
@@ -218,9 +212,9 @@ const Home = () => {
           )}
         </section>
 
-        {/* Upcoming Meetings Section */}
-        <section aria-labelledby="meetings-heading" className="space-y-6">
-          <div className="flex justify-between items-center">
+        {/* Meetings Section */}
+        <section className="lg:col-span-1" aria-labelledby="meetings-heading">
+          <div className="flex justify-between items-center mb-6">
             <h2 id="meetings-heading" className="text-2xl font-bold">Upcoming Meetings</h2>
             <Link
               to="/meetings"
