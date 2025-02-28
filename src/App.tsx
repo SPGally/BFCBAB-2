@@ -17,6 +17,7 @@ import MeetingDetails from './pages/MeetingDetails';
 import FAQ from './pages/FAQ';
 import FAQDetails from './pages/FAQDetails';
 import SubmitButton from './components/SubmitButton';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -25,27 +26,29 @@ function App() {
         <div className="min-h-screen flex flex-col bg-gray-50">
           <Navbar />
           <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/minutes" element={<Minutes />} />
-              <Route path="/meetings" element={<Meetings />} />
-              <Route path="/meetings/:id" element={<MeetingDetails />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:id" element={<NewsArticle />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/faq/:id" element={<FAQDetails />} />
-              <Route path="/submit" element={<Submit />} />
-              <Route path="/admin/login" element={<Login />} />
-              <Route
-                path="/admin/*"
-                element={
-                  <RequireAuth>
-                    <Admin />
-                  </RequireAuth>
-                }
-              />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/minutes" element={<Minutes />} />
+                <Route path="/meetings" element={<Meetings />} />
+                <Route path="/meetings/:id" element={<MeetingDetails />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news/:id" element={<NewsArticle />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/faq/:id" element={<FAQDetails />} />
+                <Route path="/submit" element={<Submit />} />
+                <Route path="/admin/login" element={<Login />} />
+                <Route
+                  path="/admin/*"
+                  element={
+                    <RequireAuth>
+                      <Admin />
+                    </RequireAuth>
+                  }
+                />
+              </Routes>
+            </ErrorBoundary>
             <SubmitButton />
           </main>
           <Footer />

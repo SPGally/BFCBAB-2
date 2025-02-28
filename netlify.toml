@@ -2,14 +2,36 @@
   command = "npm run build"
   publish = "dist"
 
-# Handle client-side routing
+# Handle all routes for the SPA
 [[redirects]]
   from = "/*"
+  to = "/index.html"
+  status = 200
+  force = true # Ensure SPA routing works even for paths that might match static files
+
+# Additional redirect for admin routes
+[[redirects]]
+  from = "/admin/*"
   to = "/index.html"
   status = 200
   force = true
 
 # Security headers
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "text/javascript"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,4 +39,4 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; media-src 'self' https:; object-src 'none'; frame-src https:; worker-src 'self' blob:;"
+    Content-Security-Policy = "default-src 'self' https://hefkoywehwsfqiwuknyv.supabase.co https://images.gc.barnsleyfcservices.co.uk https://www.barnsleyfc.co.uk; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' wss://hefkoywehwsfqiwuknyv.supabase.co https://hefkoywehwsfqiwuknyv.supabase.co; media-src 'self'; object-src 'none'; frame-src https:; worker-src 'self' blob:;"
