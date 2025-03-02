@@ -282,6 +282,31 @@ const Home = () => {
               <p className="text-gray-500 mt-2">Check back soon for new meeting dates</p>
             </div>
           )}
+
+          {/* Visual History Advertisement */}
+          <div className="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="relative">
+              <img
+                src="/images/bfc-fans-visual-history-1.jpg"
+                alt="Barnsley FC: The People's Visual History"
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </div>
+            <div className="p-6">
+              <h2 className="text-2xl font-bold mb-4">Barnsley FC: The People's Visual History</h2>
+              <p className="text-gray-600 mb-6">
+                Help us create a unique archive of fan memories and memorabilia. Whether you have photos, tickets, programmes, or other cherished items that tell your story of supporting the Reds, we want to preserve these precious memories for future generations.
+              </p>
+              <Link
+                to="/visual-history"
+                className="inline-flex items-center gap-2 bg-barnsley-red text-white px-6 py-3 rounded-md hover:bg-[#B31329] transition-colors"
+              >
+                Join The Project
+                <ChevronRight className="h-5 w-5" />
+              </Link>
+            </div>
+          </div>
         </section>
       </div>
     </main>
