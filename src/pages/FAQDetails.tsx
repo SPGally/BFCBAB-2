@@ -1,105 +1,32 @@
-import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
+import { getFaq, getMember, getMinute } from '../lib/content';
 import { ChevronLeft, User, Calendar, Tag } from 'lucide-react';
 
-interface FAQ {
-  id: string;
-  question: string;
-  answer: string;
-  topic_id: string;
-  author: {
-    name: string;
-    role: string;
-  } | null;
-  topic: {
-    name: string;
-  };
-  minutes_refs: string[];
-  raised_by: string[];
-  created_at: string;
-}
-
-interface Minute {
-  id: string;
-  title: string;
-  file_path: string;
-  meeting_date: string;
-}
-
 export default function FAQDetails() {
-  const { id } = useParams();
-  const [faq, setFaq] = React.useState<FAQ | null>(null);
-  const [minutes, setMinutes] = React.useState<Minute[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const { id = '' } = useParams();
+  const found = getFaq(id);
+  const faq = found
+    ? {
+        ...found.faq,
+        answer: found.faq.answer_html,
+        topic: { name: found.topic.name },
+        author: (() => {
+          const m = found.faq.author ? getMember(found.faq.author) : undefined;
+          return m ? { name: m.name, role: m.role } : null;
+        })(),
+      }
+    : null;
+  const minutes = faq
+    ? faq.minutes_refs.map((ref) => getMinute(ref)).filter((m): m is NonNullable<typeof m> => Boolean(m))
+    : [];
 
-  React.useEffect(() => {
-    fetchFAQ();
-  }, [id]);
-
-  React.useEffect(() => {
-    if (faq?.minutes_refs?.length > 0) {
-      fetchMinutes(faq.minutes_refs);
-    }
-  }, [faq]);
-
-  const fetchFAQ = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('faqs')
-        .select(`
-          *,
-          author:board_members!author_id(name, role),
-          topic:faq_topics!topic_id(name)
-        `)
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
-      if (!data) throw new Error('FAQ not found');
-
-      setFaq(data);
-      setError(null);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchMinutes = async (minuteIds: string[]) => {
-    try {
-      const { data, error } = await supabase
-        .from('minutes')
-        .select('id, title, file_path, meeting_date')
-        .in('id', minuteIds);
-
-      if (error) throw error;
-      setMinutes(data || []);
-    } catch (error: any) {
-      console.error('Error fetching minutes:', error);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-32 bg-gray-200 rounded"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !faq) {
+  if (!faq) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {error || 'FAQ not found'}
+            FAQ not found
           </h1>
           <Link
             to="/faq"
@@ -131,6 +58,12 @@ export default function FAQDetails() {
           </div>
 
           <h1 className="text-3xl font-bold mb-6">{faq.question}</h1>
+
+          {faq.placeholder && (
+            <p className="mb-6 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-md p-3">
+              This is an example entry carried over from the original site. Real answers will replace it.
+            </p>
+          )}
 
           <div className="prose max-w-none mb-8" dangerouslySetInnerHTML={{ __html: faq.answer }} />
 
@@ -166,7 +99,7 @@ export default function FAQDetails() {
                       <Calendar className="h-5 w-5 text-barnsley-red flex-shrink-0" />
                       <div>
                         <time className="text-sm text-gray-600">
-                          {format(new Date(minute.meeting_date), 'MMMM d, yyyy')}
+                          {format(parseISO(minute.meeting_date), 'MMMM d, yyyy')}
                         </time>
                         <a
                           href={minute.file_path}

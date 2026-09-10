@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, User } from 'lucide-react';
+import { Menu } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -18,10 +18,6 @@ const Navbar = () => {
               <a href="https://www.barnsleyfc.co.uk/app" className="hover:text-gray-200">APP</a>
             </div>
             <div>
-              <a href="/admin/login" className="flex items-center hover:text-gray-200">
-                <User className="h-4 w-4 mr-2" />
-                LOG IN
-              </a>
             </div>
           </div>
         </div>

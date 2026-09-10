@@ -8,6 +8,17 @@
     <title>Barnsley FC Fan Advisory Board</title>
   </head>
   <body>
+    <!-- Hidden copy of the Submit form so Netlify Forms detects the fields at build time. -->
+    <form name="fab-submission" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="topic" />
+      <input type="text" name="member" />
+      <input type="text" name="subject" />
+      <textarea name="message"></textarea>
+      <input type="text" name="bot-field" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

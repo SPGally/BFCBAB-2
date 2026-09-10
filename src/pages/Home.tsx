@@ -1,85 +1,15 @@
 import React from 'react';
-import { supabase } from '../lib/supabase';
+import { getNews, getUpcomingMeetings } from '../lib/content';
 import { format, parseISO } from 'date-fns';
 import { Newspaper, Calendar, ChevronRight, Clock, MapPin, Users, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-interface NewsItem {
-  id: string;
-  title: string;
-  content: string;
-  summary: string;
-  image_url: string | null;
-  published_at: string | null;
-  pinned: boolean;
-  author?: {
-    name: string;
-    role: string;
-  } | null;
-}
-
-interface Meeting {
-  id: string;
-  title: string;
-  date: string;
-  location: string;
-  description: string | null;
-}
-
 const Home = () => {
-  const [news, setNews] = React.useState<NewsItem[]>([]);
-  const [meetings, setMeetings] = React.useState<Meeting[]>([]);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    Promise.all([fetchNews(), fetchMeetings()]).finally(() => setLoading(false));
-  }, []);
-
-  const fetchNews = async () => {
-    const now = new Date().toISOString();
-    const { data, error } = await supabase
-      .from('news')
-      .select('*, author:board_members!author_id(name, role)')
-      .eq('published', true)
-      .or(`published_at.is.null,published_at.lte.${now}`)
-      .order('pinned', { ascending: false })
-      .order('published_at', { ascending: false })
-      .limit(7);
-
-    if (!error && data) {
-      setNews(data);
-    }
-  };
-
-  const fetchMeetings = async () => {
-    const { data, error } = await supabase
-      .from('meetings')
-      .select('*')
-      .gte('date', new Date().toISOString())
-      .order('date', { ascending: true })
-      .limit(3);
-
-    if (!error) {
-      setMeetings(data || []);
-    }
-  };
+  const news = React.useMemo(() => getNews().slice(0, 7), []);
+  const meetings = React.useMemo(() => getUpcomingMeetings().slice(0, 3), []);
 
   const heroArticle = news[0];
   const otherArticles = news.slice(1);
-
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" aria-busy="true">
-        <div className="animate-pulse" aria-label="Loading content">
-          <div className="h-96 bg-gray-200 rounded-lg mb-12"></div>
-          <div className="space-y-4">
-            <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -102,11 +32,11 @@ const Home = () => {
               {/* Hero Article */}
               {heroArticle && (
                 <article className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <Link to={`/news/${heroArticle.id}`} className="block">
-                    {heroArticle.image_url ? (
+                  <Link to={`/news/${heroArticle.slug}`} className="block">
+                    {heroArticle.image ? (
                       <div className="relative h-96 group">
                         <img
-                          src={heroArticle.image_url}
+                          src={heroArticle.image}
                           alt=""
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           aria-hidden="true"
@@ -137,15 +67,15 @@ const Home = () => {
                         </time>
                       )}
                     </div>
-                    <Link to={`/news/${heroArticle.id}`}>
+                    <Link to={`/news/${heroArticle.slug}`}>
                       <h3 className="text-3xl font-bold mb-4 hover:text-barnsley-red">
                         {heroArticle.title}
                       </h3>
                     </Link>
                     <p className="text-gray-600 mb-6 text-lg">{heroArticle.summary}</p>
-                    {heroArticle.author && (
+                    {heroArticle.authorMember && (
                       <p className="text-gray-500">
-                        By {heroArticle.author.name}, {heroArticle.author.role}
+                        By {heroArticle.authorMember.name}, {heroArticle.authorMember.role}
                       </p>
                     )}
                   </div>
@@ -155,13 +85,13 @@ const Home = () => {
               {/* Other Articles */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {otherArticles.map((item) => (
-                  <article key={item.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <article key={item.slug} className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="flex h-full">
-                      <Link to={`/news/${item.id}`} className="w-32 flex-shrink-0">
-                        {item.image_url ? (
+                      <Link to={`/news/${item.slug}`} className="w-32 flex-shrink-0">
+                        {item.image ? (
                           <div className="w-full h-full group">
                             <img
-                              src={item.image_url}
+                              src={item.image}
                               alt=""
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                               aria-hidden="true"
@@ -192,7 +122,7 @@ const Home = () => {
                             </time>
                           )}
                         </div>
-                        <Link to={`/news/${item.id}`}>
+                        <Link to={`/news/${item.slug}`}>
                           <h3 className="font-semibold hover:text-barnsley-red line-clamp-2">
                             {item.title}
                           </h3>
