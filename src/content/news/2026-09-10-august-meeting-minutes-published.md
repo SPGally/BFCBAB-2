@@ -2,7 +2,7 @@
 title: "Minutes of the August meeting now published"
 slug: august-meeting-minutes-published
 published_at: "2026-09-10T17:30:00Z"
-summary: "The minutes of the Fan Advisory Board's 4 August meeting are now available. We're sorry they have taken longer than usual: the first draft needed a lot of correcting before it could be published, and we explain why and what we are changing."
+summary: "The minutes of the Fan Advisory Board's 4 August meeting are now available. We're sorry they have taken longer than usual: the first draft needed a lot of correcting, and that work coincided with the transfer window. We explain what happened and what we are changing."
 author: "paul-gallagher"
 image: "/images/news/2026-09-10-august-meeting-minutes-published.jpg"
 pinned: true
@@ -12,7 +12,7 @@ legacy_id: null
 <p>The minutes of the Fan Advisory Board meeting held on Tuesday 4 August 2026 at Oakwell have now been published. You can read them on our <a href="/minutes">Minutes page</a> or on the <a href="https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes" target="_blank" rel="noopener noreferrer">official club website</a>.</p>
 <h2>An apology for the delay</h2>
 <p>First, an apology. These minutes have taken much longer than usual to reach you, and we know some supporters have been frustrated by that. We share the frustration, and we want to be open about what happened.</p>
-<p>The August meeting was held in a hybrid format, with some of us in a meeting room at Oakwell and others joining remotely. The first draft of the minutes is produced from a transcript of the meeting, and with a single room microphone and several people on the call, the transcription struggled to tell speakers apart. As a result the draft contained a significant number of errors, and every set of minutes has to be checked and corrected by the club before it can be published. Getting them right took priority over getting them out quickly, but it should not have taken this long, and we are sorry it did.</p>
+<p>The August meeting was held in a hybrid format, with some of us in a meeting room at Oakwell and others joining remotely. The first draft of the minutes is produced from a transcript of the meeting, and with a single room microphone and several people on the call, the transcription struggled to tell speakers apart. As a result the draft contained a significant number of errors, and every set of minutes has to be checked and corrected by the club before it can be published. That correction work landed at the same time as the closing weeks of the transfer window and the start of the season, when the club staff who review the minutes were at their busiest. Getting them right took priority over getting them out quickly, but it should not have taken this long, and we are sorry it did.</p>
 <p>Two things change from now on. We will hold our meetings in a single format wherever possible, either everyone in the room or everyone on a video call, so the transcript is reliable from the start. And every set of minutes will carry a note at the bottom giving the date they were approved and the date they were published, so you can always see where any delay has occurred and why.</p>
 <h2>What was discussed</h2>
 <p>It was a full agenda, the first meeting after the close-season break. The highlights:</p>
