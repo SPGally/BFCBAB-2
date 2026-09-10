@@ -1,0 +1,46 @@
+name: Guard main
+
+# Detects any commit on main that did not arrive through a merged pull request,
+# opens an issue, and raises a revert PR. Compensates for branch protection being
+# unavailable on the current GitHub plan. See CLAUDE.md: never push to main.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Check every pushed commit came via a merged PR
+        id: check
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          bad=""
+          for sha in $(git rev-list ${{ github.event.before }}..${{ github.sha }} 2>/dev/null || git rev-list -n 20 ${{ github.sha }}); do
+            n=$(gh api "repos/${{ github.repository }}/commits/$sha/pulls" -q '[.[] | select(.merged_at != null)] | length')
+            if [ "$n" = "0" ]; then bad="$bad $sha"; fi
+          done
+          echo "bad=$bad" >> "$GITHUB_OUTPUT"
+          [ -z "$bad" ] && echo "all commits came through merged PRs" || echo "::error::Direct push detected:$bad"
+      - name: Open issue and revert PR
+        if: steps.check.outputs.bad != ''
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          set -e
+          git config user.name "guard-main"
+          git config user.email "guard-main@users.noreply.github.com"
+          branch="revert/direct-push-${{ github.sha }}"
+          git switch -c "$branch"
+          for sha in ${{ steps.check.outputs.bad }}; do git revert --no-edit "$sha" || { git revert --abort; echo "revert conflict on $sha"; }; done
+          git push -u origin "$branch" || true
+          body=$(printf 'Commits pushed to main without a merged PR by %s:%s\n\nA revert PR has been opened. Merge it, then re-land the change via a normal PR. Pushing to main is never allowed (CLAUDE.md).' "${{ github.actor }}" "${{ steps.check.outputs.bad }}")
+          issue=$(gh issue create --title "Direct push to main detected ($(date -u +%F))" --label direct-push --body "$body")
+          prbody=$(printf 'Fixes %s\n\nAgent: FAB CI guard-main\n\nAutomated revert of a direct push to main. Merge this, then re-land via a normal PR.\n\nHandoff: direct push by %s reverted; see the linked issue.' "$issue" "${{ github.actor }}")
+          gh pr create --head "$branch" --base main --title "revert: direct push to main" --body "$prbody" || true

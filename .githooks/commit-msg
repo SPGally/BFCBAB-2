@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Enforce Conventional Commits on the subject line (plain bash/grep, no framework).
+# Accepted: type(scope)!: subject, with type one of the list below. Merge and revert
+# commits git itself generates are allowed through; fixup!/squash! are refused because they
+# should never reach a PR branch.
+msgfile="$1"
+subject=$(grep -vE '^#' "$msgfile" | grep -m1 -vE '^[[:space:]]*$' || true)
+re='^(feat|fix|docs|chore|refactor|test|ci|perf|build|style|revert)(\([a-z0-9-]+\))?!?: .+'
+if printf '%s' "$subject" | grep -Eq "$re"; then exit 0; fi
+if printf '%s' "$subject" | grep -Eq '^(Merge |Revert ")'; then exit 0; fi
+cat >&2 <<EOF
+BLOCKED: commit message is not a Conventional Commit.
+  got:      $subject
+  expected: type(scope): subject   e.g. 'feat(content): minutes index from src/data (#12)'
+  types:    feat fix docs chore refactor test ci perf build style revert
+EOF
+exit 1

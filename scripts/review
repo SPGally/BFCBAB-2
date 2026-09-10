@@ -1,0 +1,219 @@
+#!/usr/bin/env bash
+# Review helper. Usage:
+#   scripts/review queue                 open non-draft PRs, oldest first, with a status mark
+#                                        (reviewing:<M> / fixing:<M> = a worker on machine M holds it: skip)
+#   scripts/review who <N>               banner: which agent did the work, which issue, who claimed it
+#   scripts/review checkout <N>          take the reviewing:<Machine> lock, then worktree ../fab-review-<N>
+#                                        at the PR head (prints the banner); refuses if another machine holds it
+#   scripts/review claim <N> | release <N>   take / drop the reviewing lock without a worktree
+#   scripts/review done <N>              remove that worktree and release the lock
+#   scripts/review decide <N> merge|changes|paul|decided "<message>"
+#       merge   : refuses own PRs; refuses protected paths unless a "**Paul decided:**" comment exists on the PR
+#       changes : posts list, labels changes-requested, mirrors to issue
+#       paul    : defer with needs-paul (only when Paul is not in the session)
+#       decided : record Paul's inline answer, clear needs-paul
+# Env: AGENT_NAME (env wins over .env.agent). DRY_RUN=1 prints gh mutations instead of running them.
+# FAB_REPO overrides the owner/name (default SPGally/BFCBAB-2).
+# LOCK_STALE_HOURS (default 3) / LOCK_STEAL=1 control taking over another machine's lock (scripts/lib/lock.sh).
+# Everything talks to GitHub over REST (scripts/lib/gh-rest.sh); issue labels and PR state
+# are the source of truth.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+[ -z "${AGENT_NAME:-}" ] && [ -f "$ROOT/.env.agent" ] && source "$ROOT/.env.agent"   # env var wins over the file
+: "${AGENT_NAME:?Set AGENT_NAME (env) or .env.agent}"
+REPO="${FAB_REPO:-SPGally/BFCBAB-2}"
+HANDOFF="$(cat "$ROOT/.github/HANDOFF_ISSUE" 2>/dev/null || echo 1)"
+REVIEWER_SIG_RE="— FAB( [A-Za-z]+)? Reviewer"   # matches "— FAB Reviewer Opus 5" and "— FAB MacBook Reviewer Opus 5"; not an Orchestrator/Coder signature that merely mentions "Reviewer"
+# Protected paths (docs/review-agent.md §3.5): a PR touching any of these needs a recorded
+# "**Paul decided:**" comment before `decide merge` will merge it.
+PROTECTED_RE='^(\.github/workflows/|scripts/|CLAUDE\.md|netlify\.toml|wrangler\.toml)'
+US=$'\x1f'
+source "$ROOT/scripts/lib/gh-rest.sh"
+source "$ROOT/scripts/lib/lock.sh"
+run() { if [ "${DRY_RUN:-}" = 1 ]; then echo "+ $*"; else "$@"; fi; }
+sign() { printf '%s\n\n— %s' "$1" "$AGENT_NAME"; }
+issue_of() { rest_get "pulls/$1" -q '.body' | { grep -oE '(Fixes|Closes|Resolves) #[0-9]+' || true; } | head -1 | { grep -oE '[0-9]+' || true; }; }
+agent_of() { rest_get "pulls/$1" -q '.body' | { grep -oE '^Agent: .*' || true; } | head -1 | sed 's/^Agent: //'; }
+
+who() { # banner: which agent authored PR N, which issue it closes, who claimed that issue
+  local n="$1" title agent iss claimer=""
+  title=$(rest_get "pulls/$n" -q .title)
+  agent=$(agent_of "$n")
+  iss=$(issue_of "$n")
+  if [ -n "$iss" ]; then
+    claimer=$(rest_get "issues/$iss/comments" -q '.[] | select(.body | test("^Claiming")) | .body' \
+      | { grep -oE '— .*' || true; } | tail -1 | sed 's/^— //')
+  fi
+  echo "=================================================================="
+  echo " PR #$n  $title"
+  echo " Work done by : ${agent:-unknown (no Agent: line in PR body)}"
+  if [ -n "$iss" ]; then echo " Closes issue : #$iss${claimer:+  (claimed by: $claimer)}"; else echo " Closes issue : none"; fi
+  echo "=================================================================="
+}
+
+# mark_for <labels> <last_commit> <last_review> <paul_after_count> [lock_stale] -> prints the mark
+# (pure; testable via _mark). A fresh work lock (reviewing:<M> / fixing:<M>, scripts/lib/lock.sh)
+# wins over every other mark: the PR is someone's right now, whatever state it is in, and the
+# queue reader must skip it. A stale lock (lock_stale=1) is ignored here so the PR shows its real
+# state and gets a worker, whose lock_take then takes the abandoned lock over.
+mark_for() {
+  local labels="$1" last_commit="$2" last_review="$3" paul_after="$4" lock_stale="${5:-0}" lock
+  lock=$(printf '%s\n' "$labels" | tr ',' '\n' | { grep -E '^(reviewing|fixing):' || true; } | head -1)
+  if [ -n "$lock" ] && [ "$lock_stale" != 1 ]; then
+    echo "$lock"
+  elif echo "$labels" | grep -q needs-paul; then
+    if [ "${paul_after:-0}" -gt 0 ]; then echo paul-replied; else echo waiting-paul; fi
+  elif echo "$labels" | grep -q changes-requested && [ -n "$last_review" ] && [[ "$last_commit" < "$last_review" ]]; then
+    echo waiting-author
+  else
+    echo ready
+  fi
+}
+
+case "${1:-}" in
+  queue)
+    open_issues=" $(rest_get "issues?state=open&per_page=100" --paginate -q '.[] | select(.pull_request == null) | .number' | tr '\n' ' ') "
+    rest_get "pulls?state=open&per_page=100" --paginate \
+      -q '.[] | select(.draft|not) | [.created_at, (.number|tostring), .title, ([.labels[].name]|join(",")), .head.ref,
+           ((try (.body|capture("Agent: (?<a>[^\n]+)")|.a) catch "?")),
+           ((try (.body|capture("(Fixes|Closes|Resolves) #(?<i>[0-9]+)")|.i) catch ""))] | join("")' \
+    | sort | while IFS="$US" read -r created n title labels branch agent iss; do
+        # commits/comments are only fetched for PRs already labelled changes-requested,
+        # where we need them to tell "pushed since review" from "still waiting on author".
+        # Every other PR (the common case) needs zero extra REST calls to mark as ready.
+        last_commit="-"; last_review=""
+        if echo "$labels" | grep -q changes-requested; then
+          last_commit=$(rest_get "pulls/$n/commits" -q '(.[-1].commit.committer.date // .[-1].commit.author.date) // "-"')
+          last_review=$(rest_get "issues/$n/comments" \
+            | jq -r --arg sigre "$REVIEWER_SIG_RE" '([.[] | select(.body | test($sigre))] | last | .created_at) // ""')
+        fi
+        paul_after=0
+        if echo "$labels" | grep -q needs-paul; then
+          label_time=$(rest_get "issues/$n/events" -q '[.[] | select(.event=="labeled" and .label.name=="needs-paul")][-1].created_at // ""')
+          paul_after=$(rest_get "issues/$n/comments" \
+            | jq -r --arg t "$label_time" '[.[] | select(.created_at > $t) | select(.body | test("— FAB") | not)] | length')
+        fi
+        # A locked PR costs one events read to age the lock; a stale one shows its real state
+        # with a note, so the orchestrator spawns a worker that takes the lock over.
+        lock_note=""; lock_stale=0
+        lock=$(printf '%s\n' "$labels" | tr ',' '\n' | { grep -E '^(reviewing|fixing):' || true; } | head -1)
+        if [ -n "$lock" ]; then
+          age=$(lock_age_hours "$n" "$lock")
+          if lock_is_stale "$age"; then lock_stale=1; lock_note="  (stale $lock ${age}h; a worker may take it over)"; fi
+        fi
+        mark=$(mark_for "$labels" "$last_commit" "$last_review" "$paul_after" "$lock_stale")
+        if [ -n "$iss" ]; then
+          deps=""
+          for d in $(rest_get "issues/$iss" -q .body | sed -n '/## Dependencies/,$p' | { grep -oE '\(#[0-9]+\)' || true; } | tr -d '(#)'); do
+            case "$open_issues" in *" $d "*) deps="$deps #$d";; esac
+          done
+          [ -n "$deps" ] && mark="blocked:$deps"
+        fi
+        printf '#%-4s %-16s %-10s issue:#%-4s %-28s %s%s\n' "$n" "$mark" "${created:0:10}" "${iss:-?}" "$agent" "$title" "$lock_note"
+      done
+    ;;
+  who)
+    who "${2:?PR number}"
+    ;;
+  claim)
+    lock_take "${2:?PR number}" reviewing
+    ;;
+  release)
+    lock_release "${2:?PR number}" reviewing; echo "released reviewing lock on PR #$2"
+    ;;
+  checkout)
+    n="${2:?PR number}"; dir="$(cd "$ROOT/.." && pwd)/fab-review-$n"
+    [ -e "$dir" ] && { echo "$dir exists; run: scripts/review done $n"; exit 1; }
+    # The lock comes first: a refusal here means another machine's reviewer already has the
+    # PR, and the caller returns BLOCKED(lock) instead of reviewing it a second time.
+    lock_take "$n" reviewing || exit 1
+    who "$n"
+    git -C "$ROOT" fetch -q origin "refs/pull/$n/head:refs/review/$n"
+    git -C "$ROOT" worktree add --detach "$dir" "refs/review/$n"
+    git -C "$dir" config core.hooksPath .githooks
+    echo "$dir"
+    ;;
+  done)
+    n="${2:?PR number}"; dir="$(cd "$ROOT/.." && pwd)/fab-review-$n"
+    git -C "$ROOT" worktree remove --force "$dir" 2>/dev/null || true
+    git -C "$ROOT" update-ref -d "refs/review/$n" 2>/dev/null || true
+    git -C "$ROOT" worktree prune; echo "removed $dir"
+    lock_release "$n" reviewing
+    ;;
+  decide)
+    n="${2:?PR number}"; kind="${3:?merge|changes|paul|decided}"; msg="${4:?message}"
+    iss=$(issue_of "$n")
+    author=$(agent_of "$n")
+    echo ">> Decision '$kind' on PR #$n — work by ${author:-unknown}${iss:+, issue #$iss}"
+    case "$kind" in
+      merge)
+        [ "$author" = "$AGENT_NAME" ] && { echo "REFUSED: cannot merge own PR #$n"; exit 1; }
+        protected=$(rest_pr_files "$n" | awk -F'\t' -v re="$PROTECTED_RE" '$2 ~ re { print $2 }')
+        if [ -n "$protected" ]; then
+          decided=$(rest_get "issues/$n/comments" \
+            | jq -r '[.[] | select(.body | startswith("**Paul decided:**")) | select(.body | contains("— FAB "))] | length')
+          if [ "${decided:-0}" -eq 0 ]; then
+            echo "REFUSED: PR #$n touches protected paths and has no '**Paul decided:**' comment:"; echo "$protected" | sed 's/^/  /'
+            echo "Ask Paul inline, then: scripts/review decide $n decided \"<answer>\""; exit 1
+          fi
+        fi
+        # Called directly rather than through `run`: we need the merge's captured
+        # stdout/stderr (merge_out) to report the failure, which `run` does not return.
+        # rest_merge_pr handles its own DRY_RUN echo.
+        branch=$(rest_get "pulls/$n" -q .head.ref)
+        merge_out="" merge_status=0
+        if [ "${DRY_RUN:-}" = 1 ]; then
+          rest_merge_pr "$n" "$branch"
+        else
+          merge_out=$(rest_merge_pr "$n" "$branch" 2>&1) || merge_status=$?
+        fi
+        if [ "$merge_status" -eq 0 ]; then
+          rest_comment "$n" "$(sign "**Review: merge.**
+
+$msg")"
+          [ -n "$iss" ] && rest_remove_label "$iss" claimed
+          rest_comment "$HANDOFF" "$(sign "$(date -u +'%Y-%m-%d %H:%M UTC') — Merged PR #$n${iss:+ (closes #$iss)}: $msg")"
+        else
+          echo "$merge_out" >&2
+          rest_comment "$n" "$(sign "**Review: merge attempted but failed.**
+
+\`\`\`
+$merge_out
+\`\`\`
+
+$msg")"
+          exit 1
+        fi
+        ;;
+      changes)
+        rest_comment "$n" "$(sign "**Review: changes requested.**
+
+$msg")"
+        rest_add_label "$n" changes-requested
+        if [ -n "$iss" ]; then rest_comment "$iss" "$(sign "PR #$n reviewed: changes requested. The must-fix list is on the PR. Owning agent: scripts/agent resume $n, fix, push, comment; it re-queues automatically.")"; fi
+        ;;
+      paul)
+        rest_comment "$n" "$(sign "**Review: decision needed from Paul.**
+
+$msg")"
+        rest_add_label "$n" needs-paul
+        [ -n "$iss" ] && rest_add_label "$iss" needs-paul
+        ;;
+      decided)
+        rest_comment "$n" "$(sign "**Paul decided:** $msg")"
+        rest_remove_label "$n" needs-paul
+        if [ -n "$iss" ]; then rest_comment "$iss" "$(sign "Decision on PR #$n — Paul decided: $msg")"; rest_remove_label "$iss" needs-paul; fi
+        ;;
+      *) echo "kind must be merge|changes|paul|decided"; exit 1;;
+    esac
+    # A verdict ends the review: drop the lock so the next actor (fix coder, re-reviewer,
+    # Paul) is not told the PR is still being reviewed. `decided` is Paul's answer being
+    # recorded, usually by an orchestrator that never held the lock; the release is a no-op then.
+    lock_release "$n" reviewing
+    ;;
+  _mark) shift; mark_for "$@";;   # test hook
+  _lock) shift; lock_take "$@";;  # test hook: lock_take <N> <kind>
+  _holder) shift; lock_holder_from_labels "$@";;  # test hook: lock_holder_from_labels <kind> <labels>
+  _sig) shift; printf '%s' "${1:-}" | grep -qE "$REVIEWER_SIG_RE" && echo match || echo nomatch;;   # test hook
+  *) sed -n '2,16p' "$0"; exit 1;;
+esac
