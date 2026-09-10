@@ -52,7 +52,7 @@ const VisualHistory = () => {
 
           <div className="my-12">
             <p className="text-lg mb-6">
-              This exciting project is supported by the BFC Fans Advisory Board and club sponsor Parliament, with the full support of Barnsley FC.
+              This exciting project is supported by the BFC Fan Advisory Board and club sponsor Parliament, with the full support of Barnsley FC.
             </p>
             
             {/* Parliament Logo */}
@@ -77,7 +77,7 @@ const VisualHistory = () => {
               <blockquote className="border-l-4 border-barnsley-red pl-4 italic mb-4">
                 "Barnsley FC is nothing without its supporters, and this project is a fantastic way to showcase our club's rich history from the fans' perspective. We want every fan, past and present, to dig deep and find those special items that connect them to their time following the Reds. Whether it's an old ticket stub, a scarf from a famous match, or a cherished photograph, every piece tells part of the story. Let's make sure these memories are preserved for future generations."
               </blockquote>
-              <p className="text-right font-medium">Steve Brain, Vice Chair of the Fans Advisory Board</p>
+              <p className="text-right font-medium">Steve Brain, Chair of the Fan Advisory Board</p>
             </div>
 
             <div>
