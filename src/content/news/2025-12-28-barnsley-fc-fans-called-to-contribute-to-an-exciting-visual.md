@@ -1,0 +1,12 @@
+---
+title: "Barnsley FC fans called to contribute to an exciting visual history project"
+slug: barnsley-fc-fans-called-to-contribute-to-an-exciting-visual
+published_at: "2025-12-28T20:24:02.682Z"
+summary: "Barnsley FC supporters are being invited to play a crucial role in a new project that celebrates the deep connection between the club and its fans."
+author: "paul-gallagher"
+image: "/images/news/2025-12-28-barnsley-fc-fans-called-to-contribute-to-an-exciting-visual.jpg"
+pinned: false
+draft: false
+legacy_id: ee6de719-f095-4bb5-8c52-5ce77588beff
+---
+<p>Barnsley FC supporters are being invited to play a crucial role in a new project that celebrates the deep connection between the club and its fans. The initiative, led by renowned football photographer Julian Germain and supported by the Barnsley FC Fans Advisory Board (FAB), aims to create a unique visual archive of the club’s history through the eyes of its supporters.</p><p>With a book set to be published in November 2025, the project seeks to collect treasured memorabilia from Barnsley fans—whether it’s old matchday photos, scarves, ticket stubs, or personal keepsakes that tell the story of what it means to follow the Reds. By gathering these pieces of history, the project will preserve the club’s rich legacy for future generations.</p><p>Kelly Drury, Chair of the BFC Fans Advisory Board, highlighted the importance of fan participation:</p><p>"This is a once-in-a-lifetime opportunity for Barnsley fans to contribute to a lasting tribute to our club. Our history isn’t just written in the record books—it’s in the memories of those who’ve cheered from the stands, travelled to away games, and celebrated the highs and lows of following Barnsley FC. We want to see those cherished items that tell your story."</p><p>Photographer Julian Germain also expressed his enthusiasm:</p><p>"Football is more than just the game—it’s about identity, community, and the bonds that tie generations of supporters together. The passion of Barnsley fans is legendary, and this project will bring that to life in a truly unique way. Every fan has a story, and we want to help tell it."</p><p>The project is actively seeking contributions, and fans are encouraged to visit&nbsp;Barnsley FC: The People's Visual History&nbsp;to find out how they can get involved. Whether you’ve got a treasured photo from a famous match or a well-worn scarf passed down through generations, now is the time to share your piece of Barnsley’s history.</p>
