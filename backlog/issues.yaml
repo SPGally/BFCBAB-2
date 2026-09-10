@@ -1,0 +1,32 @@
+# FAB website backlog. One entry per GitHub issue. Consumed by scripts/bootstrap-github.sh
+# (Paul runs it; it is idempotent, so edit entries here and re-run to update the issues).
+#
+# Fields: id (FAB-NNN, zero-padded, unique, never reused), title, milestone (M0..M3), wave
+# (1..4), area (content | site | tooling | docs | deploy | ci), size (S/M/L), depends (list
+# of ids that must be merged first), paul_only (true when it needs secrets, DNS, Netlify /
+# Cloudflare or club access), body (Markdown with the sections ## Context / ## Scope /
+# ## Out of scope / ## Acceptance tests / ## Files touched; Dependencies is appended by the
+# script from `depends`).
+#
+# Milestones: M0 "Stabilise" (get the site back up without Supabase), M1 "Content by PR"
+# (all content editable as files in the repo), M2 "Cloudflare" (move hosting from Netlify
+# to Cloudflare Pages), M3 "Polish".
+#
+# Labels derived: area:<area>, wave:<wave>, size:<size>, agent-ready (or paul-only).
+# Issue title on GitHub becomes "<id> <title>", e.g. "FAB-001 Remove Supabase client".
+#
+# Example entry:
+#
+# - id: FAB-001
+#   title: "Short imperative title"
+#   milestone: M0
+#   wave: 1
+#   area: site
+#   size: S
+#   depends: []
+#   body: |
+#     ## Context
+#     ## Scope
+#     ## Out of scope
+#     ## Acceptance tests
+#     ## Files touched
