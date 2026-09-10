@@ -1,0 +1,37 @@
+name: Task
+description: A unit of work an agent can pick up cold.
+labels: ["needs-spec"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why this exists. Link the doc section or the page on the live site.
+    validations: { required: true }
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What to build, concretely.
+    validations: { required: true }
+  - type: textarea
+    id: out
+    attributes:
+      label: Out of scope
+    validations: { required: true }
+  - type: textarea
+    id: tests
+    attributes:
+      label: Acceptance tests
+      description: What must pass (npm run lint / build / test) and what to check by hand in the browser.
+    validations: { required: true }
+  - type: textarea
+    id: files
+    attributes:
+      label: Files touched
+      description: Expected paths, so concurrent agents can avoid collisions.
+  - type: textarea
+    id: deps
+    attributes:
+      label: Dependencies
+      description: Issues that must be merged first.
