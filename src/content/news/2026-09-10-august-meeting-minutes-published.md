@@ -4,7 +4,7 @@ slug: august-meeting-minutes-published
 published_at: "2026-09-10T17:30:00Z"
 summary: "The minutes of the Fan Advisory Board's 4 August meeting are now available. We're sorry they've taken longer than usual to reach you: they were with the club for sign-off during the transfer window, when the staff who review them were stretched."
 author: "paul-gallagher"
-image: null
+image: "/images/news/2026-09-10-august-meeting-minutes-published.jpg"
 pinned: true
 draft: false
 legacy_id: null
