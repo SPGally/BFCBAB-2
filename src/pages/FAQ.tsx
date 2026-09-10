@@ -1,8 +1,7 @@
 import React from 'react';
-import { supabase } from '../lib/supabase';
-import { ChevronDown, ChevronUp, Search, Tag, User, FileText, ArrowRight } from 'lucide-react';
+import { getFaqTopics, getMember } from '../lib/content';
+import { ChevronDown, ChevronUp, Search, Tag, User, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
 
 interface FAQTopic {
   id: string;
@@ -15,58 +14,31 @@ interface FAQ {
   question: string;
   answer: string;
   topic_id: string;
-  author: {
-    name: string;
-    role: string;
-  } | null;
-  minutes_refs: string[];
-  raised_by: string[];
-  created_at: string;
+  author: { name: string; role: string } | null;
+  placeholder: boolean;
 }
 
+const allTopics: FAQTopic[] = getFaqTopics().map((t) => ({ id: t.id, name: t.name, description: t.description }));
+const allFaqs: FAQ[] = getFaqTopics().flatMap((t) =>
+  t.questions.map((q) => {
+    const m = q.author ? getMember(q.author) : undefined;
+    return {
+      id: q.id,
+      question: q.question,
+      answer: q.answer_html,
+      topic_id: t.id,
+      author: m ? { name: m.name, role: m.role } : null,
+      placeholder: Boolean(q.placeholder),
+    };
+  })
+);
+
 export default function FAQ() {
-  const [topics, setTopics] = React.useState<FAQTopic[]>([]);
-  const [faqs, setFaqs] = React.useState<FAQ[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const topics = allTopics;
+  const faqs = allFaqs;
   const [expandedTopics, setExpandedTopics] = React.useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedTopics, setSelectedTopics] = React.useState<Set<string>>(new Set());
-  const [error, setError] = React.useState<string | null>(null);
-
-  React.useEffect(() => {
-    Promise.all([fetchTopics(), fetchFAQs()]).finally(() => setLoading(false));
-  }, []);
-
-  const fetchTopics = async () => {
-    const { data, error } = await supabase
-      .from('faq_topics')
-      .select('*')
-      .order('order_position');
-
-    if (error) {
-      setError('Failed to load FAQ topics');
-      console.error('Error fetching topics:', error);
-    } else {
-      setTopics(data || []);
-    }
-  };
-
-  const fetchFAQs = async () => {
-    const { data, error } = await supabase
-      .from('faqs')
-      .select(`
-        *,
-        author:board_members!author_id(name, role)
-      `)
-      .order('order_position');
-
-    if (error) {
-      setError('Failed to load FAQs');
-      console.error('Error fetching FAQs:', error);
-    } else {
-      setFaqs(data || []);
-    }
-  };
 
   const toggleTopic = (topicId: string) => {
     setExpandedTopics(prev => {
@@ -107,30 +79,9 @@ export default function FAQ() {
     return acc;
   }, {} as Record<string, FAQ[]>);
 
-  if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="animate-pulse space-y-8">
-          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
-          <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 text-red-700">
-          {error}
-        </div>
-      )}
 
       <div className="mb-8 space-y-4">
         {/* Search */}
@@ -193,6 +144,11 @@ export default function FAQ() {
                 <div className="bg-white rounded-b-lg shadow-md divide-y divide-gray-100">
                   {topicFaqs.map(faq => (
                     <div key={faq.id} className="p-6 hover:bg-gray-50 transition-colors">
+                      {faq.placeholder && (
+                        <p className="text-xs uppercase tracking-wide text-amber-700 bg-amber-50 inline-block px-2 py-0.5 rounded mb-2">
+                          Example entry
+                        </p>
+                      )}
                       <Link to={`/faq/${faq.id}`} className="block group">
                         <h3 className="text-lg font-medium text-gray-900 group-hover:text-barnsley-red transition-colors">
                           {faq.question}
