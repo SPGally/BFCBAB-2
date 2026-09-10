@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Refuse any push that updates refs/heads/main. Merges happen through PRs on GitHub only.
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = "refs/heads/main" ]; then
+    echo "BLOCKED: pushing to main is never allowed. Open a PR: scripts/agent pr" >&2
+    exit 1
+  fi
+done
+exit 0

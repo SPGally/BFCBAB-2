@@ -1,0 +1,287 @@
+#!/usr/bin/env bash
+# Agent helper. Usage:
+#   scripts/agent next              list claimable issues (agent-ready, unclaimed) ordered by milestone/wave
+#   scripts/agent claim <N>         claim issue N, create branch (refuses to run in the
+#                                   repository's primary checkout; use `worktree` instead,
+#                                   or FAB_ALLOW_SHARED_CHECKOUT=1 for Paul's own use)
+#   scripts/agent pr [body|@file|-] push current branch and open a PR from the template;
+#                                   an optional body argument (same @file/-/text expansion
+#                                   as `comment`) supplies the real "What changed / How
+#                                   verified / Out of scope / Handoff" content, replacing the
+#                                   template's placeholder sections after Fixes#/Agent:
+#   scripts/agent handoff "<msg>"   comment on the pinned handoff issue
+#   scripts/agent issue "<title>" <body|@file|-> --kind bug|improvement [--area X] [--size S|M|L] [--label L]...
+#                                   file a labelled, agent-ready issue over REST; prints its number
+#   scripts/agent comment <N> <text|@file|->   post a signed comment on issue/PR N (the ONLY way
+#                                   agents post comments; @file reads the file, - reads stdin)
+#   scripts/agent mine              your open PRs: fix-needed | fixed-awaiting-review | awaiting-review | waiting-paul
+#                                   | fixing:<M> (a coder on machine M holds the fix lock right now)
+#   scripts/agent resume <N>        take the fixing:<Machine> lock on PR N, switch to its branch and print
+#                                   the reviewer's change list; refuses if another machine holds the lock
+#                                   (also refuses to run in the primary checkout, same as `claim`)
+#   scripts/agent release <N>       drop the fixing lock (comment <PR> does this for you after the fix-round comment)
+#   (next and claim refuse to run while you have a fix-needed PR)
+#   scripts/agent worktree <name> [model]   create ../fab-<name> worktree with identity
+#                                            "FAB <Machine> Coder-<name> <model>" (machine taken
+#                                            from the parent clone's AGENT_NAME); model defaults to "Sonnet 5"
+#   scripts/agent worktree-rm <name>  remove that worktree once its PR is merged
+# Env: AGENT_NAME from .env.agent. DRY_RUN=1 prints gh commands instead of running them.
+# FAB_REPO overrides the owner/name otherwise read from the origin remote.
+# Everything talks to GitHub over REST (`gh api`, scripts/lib/gh-rest.sh): the GraphQL-backed
+# `gh pr`/`gh issue` commands share a separate, easily-exhausted rate-limit budget. Issue
+# labels (claimed, changes-requested, needs-paul) and PR state are the source of truth.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+[ -z "${AGENT_NAME:-}" ] && [ -f "$ROOT/.env.agent" ] && source "$ROOT/.env.agent"   # env var wins over the file
+# machine_of (and the per-PR fixing:<Machine> lock) live in scripts/lib/lock.sh; its
+# REST calls need $REPO, which is set further down, but nothing calls them before then.
+source "$ROOT/scripts/lib/lock.sh"
+# is_primary_checkout: true (rc 0) when the current working tree is the repository's
+# primary checkout rather than a linked worktree (`git worktree add`). A linked worktree's
+# git-dir is `<primary-git-dir>/worktrees/<name>`, distinct from the shared common-dir; the
+# primary checkout's git-dir *is* the common-dir. Used to stop `scripts/agent claim` and
+# `scripts/agent resume` from switching branches in Paul's own shared checkout.
+is_primary_checkout() {
+  local gitdir commondir
+  gitdir=$(git rev-parse --git-dir 2>/dev/null) || return 1
+  commondir=$(git rev-parse --git-common-dir 2>/dev/null) || return 1
+  gitdir=$(cd "$gitdir" && pwd)
+  commondir=$(cd "$commondir" && pwd)
+  [ "$gitdir" = "$commondir" ]
+}
+# refuse_shared_checkout: shared guard for `claim` and `resume`, both of which switch branches.
+# Checked first, before any REST call or `gate`, since it is decided purely from local git
+# state and a refusal here should never spend rate-limited API calls on a request we are
+# about to reject anyway.
+refuse_shared_checkout() {
+  if is_primary_checkout && [ "${FAB_ALLOW_SHARED_CHECKOUT:-}" != 1 ]; then
+    echo "STOP: this is the repository's primary checkout, not an isolated worktree."
+    echo "Coders must never switch this checkout's branch (Paul runs the site locally here)."
+    echo "Create an isolated worktree instead: scripts/agent worktree <name> [model]"
+    echo "(Paul's own use only: set FAB_ALLOW_SHARED_CHECKOUT=1 to override.)"
+    return 1
+  fi
+}
+case "${1:-}" in
+  _machine) shift; machine_of "${1:-}"; exit 0;;   # test hook
+  _primary_checkout) is_primary_checkout && echo primary || echo linked; exit 0;;   # test hook
+  worktree)
+    name="${2:?worktree name, e.g. 2 or cloudish}"
+    dir="$(cd "$ROOT/.." && pwd)/fab-$name"
+    [ -e "$dir" ] && { echo "$dir already exists"; exit 1; }
+    model="${3:-Sonnet 5}"   # label only; the model actually used is whatever the session runs
+    machine="$(machine_of "${AGENT_NAME:-}")"
+    [ -n "$machine" ] || { echo "cannot determine machine: set AGENT_NAME in .env.agent (format 'FAB <Machine> ...') before running worktree" >&2; exit 1; }
+    git -C "$ROOT" fetch -q origin
+    git -C "$ROOT" worktree add --detach "$dir" origin/main >/dev/null 2>&1
+    printf 'AGENT_NAME="FAB %s Coder-%s %s"\n' "$machine" "$name" "$model" > "$dir/.env.agent"
+    git -C "$dir" config core.hooksPath .githooks
+    echo "worktree ready: $dir"
+    echo "identity: $(cat "$dir/.env.agent")"
+    echo "start the agent with: cd $dir && npm ci && scripts/agent next"
+    exit 0;;
+  worktree-rm)
+    name="${2:?worktree name}"
+    dir="$(cd "$ROOT/.." && pwd)/fab-$name"
+    br=$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+    git -C "$ROOT" worktree remove "$dir" && echo "removed $dir"
+    [ -n "$br" ] && [ "$br" != "HEAD" ] && git -C "$ROOT" branch -d "$br" 2>/dev/null && echo "deleted merged branch $br"
+    exit 0;;
+esac
+: "${AGENT_NAME:?Set AGENT_NAME in .env.agent (copy .env.agent.example)}"
+[ "$(git config core.hooksPath 2>/dev/null)" = ".githooks" ] || git config core.hooksPath .githooks
+REPO="${FAB_REPO:-$(git -C "$ROOT" remote get-url origin | sed -E 's#^[a-z]+://##; s#^git@##; s#^github\.com[:/]##; s#\.git$##')}"
+HANDOFF="$(cat "$ROOT/.github/HANDOFF_ISSUE" 2>/dev/null || echo "")"
+source "$ROOT/scripts/lib/gh-rest.sh"
+run() { if [ "${DRY_RUN:-}" = 1 ]; then echo "+ $*"; else "$@"; fi; }
+sign() { printf '%s\n\n— %s' "$1" "$AGENT_NAME"; }
+
+# ---- own-PR awareness -------------------------------------------------------
+# Lists this agent's open PRs with a state. Output lines: STATE<TAB>NUMBER<TAB>BRANCH<TAB>TITLE
+mine_raw() {
+  # One REST list call for all open PRs; per-PR commits/comments calls only for the (few)
+  # PRs already labelled changes-requested, where we need to know whether there has been a
+  # push since the review comment. Everything else needs no extra call.
+  rest_get "pulls?state=open&per_page=100" \
+    | jq -r --arg me "$AGENT_NAME" '
+      .[] | select(((try (.body | capture("Agent: (?<a>[^\n]+)") | .a) catch "") == $me))
+      | [(.number|tostring), .head.ref, ([.labels[].name] | join(",")), .title] | join("")' \
+    | while IFS=$'\x1f' read -r n branch labels title; do
+        state=awaiting-review
+        fixer=$(lock_holder_from_labels fixing "$labels")
+        if [ -n "$fixer" ]; then state="fixing:$fixer"   # a fix round is in progress on that machine; not fix-needed
+        elif echo "$labels" | grep -q needs-paul; then state=waiting-paul
+        elif echo "$labels" | grep -q changes-requested; then
+          last_commit=$(rest_get "pulls/$n/commits" -q '(.[-1].commit.committer.date // .[-1].commit.author.date) // ""')
+          last_changes=$(rest_get "issues/$n/comments" -q '([.[] | select(.body | test("Review: changes requested"))] | last | .created_at) // ""')
+          if [ -n "$last_changes" ] && [[ "$last_commit" < "$last_changes" ]]; then state=fix-needed; else state=fixed-awaiting-review; fi
+        fi
+        printf '%s\x1f%s\x1f%s\x1f%s\n' "$state" "$n" "$branch" "$title"
+      done
+}
+mine() {
+  local any=0
+  while IFS=$'\x1f' read -r state n branch title; do
+    any=1; printf '%-22s #%-4s %-45s %s\n' "$state" "$n" "$branch" "$title"
+  done < <(mine_raw)
+  [ "$any" = 1 ] || echo "no open PRs for $AGENT_NAME"
+}
+fix_needed() { mine_raw | awk -F$'\x1f' '$1=="fix-needed"{print "#"$2}' | tr '\n' ' '; }
+
+# build_pr_body <issue-number> [body|@file|-] -> the full PR body text. With no second
+# argument, only "Fixes #" and "Agent:" are filled in and the template's placeholder
+# sections are left as-is. With one, it is expanded via read_body (same @file/-/text rules
+# as `comment`) and replaces everything from "## What changed" on, so a coder always has
+# one sanctioned path to a complete, real PR body.
+build_pr_body() {
+  local n="$1" content_arg="${2:-}" header content
+  header=$(sed -e "s/^Fixes #\$/Fixes #$n/" -e "s|^Agent: .*|Agent: $AGENT_NAME|" "$ROOT/.github/PULL_REQUEST_TEMPLATE.md")
+  if [ -n "$content_arg" ]; then
+    content=$(read_body "$content_arg") || return 1
+    printf '%s\n%s' "$(printf '%s\n' "$header" | sed -n '1,/^## What changed$/p' | sed '$d')" "$content"
+  else
+    printf '%s' "$header"
+  fi
+}
+gate() {
+  local f; f=$(fix_needed)
+  if [ -n "$f" ]; then
+    echo "STOP: you have PR(s) with changes requested: $f"
+    echo "Fix those first: scripts/agent resume <N>, address the list on the PR, push, then comment what you addressed."
+    echo "(Run 'scripts/agent mine' to see all your PRs.)"
+    return 1
+  fi
+}
+
+case "${1:-}" in
+  _pr_body) shift; build_pr_body "$@";;   # test hook
+  mine)
+    mine
+    ;;
+  resume)
+    n="${2:?PR number}"
+    refuse_shared_checkout || exit 1
+    branch=$(rest_get "pulls/$n" -q .head.ref)
+    run git fetch -q origin "$branch"
+    if git worktree list --porcelain | grep -q "branch refs/heads/$branch$"; then
+      echo "branch $branch is checked out in another worktree:"; git worktree list | grep "\[$branch\]"; exit 1
+    fi
+    # Local checks first so a failure never leaves a lock behind; then the lock, so a coder
+    # on another machine that is already fixing this PR is not duplicated. A refusal
+    # here means: return BLOCKED, do not fix.
+    lock_take "$n" fixing || exit 1
+    run git switch -q "$branch" 2>/dev/null || run git switch -q -c "$branch" "origin/$branch"
+    run git pull -q --ff-only origin "$branch" || true
+    echo "on $branch for PR #$n. Changes requested:"
+    rest_get "issues/$n/comments" -q '[.[] | select(.body | test("Review: changes requested"))] | last | .body'
+    ;;
+  next)
+    gate || exit 1
+    rest_get "issues?state=open&labels=agent-ready&per_page=100" --paginate \
+      -q '.[] | select(.pull_request == null) | select(any(.labels[]; .name=="claimed") | not) | [ (.milestone.title // "zz"), ( [.labels[].name | select(startswith("wave:"))][0] // "wave:9" ), (.number|tostring), .title ] | @tsv' \
+      | sort | awk -F'\t' '{printf "#%-4s %-6s %-8s %s\n", $3, $1, $2, $4}'
+    ;;
+  claim)
+    n="${2:?issue number}"
+    refuse_shared_checkout || exit 1
+    gate || exit 1
+    if rest_get "issues/$n" -q '.labels[].name' | grep -qx claimed; then
+      echo "Issue #$n is already claimed:"; rest_get "issues/$n/comments" -q '.[].body' | grep -B1 -A3 "claim" | tail -8; exit 1
+    fi
+    title=$(rest_get "issues/$n" -q .title)
+    slug=$(echo "$title" | sed -E 's/^FAB-[0-9]+ //' | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g' | cut -c1-40)
+    # Do the local, easily-failing work (fetch/branch-create) before anything visible on
+    # GitHub, so a failure here never leaves the issue claimed with no branch to show for it.
+    run git fetch origin
+    run git switch -c "feat/$n-$slug" origin/main
+    rest_add_label "$n" claimed
+    rest_comment "$n" "$(sign "Claiming this. Branch: feat/$n-$slug")"
+    echo "Claimed #$n on branch feat/$n-$slug"
+    ;;
+  pr)
+    branch=$(git rev-parse --abbrev-ref HEAD)
+    n=$(echo "$branch" | grep -oE '/[0-9]+-' | tr -d '/-')
+    [ -n "$n" ] || { echo "branch name must be type/NNN-slug"; exit 1; }
+    # Build (and validate) the body before pushing: a bad @file argument or missing
+    # Handoff: line should fail here, not leave a pushed-but-mislabeled PR behind.
+    body=$(build_pr_body "$n" "${2:-}") || exit 1
+    # Only enforced when a body argument was actually supplied: with none, the template's
+    # placeholder Handoff line is left as-is (see build_pr_body).
+    if [ -n "${2:-}" ] && ! printf '%s' "$body" | grep -Eq '^Handoff: *[^<[:space:]]'; then
+      echo "PR body has no filled 'Handoff:' line (pr-shape requires it); fix the body argument and retry."
+      exit 1
+    fi
+    run git push -u origin "$branch"
+    # Title: the first commit ahead of main; the commit-msg hook guarantees it is already a
+    # conventional-commit subject. Fetch main first so a stale local origin/main does not
+    # pull commits already on main into the range.
+    run git fetch -q origin main
+    title=$(git log --format=%s "origin/main..$branch" | tail -1)
+    [ -n "$title" ] || title="feat: #$n"
+    # Captured into a variable (not `read ... < <(...)` directly) and checked for content
+    # rather than relying on the command's own exit status: `rest_create_pr`/`rest_find_open_pr`
+    # print with a trailing-newline-free `printf '%s'`, which makes bash's `read` return
+    # non-zero even when it successfully parsed both fields -- under `set -e` that would
+    # abort the script on every *successful* create too. A `<<<` here-string (bash always
+    # appends a newline) does not have this problem.
+    create_out=$(rest_create_pr "$title" "$branch" main "$body" 2>/dev/null) || true
+    if [ -n "$create_out" ]; then
+      read -r pr_number pr_url <<<"$create_out"
+      echo "opened PR #$pr_number: $pr_url"
+    else
+      # Most likely cause: a PR for this branch already exists (e.g. an earlier `pr` call
+      # with no body argument left the template's placeholder body in place) -- recover by
+      # updating that PR's body instead of failing outright.
+      found=$(rest_find_open_pr "$branch")
+      [ -n "$found" ] || { echo "could not create or find an open PR for $branch"; exit 1; }
+      read -r pr_number pr_url <<<"$found"
+      rest_update_pr_body "$pr_number" "$body"
+      echo "updated PR #$pr_number: $pr_url"
+    fi
+    ;;
+  handoff)
+    msg="${2:?message}"
+    [ -n "$HANDOFF" ] || { echo "no .github/HANDOFF_ISSUE; run scripts/bootstrap-github.sh"; exit 1; }
+    msg=$(read_body "$msg") || exit 1
+    rest_comment "$HANDOFF" "$(sign "$(date -u +'%Y-%m-%d %H:%M UTC') — $msg")"
+    ;;
+  issue)
+    title="${2:?title}"; body=$(read_body "${3:?body, @file or -}") || exit 1; shift 3
+    kind=""; area=""; size=""; extra=()
+    while [ $# -gt 0 ]; do case "$1" in
+      --kind) kind="$2"; shift 2;; --area) area="$2"; shift 2;; --size) size="$2"; shift 2;;
+      --label) extra+=("$2"); shift 2;; *) echo "unknown option $1"; exit 1;; esac; done
+    [ "$kind" = bug ] || [ "$kind" = improvement ] || { echo "--kind must be bug or improvement"; exit 1; }
+    if [ -n "$area" ]; then
+      case "$area" in
+        content|site|tooling|docs|deploy|ci) ;;
+        *) echo "--area must be one of: content site tooling docs deploy ci"; exit 1;;
+      esac
+    fi
+    if [ -n "$size" ]; then
+      case "$size" in
+        S|M|L) ;;
+        *) echo "--size must be one of: S M L"; exit 1;;
+      esac
+    fi
+    labels=("$kind" "agent-ready" "wave:1"); [ -n "$area" ] && labels+=("area:$area"); [ -n "$size" ] && labels+=("size:$size")
+    [ ${#extra[@]} -gt 0 ] && labels+=("${extra[@]}")
+    args=(); for l in "${labels[@]}"; do args+=(-f "labels[]=$l"); done
+    if [ "${DRY_RUN:-}" = 1 ]; then echo "+ gh api POST repos/$REPO/issues title=$title labels=${labels[*]}" >&2; echo 0; exit 0; fi
+    num=$(gh_retry api --method POST "repos/$REPO/issues" -f "title=$title" -f "body=$(printf '%s\n\n— %s' "$body" "$AGENT_NAME")" "${args[@]}" -q .number) || exit 1
+    echo "$num"
+    ;;
+  comment)
+    n="${2:?issue or PR number}"; text=$(read_body "${3:?text, @file or -}") || exit 1
+    rest_comment "$n" "$(sign "$text")"
+    echo "commented on #$n ($(printf '%s' "$text" | wc -c | tr -d ' ') chars)"
+    # The fix-round comment is the coder's last step on the PR: drop this machine's fixing
+    # lock so the reviewer's queue shows the PR as ready again. No-op on issues or when the
+    # lock is held elsewhere (rest_remove_label tolerates an absent label).
+    lock_release "$n" fixing
+    ;;
+  release)
+    n="${2:?PR number}"; lock_release "$n" fixing; echo "released fixing lock on PR #$n"
+    ;;
+  *) sed -n '2,27p' "$0"; exit 1;;
+esac

@@ -1,0 +1,354 @@
+# FAB website backlog. One entry per GitHub issue. Consumed by scripts/bootstrap-github.sh
+# (Paul runs it; it is idempotent, so edit entries here and re-run to update the issues).
+#
+# Fields: id (FAB-NNN, zero-padded, unique, never reused), title, milestone (M0..M3), wave
+# (1..4), area (content | site | tooling | docs | deploy | ci), size (S/M/L), depends (list
+# of ids that must be merged first), paul_only (true when it needs secrets, DNS, Netlify /
+# Cloudflare or club access), body (Markdown with the sections ## Context / ## Scope /
+# ## Out of scope / ## Acceptance tests / ## Files touched; Dependencies is appended by the
+# script from `depends`).
+#
+# Milestones: M0 "Stabilise" (get the site back up without Supabase), M1 "Content by PR"
+# (all content editable as files in the repo), M2 "Hosting" (decide and move hosting off
+# Netlify when DNS can change), M3 "Polish".
+#
+# Labels derived: area:<area>, wave:<wave>, size:<size>, agent-ready (or paul-only).
+# Issue title on GitHub becomes "<id> <title>", e.g. "FAB-001 Remove Supabase client".
+#
+# Example entry:
+#
+# - id: FAB-001
+#   title: "Short imperative title"
+#   milestone: M0
+#   wave: 1
+#   area: site
+#   size: S
+#   depends: []
+#   body: |
+#     ## Context
+#     ## Scope
+#     ## Out of scope
+#     ## Acceptance tests
+#     ## Files touched
+
+- id: FAB-001
+  title: "Vitest and Testing Library set up with tests for the content layer"
+  milestone: M0
+  wave: 1
+  area: tooling
+  size: S
+  body: |
+    ## Context
+    There are no tests. `package.json` declares `"test": "vitest run"` but vitest is not installed. `src/lib/content.ts` is the only code that knows where content comes from, so it is the thing to test.
+    ## Scope
+    - Add `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom` as devDependencies; `vitest.config.ts` with the jsdom environment and `import.meta.glob` working under test.
+    - Tests for `src/lib/content.ts`: minutes sorted newest first; `getMinute('2026-08-04')` found; `getUpcomingMeetings(now)` filters past dates; `getNews()` puts pinned first, excludes `draft: true` and future `published_at`; `getArticle` resolves both slug and `legacy_id`; `getFaq` resolves `minutes_refs` to minutes; front-matter parser handles JSON strings, booleans and null.
+    - One render test: the Minutes page search narrows the list.
+    - `npm test` runs in `.github/workflows/ci.yml`.
+    ## Out of scope
+    End-to-end tests.
+    ## Acceptance tests
+    - `npm test` passes locally and in CI.
+    ## Files touched
+    package.json, vitest.config.ts, src/lib/content.test.ts, src/pages/Minutes.test.tsx, .github/workflows/ci.yml
+
+- id: FAB-002
+  title: "Make the pre-commit hook block on typecheck now that lint and tsc are clean"
+  milestone: M0
+  wave: 1
+  area: tooling
+  size: S
+  body: |
+    ## Context
+    `.githooks/pre-commit` runs typecheck warn-only because the codebase had 28 errors when the hook was written. PR #3 made `npm run lint` and `npm run typecheck` clean.
+    ## Scope
+    - Pre-commit: eslint on staged files and `npm run typecheck` both blocking.
+    - Remove the "lint is red until FAB-003" wording from CLAUDE.md and docs/agent-playbook.md.
+    ## Acceptance tests
+    - A commit that introduces a type error is refused by the hook; `ci.yml` lint and typecheck jobs are green on main.
+    ## Files touched
+    .githooks/pre-commit, CLAUDE.md, docs/agent-playbook.md
+
+- id: FAB-003
+  title: "Netlify Forms: enable notifications for the Submit form and confirm a test submission"
+  milestone: M0
+  wave: 1
+  area: deploy
+  size: S
+  paul_only: true
+  body: |
+    ## Context
+    PR #3 moved the Submit page to Netlify Forms (form name `fab-submission`, honeypot `bot-field`). Netlify only stores submissions until notifications are configured, and the form is only registered once a deploy from `main` includes the hidden form in `index.html`.
+    ## Scope
+    - Paul: after PR #3 is live, open Netlify > Site > Forms, confirm `fab-submission` is listed, add an email notification to the FAB inbox, and send one test submission from the live site.
+    - Agent: if the form is not detected, fix the hidden form in `index.html` (all field names must match `src/pages/Submit.tsx`).
+    ## Out of scope
+    Replacing Netlify Forms (FAB-013).
+    ## Acceptance tests
+    - A test submission arrives by email with all seven fields.
+    ## Files touched
+    index.html (only if detection fails)
+
+- id: FAB-004
+  title: "Replace the placeholder FAQ entries with real questions drawn from the minutes"
+  milestone: M0
+  wave: 2
+  area: content
+  size: M
+  body: |
+    ## Context
+    `src/data/faq.json` holds the three fictional seed examples from the original migration, flagged `placeholder: true` and shown with an "Example entry" badge. The 22 sets of minutes in `src/data/minutes.json` contain the real recurring questions (ticket pricing, catering, safe standing, away travel, disabled access, hospitality works).
+    ## Scope
+    - Read the `content_text` of every minute and draft 10 to 15 real FAQ entries under the existing three topics (add a topic if needed). Each answer cites `minutes_refs` (ISO dates) and quotes the club's stated position; no invention.
+    - Remove the placeholder entries and the `placeholder` badge code paths if nothing uses them.
+    - Label the PR `needs-paul`: Paul checks the wording before merge because it speaks for the board.
+    ## Out of scope
+    Design changes to the FAQ page.
+    ## Acceptance tests
+    - Every `minutes_refs` value resolves via `getMinute`; `/faq/<id>` renders each entry.
+    ## Files touched
+    src/data/faq.json, src/pages/FAQ.tsx, src/pages/FAQDetails.tsx
+
+- id: FAB-005
+  title: "Content guide and an /add-news skill so articles, meetings and members are added by PR"
+  milestone: M1
+  wave: 1
+  area: docs
+  size: S
+  body: |
+    ## Context
+    docs/supabase-removal-plan.md §3. Paul, or Claude in a session, updates the site by editing files. The rules must be written once so any session can do it cold.
+    ## Scope
+    - `docs/content-guide.md`: one section per content type (news, minutes, upcoming meetings, members, FAQ) with the file location, the field list, a copy-paste example, image size and naming rules (news 1600 px wide JPEG, members 600 px), and the PR checklist (lint, typecheck, build, preview checked).
+    - `.claude/skills/add-news/SKILL.md`: takes a title, body and optional image path; writes `src/content/news/<yyyy-mm-dd>-<slug>.md` with today's `published_at`, resizes the image with `sips` into `public/images/news/`, runs the checks, and opens the PR with `scripts/agent pr`.
+    - Link the guide from README.md and CLAUDE.md.
+    ## Out of scope
+    A web admin UI.
+    ## Acceptance tests
+    - A fresh session adds a draft article following only the guide; the reviewer confirms the front matter validates and the page renders.
+    ## Files touched
+    docs/content-guide.md, .claude/skills/add-news/SKILL.md, README.md, CLAUDE.md
+
+- id: FAB-006
+  title: "Weekly minutes sync from the club website opens a PR when a new PDF appears"
+  milestone: M1
+  wave: 1
+  area: tooling
+  size: M
+  body: |
+    ## Context
+    The club publishes minutes at https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes. The page is client-rendered; the PDF links are `https://images.gc.barnsleyfcservices.co.uk/<uuid>.pdf` with labels like `08.08.26 Read here`. `src/data/minutes.json` was built by hand from it on 10 September 2026 (22 entries).
+    ## Scope
+    - `scripts/sync-minutes.mjs`: fetch the page with Playwright (links are not in the raw HTML), diff PDF URLs against `minutes.json`, download new PDFs, extract text with `pdf-parse`, read the meeting date from the "Date of Meeting" / "Date:" / "Meeting held:" / "Meeting of" header (fall back to the club label; the PDF wins when they differ, as with 08.08.26 vs 4 August 2026), read the location, append entries. Idempotent.
+    - `.github/workflows/sync-minutes.yml`: weekly cron plus manual dispatch; if `minutes.json` changed, open a PR with `peter-evans/create-pull-request` labelled `content`.
+    ## Out of scope
+    Mirroring PDFs into the repo (FAB-016).
+    ## Acceptance tests
+    - unit: the header parser handles the four header styles present in the current 22 PDFs (fixtures of first-page text).
+    - Running the script today changes nothing.
+    ## Files touched
+    scripts/sync-minutes.mjs, scripts/sync-minutes.test.ts, .github/workflows/sync-minutes.yml, package.json
+
+- id: FAB-007
+  title: "Build-time RSS feed and sitemap"
+  milestone: M1
+  wave: 2
+  area: site
+  size: S
+  depends: [FAB-001]
+  body: |
+    ## Context
+    docs/supabase-removal-plan.md §4.3: `/rss.xml` has never worked because the SPA has no API routes.
+    ## Scope
+    - `scripts/build-feeds.mjs` run after `vite build`: writes `dist/rss.xml` (20 newest published articles, absolute URLs, image enclosure) and `dist/sitemap.xml` (every route: articles, minutes, FAQ, static pages). `npm run build` becomes `vite build && node scripts/build-feeds.mjs`. It must reuse the front-matter rules from `src/lib/content.ts` (extract the parser to a shared module usable from Node).
+    - `<link rel="alternate" type="application/rss+xml">` in `index.html`; `public/robots.txt` pointing at the sitemap.
+    - Note in the content guide that a future `published_at` needs a rebuild after that date (Netlify build hook or a scheduled workflow).
+    ## Acceptance tests
+    - unit: feed and sitemap parse as XML, item counts match `getNews()`, no relative URLs.
+    ## Files touched
+    scripts/build-feeds.mjs, src/lib/frontmatter.ts, package.json, index.html, public/robots.txt
+
+- id: FAB-008
+  title: "Pre-render every route to static HTML so link previews and search engines see content"
+  milestone: M1
+  wave: 2
+  area: site
+  size: M
+  depends: [FAB-007]
+  body: |
+    ## Context
+    docs/supabase-removal-plan.md §4.4. Open Graph tags are set by `react-helmet` in the browser, which crawlers do not run, so a shared news link shows no title or image.
+    ## Scope
+    - Evaluate `vite-react-ssg` against a post-build prerender step (Playwright rendering each sitemap route from `dist`). Implement the simpler one that keeps `react-router-dom` and Netlify's `_redirects` fallback.
+    - Every route in the sitemap gets a static `index.html` with `<title>`, description and OG/Twitter tags baked in; the SPA hydrates on top. Swap `react-helmet` for `react-helmet-async` if needed.
+    ## Acceptance tests
+    - `dist/news/<slug>/index.html` contains the article title in `<title>` and `og:title`.
+    - Lighthouse SEO 100 on `/` and one article.
+    ## Files touched
+    vite.config.ts, package.json, src/main.tsx, scripts/
+
+- id: FAB-009
+  title: "Upcoming meetings on the Home page from meetings.json, with an .ics download"
+  milestone: M1
+  wave: 1
+  area: site
+  size: S
+  body: |
+    ## Context
+    `src/data/meetings.json` is empty; `getUpcomingMeetings()` already feeds Home and Meetings. Supporters should be able to add the next meeting to their calendar.
+    ## Scope
+    - MeetingDetails for an upcoming meeting offers "Add to calendar", an `.ics` built in the browser (DTSTART in UTC, location, description).
+    - Document `meetings.json` fields in the content guide (FAB-005 owns the guide; add the section there if it exists, otherwise in this PR).
+    - Ask Paul for the next meeting date and add it as the first entry.
+    ## Acceptance tests
+    - unit: `.ics` output has DTSTART in UTC and the location; validates in a calendar app.
+    ## Files touched
+    src/pages/MeetingDetails.tsx, src/lib/ics.ts, src/data/meetings.json, docs/content-guide.md
+
+- id: FAB-010
+  title: "Delete the Supabase project once PRs #1 to #3 are live"
+  milestone: M0
+  wave: 3
+  area: tooling
+  size: S
+  paul_only: true
+  body: |
+    ## Context
+    Everything from the backup is in the repo (PR #2). Leaving the paused project, and the paused `SPSync3` project in the same organisation, risks further invoices.
+    ## Scope
+    - Paul: confirm the site on `main` shows the imported news and members, then delete project `hefkoywehwsfqiwuknyv` in the Supabase dashboard and review the organisation's billing. Keep the downloaded backup files somewhere safe for a year.
+    - Agent: remove any remaining reference to Supabase in README and CLAUDE.md apart from docs/supabase-removal-plan.md.
+    ## Acceptance tests
+    - `grep -ri supabase --exclude-dir=node_modules --exclude-dir=.git .` only matches docs/supabase-removal-plan.md and this backlog.
+    ## Files touched
+    README.md, CLAUDE.md
+
+- id: FAB-011
+  title: "Decide the long-term host: stay on Netlify, Cloudflare Pages, or Azure Static Web Apps"
+  milestone: M2
+  wave: 1
+  area: deploy
+  size: S
+  paul_only: true
+  body: |
+    ## Context
+    docs/supabase-removal-plan.md §5. The site is static and runs anywhere. Netlify works today with Git integration and Netlify Forms; `deploy.yml` already targets Cloudflare Pages when secrets exist; Paul has asked whether the existing Azure subscription could host it.
+    ## Scope
+    - Paul decides, with these facts: Netlify free tier is enough for this traffic and forms (100/month); Cloudflare Pages is free with unlimited bandwidth and matches the SPSync site; Azure Static Web Apps free tier is also enough and keeps billing in one place but needs an Azure Function for the form.
+    - Record the decision in docs/supabase-removal-plan.md §5 with a **Paul decided:** comment on this issue.
+    ## Out of scope
+    Doing the move (FAB-012 to FAB-014).
+    ## Acceptance tests
+    - Decision recorded; FAB-012 rewritten for the chosen host.
+    ## Files touched
+    docs/supabase-removal-plan.md
+
+- id: FAB-012
+  title: "Deploy workflow and static config for the chosen host"
+  milestone: M2
+  wave: 2
+  area: deploy
+  size: S
+  depends: [FAB-011]
+  paul_only: true
+  body: |
+    ## Context
+    Follows FAB-011. For Cloudflare: `deploy.yml` exists, project `fab-barnsleyfc`, needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets and `public/_headers` carrying the CSP from `netlify.toml`. For Azure: `Azure/static-web-apps-deploy` action, `staticwebapp.config.json` with `navigationFallback` and the same headers.
+    ## Scope
+    - Paul: create the project/resource and the repository secrets.
+    - Agent: the config file and workflow for the chosen host; confirm every route renders on the preview URL.
+    ## Acceptance tests
+    - Deploy from `main` succeeds; `curl -I <preview>/minutes` returns 200 with the CSP header.
+    ## Files touched
+    .github/workflows/deploy.yml, public/_headers or staticwebapp.config.json
+
+- id: FAB-013
+  title: "Submit form on the new host (Pages Function or Azure Function) emailing the FAB inbox"
+  milestone: M2
+  wave: 3
+  area: deploy
+  size: M
+  depends: [FAB-012]
+  paul_only: true
+  body: |
+    ## Context
+    Netlify Forms stops working when the site leaves Netlify. The replacement is a small serverless function that validates the fields, checks a Turnstile/hCaptcha token, and sends via Resend (or the club's SMTP) to `fab@barnsleyfc.co.uk` and the chosen representative.
+    ## Scope
+    - Function under `functions/api/submit.ts` (Cloudflare) or `api/submit` (Azure); secrets held by the host.
+    - Submit page posts JSON to `/api/submit`; keeps the mailto fallback.
+    - Paul: email provider account and captcha keys.
+    ## Acceptance tests
+    - unit: validation rejects empty and oversized bodies.
+    - Manual: a test submission arrives from the preview URL.
+    ## Files touched
+    functions/ or api/, src/pages/Submit.tsx, index.html (remove the hidden Netlify form)
+
+- id: FAB-014
+  title: "Switch fab.barnsleyfc.co.uk DNS to the new host and decommission Netlify"
+  milestone: M2
+  wave: 4
+  area: deploy
+  size: S
+  depends: [FAB-012, FAB-013]
+  paul_only: true
+  body: |
+    ## Context
+    The `barnsleyfc.co.uk` zone belongs to the club. Netlify keeps serving until the CNAME moves, so nothing breaks in the meantime.
+    ## Scope
+    - Paul: add the custom domain on the new host; send the club the CNAME target and the verification TXT record; wait for it to go green.
+    - After cut-over: remove the Netlify site; delete `netlify.toml`, `netlify-cli` and the `deploy` scripts from `package.json`; update README and CLAUDE.md.
+    ## Acceptance tests
+    - `dig fab.barnsleyfc.co.uk` resolves to the new host; the site serves the latest `main` build.
+    ## Files touched
+    netlify.toml, package.json, README.md, CLAUDE.md
+
+- id: FAB-015
+  title: "Split the bundle by route and trim dependencies"
+  milestone: M3
+  wave: 1
+  area: site
+  size: S
+  body: |
+    ## Context
+    After PR #3 the bundle is one 509 kB chunk (163 kB gzipped). Remaining weight is `date-fns`, `lucide-react`, `react-router-dom` and the inlined minutes text used for search.
+    ## Scope
+    - `React.lazy` per page in `App.tsx`; `manualChunks` for vendor code; import only the `date-fns` functions used.
+    - Load `content_text` for minutes search lazily (separate JSON chunk fetched when the user types).
+    - Report before/after sizes in the PR.
+    ## Acceptance tests
+    - Largest chunk under 250 kB; Lighthouse performance 95+ on `/` (mobile).
+    ## Files touched
+    src/App.tsx, vite.config.ts, src/lib/content.ts, src/pages/Minutes.tsx
+
+- id: FAB-016
+  title: "Mirror minutes PDFs into public/minutes as a fallback"
+  milestone: M3
+  wave: 1
+  area: content
+  size: S
+  depends: [FAB-006]
+  body: |
+    ## Context
+    PDFs are hot-linked from the club CDN. If the club moves or removes them the FAB archive breaks. The storage backup already holds 19 of the 22 PDFs.
+    ## Scope
+    - `scripts/sync-minutes.mjs` also saves each PDF to `public/minutes/<yyyy-mm-dd>.pdf`; `minutes.json` gains `local_path`; the Minutes page links the local copy and keeps the club URL as `source_url`.
+    ## Acceptance tests
+    - Every entry has both paths and the local file exists.
+    ## Files touched
+    scripts/sync-minutes.mjs, src/data/minutes.json, public/minutes/, src/pages/Minutes.tsx
+
+- id: FAB-017
+  title: "Accessibility and Lighthouse pass across all pages"
+  milestone: M3
+  wave: 2
+  area: site
+  size: M
+  body: |
+    ## Context
+    The site has never been audited. Known items: `react-helmet` triggers a `UNSAFE_componentWillMount` warning; images use empty alt where they are decorative but member photos need real alt text; the Minutes search results need `aria-live`.
+    ## Scope
+    - Run Lighthouse (mobile) and axe on every route; fix everything under "Accessibility" and "Best practices"; add `lighthouserc.json` and a CI job with budgets (performance 90, accessibility 100).
+    ## Acceptance tests
+    - Lighthouse accessibility 100 on every route in CI.
+    ## Files touched
+    src/**, lighthouserc.json, .github/workflows/ci.yml
