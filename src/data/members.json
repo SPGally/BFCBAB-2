@@ -1,0 +1,102 @@
+[
+  {
+    "id": "vacant-away-day-travellers",
+    "name": "Vacant",
+    "role": "Representing away day travellers",
+    "email": null,
+    "bio": "Away Day Travellers Representative\nThis FAB position is currently vacant. To register your interest to be nominated, please email: FAB.supporterstrust@barnsleyfc.co.uk",
+    "image": "/images/members/vacant-away-day-travellers.jpg",
+    "order": 1,
+    "vacant": true
+  },
+  {
+    "id": "steve-brain",
+    "name": "Steve Brain",
+    "role": "Vice Chair and representing season ticket holders",
+    "email": "FAB.seasonticket@barnsleyfc.co.uk",
+    "bio": "I've been a BFC supporter for 64 years. I love our club, and I'm honoured to have been elected as your Representative. I will listen to you, and on your behalf, I will strive to positively develop the bond between us and our Club and drive further growth in our fan base.",
+    "image": "/images/members/steve-brain.jpg",
+    "order": 2,
+    "vacant": false
+  },
+  {
+    "id": "claire-calton",
+    "name": "Claire Calton",
+    "role": "representing women and girls",
+    "email": "FAB.womengirls@barnsleyfc.co.uk",
+    "bio": "I’m a lifelong fan and have had a season ticket since the premiership promotion season. I’m also a member of the committee at AFC Pogmoor which has a high number of girls teams and an open age ladies’ team. I also attend a lot of away games. I’ve seen a vast change in the attitudes towards women and girls in football since I started coming to matches, but there is still a long way to go.",
+    "image": "/images/members/claire-calton.jpg",
+    "order": 3,
+    "vacant": false
+  },
+  {
+    "id": "vacant-matchday-ticket-purchasers",
+    "name": "Vacant",
+    "role": "Representing matchday ticket purchasers",
+    "email": "FAB.matchticket@barnsleyfc.co.uk",
+    "bio": "Matchday Ticket Purchasers Representative\nThis FAB position is currently vacant. To register your interest to be nominated, please email: FAB.supporterstrust@barnsleyfc.co.uk",
+    "image": "/images/members/vacant-matchday-ticket-purchasers.jpg",
+    "order": 4,
+    "vacant": true
+  },
+  {
+    "id": "paul-gallagher",
+    "name": "Paul Gallagher",
+    "role": "Representing the Supporters Trust",
+    "email": "FAB.supporterstrust@barnsleyfc.co.uk",
+    "bio": "With my position within Barnsley Football Club Supporters Trust, I bring a deep understanding of fan perspectives to my role on the fan advisory board. I will advocate for transparency, inclusivity, and accountability, ensuring that all supporters, regardless of affiliation, feel represented and valued by the club.",
+    "image": "/images/members/paul-gallagher.jpg",
+    "order": 5,
+    "vacant": false
+  },
+  {
+    "id": "phil-hall",
+    "name": "Phil Hall",
+    "role": "Representing diversity and community",
+    "email": "FAB.inclusion@barnsleyfc.co.uk",
+    "bio": "The club is part of the community, and everyone should have the ability to be involved, regardless of race, religion, age, or ability. Volunteering with the Community Trust and the Hospital commentaries helps me to connect with a broad range of supporters, and I aim to do all I can to help Barnsley FC be an inclusive, community club.",
+    "image": "/images/members/phil-hall.jpg",
+    "order": 7,
+    "vacant": false
+  },
+  {
+    "id": "martin-wilson",
+    "name": "Martin Wilson",
+    "role": "Representing disabled supporters",
+    "email": "FAB.disability@barnsleyfc.co.uk",
+    "bio": "As I have been voted to be an advocate for people with disabilities, I would like to represent a group of people with issues and obstacles similar to my own. This will be a learning curve not only for myself but for all those involved. I will ensure that all those I represent will have a voice. Due to my sight loss, I would like to introduce myself in a face-to-face meeting with all disabled supporters.",
+    "image": "/images/members/martin-wilson.jpg",
+    "order": 8,
+    "vacant": false
+  },
+  {
+    "id": "vacant-supporters-not-living-locally",
+    "name": "Vacant",
+    "role": "Representing supporters not living locally",
+    "email": null,
+    "bio": "Representing Supporters Not Living Locally\nThis FAB position is currently vacant. To register your interest to be nominated, please email: FAB.supporterstrust@barnsleyfc.co.uk",
+    "image": "/images/members/vacant-supporters-not-living-locally.jpg",
+    "order": 9,
+    "vacant": true
+  },
+  {
+    "id": "robin-harris",
+    "name": "Robin Harris",
+    "role": "Representing youth and children",
+    "email": "FAB.youth@barnsleyfc.co.uk",
+    "bio": "I am very grateful to be able to accept the Youth and Children role on the Barnsley FC Fans Advisory Board. Being 17, I believe I'm in a good position to understand the children and youth of the club. During my time on the board, I want to connect with the youth of the club and understand how they want the club to move forward. I would also want to speak to parents and see where they see the club with children in mind.",
+    "image": "/images/members/robin-harris.jpg",
+    "order": 10,
+    "vacant": false
+  },
+  {
+    "id": "dominic-wood",
+    "name": "Dominic Wood",
+    "role": "Representing club sponsors and hospitality",
+    "email": "FAB.hospitality@barnsleyfc.co.uk",
+    "bio": "I would like to firstly thank the people that voted me into position, I am hoping my passion and vision shone through for our club. While I have been accepted on the board to represent the hospitality and sponsors of the club, I also think I can do more than that. I see the position enabling better communication between the club and supporters, and also to ensure regular contact with the leadership team to ensure we hold them account for the things that aren’t going in right direction, although I believe that this should be less this season.",
+    "image": "/images/members/dominic-wood.jpg",
+    "order": 11,
+    "vacant": false
+  }
+]
