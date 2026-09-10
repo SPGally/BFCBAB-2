@@ -5,13 +5,17 @@ You are one of several agents working this repository concurrently. Read this fi
 else is shared.
 
 ## What this repo is
-The Barnsley FC Fan Advisory Board website, live at fab.barnsleyfc.co.uk: a Vite + React +
-TypeScript + Tailwind single-page app, hosted on Netlify today (Cloudflare Pages is
-milestone M2). Content will live as JSON/Markdown files under `src/data/` and images under
-`public/images/`, so every content change is a PR. Supabase (auth, admin UI, content tables)
-is being removed; the plan is `docs/supabase-removal-plan.md`. Meeting-minutes PDFs are
-hot-linked from the club CDN (`images.gc.barnsleyfcservices.co.uk`) and mirrored from
-https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes.
+The Barnsley FC Fan Advisory Board website, live at fab.barnsleyfc.co.uk: a fully static
+Vite + React + TypeScript + Tailwind single-page app, hosted on Netlify (Git integration on
+`main`; a move to Cloudflare Pages or Azure is milestone M2 and needs the club to change
+DNS). There is no database and no admin UI. All content is files in the repo, read through
+`src/lib/content.ts`: news as Markdown with front matter in `src/content/news/`, minutes,
+upcoming meetings, members and FAQ as JSON in `src/data/`, images in `public/images/`. Every
+content change is a pull request; Netlify redeploys when it merges. Supabase was removed in
+September 2026; the history is `docs/supabase-removal-plan.md`. Minutes PDFs are hot-linked
+from the club CDN (`images.gc.barnsleyfcservices.co.uk`) and mirror the official list at
+https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes. The Submit form
+posts to Netlify Forms (hidden copy of the form in `index.html`).
 
 ## Identity
 Set `AGENT_NAME` in `.env.agent` (copy from `.env.agent.example`). Format:
@@ -37,10 +41,10 @@ excuse to rely on them.
 - Claim with `scripts/agent claim NNN` before branching. Hand off with `scripts/agent handoff "..."` before ending any session.
 - The delivery loop is automated: Paul runs `/work` in this folder, which spawns a fresh coder (Sonnet) per issue or fix round and a fresh reviewer (Opus) per PR, and asks Paul only for decisions. If you are a coder or reviewer subagent, follow your agent file and return your one-line result. PRs are merged by the Reviewer (or Paul), never by the author. `/review-prs` is Paul's manual sweep; `/submit-pr` is the pre-flight and PR step. Address a `changes-requested` list by pushing commits; do not open a second PR.
 - No `--watch` or polling commands against GitHub; the shared token is rate-limited.
-- Run `npm run lint` and `npm run build` before each commit; `npm test` too once FAB-004 lands.
+- Run `npm run lint`, `npm run typecheck` and `npm run build` before each commit; `npm test` too once FAB-001 lands.
 - Use `npm ci`, never `npm install`, and never commit `node_modules` or `dist`.
 - Do not edit `netlify.toml`, `wrangler.toml`, `.github/workflows/`, `scripts/` or this file unless the issue is explicitly about them (protected paths: the reviewer needs a Paul decision to merge).
-- Secrets (Supabase keys, Cloudflare tokens, Netlify tokens) never go in git, issues, PRs, or chat. `.env` is gitignored; do not read it into a comment.
+- Secrets (Cloudflare, Azure or Netlify tokens) never go in git, issues, PRs, or chat.
 - Blocked on Paul: label `needs-paul`, recommend, move on.
 
 ## Commands
@@ -48,10 +52,10 @@ excuse to rely on them.
 scripts/setup-hooks.sh           # first thing on any clone
 npm ci                           # set up (Node 20+)
 npm run dev                      # local site on http://localhost:5173
-npm run lint                     # eslint (red on existing source today; FAB-003 fixes it)
-npm run typecheck                # tsc --noEmit (also red today; FAB-003; warn-only in the pre-commit hook until then)
+npm run lint                     # eslint, clean on main; keep it that way
+npm run typecheck                # tsc --noEmit, clean on main (warn-only in the pre-commit hook until FAB-002)
 npm run build                    # vite build -> dist/
-npm test                         # vitest run (no runner installed yet: FAB-004 sets it up and adds the first tests)
+npm test                         # vitest run (no runner installed yet: FAB-001 sets it up and adds the first tests)
 scripts/agent mine | resume NNN | next | claim NNN | pr [body|@file|-] | handoff "msg" | comment NNN <text|@file|-> | release NNN
 #   `comment` is the ONLY way to post a comment (it signs and expands @file); never `gh pr comment` or `gh api` for comments
 #   `resume`/`scripts/review checkout` take a per-PR work lock (label reviewing:<Machine> / fixing:<Machine>);
@@ -64,14 +68,14 @@ scripts/agent mine | resume NNN | next | claim NNN | pr [body|@file|-] | handoff
 
 The hooks in `.githooks/` are plain bash: `pre-commit` refuses commits on main and, when
 source is staged, runs eslint on the staged files (blocking) and `npm run typecheck` on the
-project (warning only); `commit-msg` enforces Conventional Commits; `pre-push` refuses
-pushes to main. `scripts/setup-hooks.sh` sets `core.hooksPath`; there is no other install
-step. Known state: the existing source fails both `npm run lint` (62 errors) and
-`npm run typecheck`, so CI's lint job is red on every PR until FAB-003 cleans it up. Do not
-add to the count; do not "fix" unrelated files in your PR either (that is FAB-003's job).
+project (warning only until FAB-002 makes it blocking); `commit-msg` enforces Conventional
+Commits; `pre-push` refuses pushes to main. `scripts/setup-hooks.sh` sets `core.hooksPath`;
+there is no other install step. Lint and typecheck are clean on `main`; a PR that makes
+either red is sent back.
 
 ## Where things are
 `docs/agent-playbook.md` (how agents work this repo), `docs/review-agent.md` (review
 policy), `docs/supabase-removal-plan.md` (what is being removed and in what order),
 `backlog/issues.yaml` (the backlog source; `scripts/bootstrap-github.sh` turns it into
-issues, Paul runs that). Site source: `src/`, static assets: `public/`.
+issues, Paul runs that). Site source: `src/`, content: `src/content/` and `src/data/`, static assets: `public/`.
+`docs/content-guide.md` (FAB-005) will describe every content file's fields.

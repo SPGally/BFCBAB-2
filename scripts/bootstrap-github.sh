@@ -40,7 +40,7 @@ for w in 1 2 3 4; do mklabel "wave:$w" "bfd4f2" "Parallel wave $w within a miles
 for s in S M L; do mklabel "size:$s" "ededed" "Size $s"; done
 
 echo "== milestones"
-ms_title() { case "$1" in M0) echo "Stabilise";; M1) echo "Content by PR";; M2) echo "Cloudflare";; M3) echo "Polish";; esac; }
+ms_title() { case "$1" in M0) echo "Stabilise";; M1) echo "Content by PR";; M2) echo "Hosting";; M3) echo "Polish";; esac; }
 for m in M0 M1 M2 M3; do
   t="$m $(ms_title "$m")"
   gh api "repos/$REPO/milestones?state=all" --paginate -q ".[] | select(.title==\"$t\") | .number" | grep -q . \
