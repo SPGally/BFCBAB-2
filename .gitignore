@@ -32,3 +32,10 @@ dist-ssr
 
 # Local Netlify folder
 .netlify
+
+# Claude Code worktrees and per-machine agent identity
+.claude/worktrees/
+.env.agent
+
+# Social media credentials (local only)
+.env.social

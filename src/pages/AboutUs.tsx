@@ -1,35 +1,9 @@
-import React from 'react';
-import { supabase } from '../lib/supabase';
+import { getMembers } from '../lib/content';
 import { Mail, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-interface BoardMember {
-  id: string;
-  name: string;
-  role: string;
-  bio: string | null;
-  image_url: string | null;
-  email: string | null;
-  order_position: number;
-}
-
 const AboutUs = () => {
-  const [members, setMembers] = React.useState<BoardMember[]>([]);
-
-  React.useEffect(() => {
-    fetchMembers();
-  }, []);
-
-  const fetchMembers = async () => {
-    const { data, error } = await supabase
-      .from('board_members')
-      .select('*')
-      .order('order_position', { ascending: true });
-
-    if (!error && data) {
-      setMembers(data);
-    }
-  };
+  const members = getMembers();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -80,9 +54,9 @@ const AboutUs = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {members.map((member) => (
           <div key={member.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            {member.image_url && (
+            {member.image && (
               <img
-                src={member.image_url}
+                src={member.image}
                 alt={member.name}
                 className="w-full h-80 md:h-96 lg:h-[450px] object-cover"
               />

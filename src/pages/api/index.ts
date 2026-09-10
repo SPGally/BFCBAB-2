@@ -1,1 +1,0 @@
-export { GET as default } from './rss';
