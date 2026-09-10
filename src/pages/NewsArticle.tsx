@@ -59,7 +59,7 @@ export default function NewsArticle() {
 
         <article className="bg-white rounded-lg shadow-md overflow-hidden">
           {article.image && (
-            <div className="relative h-96">
+            <div className="relative aspect-video">
               <img src={article.image} alt="" className="w-full h-full object-cover" />
             </div>
           )}

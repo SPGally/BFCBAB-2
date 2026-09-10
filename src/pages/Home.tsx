@@ -34,7 +34,7 @@ const Home = () => {
                 <article className="bg-white rounded-lg shadow-md overflow-hidden">
                   <Link to={`/news/${heroArticle.slug}`} className="block">
                     {heroArticle.image ? (
-                      <div className="relative h-96 group">
+                      <div className="relative aspect-video group">
                         <img
                           src={heroArticle.image}
                           alt=""
@@ -49,7 +49,7 @@ const Home = () => {
                         />
                       </div>
                     ) : (
-                      <div className="h-96 bg-gray-100 flex items-center justify-center group">
+                      <div className="aspect-video bg-gray-100 flex items-center justify-center group">
                         <Newspaper className="h-16 w-16 text-gray-400 transition-transform duration-300 group-hover:scale-110" />
                       </div>
                     )}
