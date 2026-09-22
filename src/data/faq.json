@@ -54,5 +54,83 @@
         "placeholder": true
       }
     ]
+  },
+  {
+    "id": "ticketing-and-pricing",
+    "name": "Ticketing and Pricing",
+    "description": "Season tickets, matchday prices, memberships and the ticket office",
+    "questions": []
+  },
+  {
+    "id": "stadium-and-facilities",
+    "name": "Stadium and Facilities",
+    "description": "Oakwell itself: stands, toilets, lighting, the big screen, PA system and catering",
+    "questions": []
+  },
+  {
+    "id": "accessibility",
+    "name": "Accessibility and Disabled Supporters",
+    "description": "Access, seating, headsets and commentary, passport cards and reasonable adjustments",
+    "questions": []
+  },
+  {
+    "id": "car-parking-and-travel",
+    "name": "Car Parking and Travel",
+    "description": "Parking, road closures after the game, and getting to and from Oakwell",
+    "questions": []
+  },
+  {
+    "id": "away-games-and-living-away",
+    "name": "Away Games and Supporters Living Away",
+    "description": "Away travel, away ticketing, hotel discounts and following the Reds from a distance",
+    "questions": []
+  },
+  {
+    "id": "hospitality-and-sponsorship",
+    "name": "Hospitality and Sponsorship",
+    "description": "Lounges, hospitality areas, sponsors and commercial partnerships",
+    "questions": []
+  },
+  {
+    "id": "retail-and-kit",
+    "name": "Retail and Kit",
+    "description": "The club shop, kit releases, training and travel wear",
+    "questions": []
+  },
+  {
+    "id": "academy-and-football",
+    "name": "Academy and Football",
+    "description": "The Academy, the first team, pre-season and playing matters",
+    "questions": []
+  },
+  {
+    "id": "finance-and-governance",
+    "name": "Club Finances and Governance",
+    "description": "Ownership, the Independent Football Regulator, council funding and how the club is run",
+    "questions": []
+  },
+  {
+    "id": "community-and-inclusion",
+    "name": "Community and Inclusion",
+    "description": "Community Trust, inclusion, women and girls, youth and families",
+    "questions": []
+  },
+  {
+    "id": "heritage-and-2027",
+    "name": "Heritage and 2027",
+    "description": "The club's history, the founder's plaque, and the 2027 anniversaries",
+    "questions": []
+  },
+  {
+    "id": "fan-zone",
+    "name": "Fan Zone and Pre-match",
+    "description": "Fan zone ideas, the Ozone, pre-match music and matchday atmosphere",
+    "questions": []
+  },
+  {
+    "id": "communication",
+    "name": "Communication with Supporters",
+    "description": "How the club and the FAB keep supporters informed, minutes, forums and iFollow",
+    "questions": []
   }
 ]

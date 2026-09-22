@@ -1,1 +1,34 @@
-[]
+[
+  {
+    "id": "2026-10-29",
+    "title": "Fan Advisory Board Meeting",
+    "date": "2026-10-29T18:00:00+00:00",
+    "location": "Online via Microsoft Teams",
+    "description": "Regular meeting of the Fan Advisory Board with the club. Send us anything you would like raised beforehand via the Submit page.",
+    "agenda_html": null
+  },
+  {
+    "id": "2026-12-10",
+    "title": "Fan Advisory Board Meeting",
+    "date": "2026-12-10T18:00:00+00:00",
+    "location": "Online via Microsoft Teams",
+    "description": "Regular meeting of the Fan Advisory Board with the club. Send us anything you would like raised beforehand via the Submit page.",
+    "agenda_html": null
+  },
+  {
+    "id": "2027-01-21",
+    "title": "Fan Advisory Board Meeting",
+    "date": "2027-01-21T18:00:00+00:00",
+    "location": "Online via Microsoft Teams",
+    "description": "Regular meeting of the Fan Advisory Board with the club. Send us anything you would like raised beforehand via the Submit page.",
+    "agenda_html": null
+  },
+  {
+    "id": "2027-02-25",
+    "title": "Fan Advisory Board Meeting",
+    "date": "2027-02-25T18:00:00+00:00",
+    "location": "Online via Microsoft Teams",
+    "description": "Regular meeting of the Fan Advisory Board with the club. Send us anything you would like raised beforehand via the Submit page.",
+    "agenda_html": null
+  }
+]
