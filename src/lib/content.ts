@@ -102,6 +102,8 @@ export interface FaqQuestion {
   raised_by: string[];
   /** Minute ids (ISO dates) this answer draws on. */
   minutes_refs: string[];
+  /** Seed example rather than a real answer; shown with a note. */
+  placeholder?: boolean;
   /** Member id of whoever answered, if known. */
   author?: string | null;
 }
