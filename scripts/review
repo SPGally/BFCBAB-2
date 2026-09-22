@@ -8,7 +8,9 @@
 #   scripts/review claim <N> | release <N>   take / drop the reviewing lock without a worktree
 #   scripts/review done <N>              remove that worktree and release the lock
 #   scripts/review decide <N> merge|changes|paul|decided "<message>"
-#       merge   : refuses own PRs; refuses protected paths unless a "**Paul decided:**" comment exists on the PR
+#       merge   : refuses own PRs; refuses protected paths unless a "**Paul decided:**" comment exists on the PR;
+#                 a PR touching src/content/, src/data/ or public/images/ is approved and labelled
+#                 approved-hold-for-paul instead of merged — Paul merges content PRs himself
 #       changes : posts list, labels changes-requested, mirrors to issue
 #       paul    : defer with needs-paul (only when Paul is not in the session)
 #       decided : record Paul's inline answer, clear needs-paul
@@ -27,6 +29,10 @@ REVIEWER_SIG_RE="— FAB( [A-Za-z]+)? Reviewer"   # matches "— FAB Reviewer Op
 # Protected paths (docs/review-agent.md §3.5): a PR touching any of these needs a recorded
 # "**Paul decided:**" comment before `decide merge` will merge it.
 PROTECTED_RE='^(\.github/workflows/|scripts/|CLAUDE\.md|netlify\.toml|wrangler\.toml)'
+# Content paths (docs/review-agent.md §3.5): a PR touching any of these is approved but never
+# merged automatically — Paul merges it himself. `decide merge` posts the approval, labels the
+# PR approved-hold-for-paul, and exits without merging.
+CONTENT_RE='^(src/content/|src/data/|public/images/)'
 US=$'\x1f'
 source "$ROOT/scripts/lib/gh-rest.sh"
 source "$ROOT/scripts/lib/lock.sh"
@@ -61,6 +67,8 @@ mark_for() {
   lock=$(printf '%s\n' "$labels" | tr ',' '\n' | { grep -E '^(reviewing|fixing):' || true; } | head -1)
   if [ -n "$lock" ] && [ "$lock_stale" != 1 ]; then
     echo "$lock"
+  elif echo "$labels" | grep -q approved-hold-for-paul; then
+    echo awaiting-paul-merge
   elif echo "$labels" | grep -q needs-paul; then
     if [ "${paul_after:-0}" -gt 0 ]; then echo paul-replied; else echo waiting-paul; fi
   elif echo "$labels" | grep -q changes-requested && [ -n "$last_review" ] && [[ "$last_commit" < "$last_review" ]]; then
@@ -156,6 +164,20 @@ case "${1:-}" in
             echo "REFUSED: PR #$n touches protected paths and has no '**Paul decided:**' comment:"; echo "$protected" | sed 's/^/  /'
             echo "Ask Paul inline, then: scripts/review decide $n decided \"<answer>\""; exit 1
           fi
+        fi
+        content=$(rest_pr_files "$n" | awk -F'\t' -v re="$CONTENT_RE" '$2 ~ re { print $2 }')
+        if [ -n "$content" ]; then
+          rest_comment "$n" "$(sign "**Review: approved, holding for Paul's manual merge (content change).**
+
+$msg
+
+This PR changes site content, so it is not merged automatically. Paul merges it himself once he has read it.")"
+          rest_add_label "$n" approved-hold-for-paul
+          [ -n "$iss" ] && rest_remove_label "$iss" claimed
+          rest_comment "$HANDOFF" "$(sign "$(date -u +'%Y-%m-%d %H:%M UTC') — PR #$n approved (content change), holding for Paul's manual merge: $msg")"
+          lock_release "$n" reviewing
+          echo "APPROVED, HOLDING FOR PAUL: PR #$n touches content paths, not merged:"; echo "$content" | sed 's/^/  /'
+          exit 0
         fi
         # Called directly rather than through `run`: we need the merge's captured
         # stdout/stderr (merge_out) to report the failure, which `run` does not return.

@@ -40,6 +40,7 @@ excuse to rely on them.
 - **Your open PRs come first.** Start every session with `scripts/agent mine` (or `/fix-prs`). While any PR of yours is `fix-needed`, `scripts/agent next` and `claim` refuse to run: fix it, push, comment what you addressed, then continue.
 - Claim with `scripts/agent claim NNN` before branching. Hand off with `scripts/agent handoff "..."` before ending any session.
 - The delivery loop is automated: Paul runs `/work` in this folder, which spawns a fresh coder (Sonnet) per issue or fix round and a fresh reviewer (Opus) per PR, and asks Paul only for decisions. If you are a coder or reviewer subagent, follow your agent file and return your one-line result. PRs are merged by the Reviewer (or Paul), never by the author. `/review-prs` is Paul's manual sweep; `/submit-pr` is the pre-flight and PR step. Address a `changes-requested` list by pushing commits; do not open a second PR.
+- **Content PRs are never auto-merged.** A PR touching `src/content/`, `src/data/` or `public/images/` — i.e. it changes what visitors see on the live site — is approved by the reviewer but left open, labelled `approved-hold-for-paul`, for Paul to merge himself. See `docs/review-agent.md` §3.5.
 - No `--watch` or polling commands against GitHub; the shared token is rate-limited.
 - Run `npm run lint`, `npm run typecheck` and `npm run build` before each commit; `npm test` too once FAB-001 lands.
 - Use `npm ci`, never `npm install`, and never commit `node_modules` or `dist`.

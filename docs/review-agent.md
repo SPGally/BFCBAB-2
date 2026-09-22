@@ -37,6 +37,7 @@ code on someone else's branch and never opens feature PRs; it reviews and decide
 | `blocked` | A dependency issue is still open | Skip, say so in the summary |
 | `reviewing:<M>` | A reviewer on machine M holds the PR's work lock | Skip: it is being reviewed right now |
 | `fixing:<M>` | A fix-round coder on machine M holds the PR | Skip: a fix is in progress |
+| `awaiting-paul-merge` | Labelled `approved-hold-for-paul`: a content PR the reviewer has approved but not merged | Skip: it is waiting on Paul to merge it himself |
 
 The reviewer takes the first `ready` or `paul-replied` PR, finishes it completely, then the
 next. It stops only when the queue has no actionable PR.
@@ -103,13 +104,16 @@ Read every changed file. Check, in this order of severity:
 
 | Outcome | When | What the reviewer does |
 |---|---|---|
-| **merge** | Everything in 3.1 to 3.4 passes, or only "note" items remain | `scripts/review decide N merge "<summary>"`: posts the review, merges with a merge commit, deletes the branch, removes `claimed`, adds a handoff entry. |
+| **merge** | Everything in 3.1 to 3.4 passes, or only "note" items remain | `scripts/review decide N merge "<summary>"`: posts the review, merges with a merge commit, deletes the branch, removes `claimed`, adds a handoff entry. If the PR touches `src/content/`, `src/data/` or `public/images/` (a content change to the live site), the script instead posts the approval, labels the PR `approved-hold-for-paul`, and does **not** merge — Paul merges content PRs himself, whatever else in 3.1 to 3.4 passed. |
 | **changes** | Concrete fixable problems | `scripts/review decide N changes "<list>"`: posts a numbered, file-and-line-specific list with the failing command output; adds label `changes-requested`; comments on the issue with a one-line pointer. |
 | **paul** | A decision outside the docs is needed, or a protected path changes (`.github/workflows/`, `scripts/`, `CLAUDE.md`, `netlify.toml`, `wrangler.toml`) | **Stop and ask Paul inline** (§3.6). After Paul answers, record it with `scripts/review decide N decided "<Paul's decision>"` and finish the PR under that decision. Only if Paul cannot be reached, `scripts/review decide N paul "<options>"`, which labels `needs-paul` and defers. |
 | **blocked** | Dependency open | Comment once naming the dependency; skip. |
 
 Never merge: the reviewer's own PRs; PRs touching protected paths without a `paul` decision
-recorded; PRs whose acceptance checks were not run.
+recorded; PRs whose acceptance checks were not run; PRs touching content paths
+(`src/content/`, `src/data/`, `public/images/`) — those are approved and left for Paul to
+merge himself (Paul decided this 2026-09-22, after a content PR was auto-merged and he asked
+for a manual approval step on anything that changes what visitors see on the live site).
 
 Small-fix exception: none. The reviewer does not commit to other agents' branches. If a fix
 is trivial, it says exactly what to change and lets the owner do it.
@@ -139,8 +143,9 @@ for routine merges. It never means deciding on Paul's behalf.
 
 ## 5. Run summary to Paul
 At the end of a run the reviewer reports, in this shape: PRs merged (number, title, one line
-why safe); PRs sent back (number, count of must-fix items); decisions needed from Paul (each
-with options and the recommended default); anything blocked. Nothing else.
+why safe); content PRs approved and awaiting Paul's manual merge (number, title); PRs sent
+back (number, count of must-fix items); decisions needed from Paul (each with options and the
+recommended default); anything blocked. Nothing else.
 
 ## 6. Guardrails
 - One PR at a time, fully finished, then the next. No parallel review worktrees.
