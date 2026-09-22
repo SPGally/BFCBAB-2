@@ -7,6 +7,58 @@ import { getMembers, getFaqTopics } from '../lib/content';
 // as form-encoded data. Notifications are configured in the Netlify UI (Forms > Settings).
 const FORM_NAME = 'fab-submission';
 const FAB_EMAIL = 'fab@barnsleyfc.co.uk';
+// reCAPTCHA v2 checkbox. Netlify verifies the token server-side (custom keys: SITE_RECAPTCHA_KEY
+// and SITE_RECAPTCHA_SECRET in the Netlify environment), which is what stops bots that post
+// straight to the form endpoint. The site key is public. If it is not configured the widget is
+// simply not rendered and the form works as before.
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string | undefined;
+
+declare global {
+  interface Window {
+    grecaptcha?: {
+      render: (el: HTMLElement, opts: { sitekey: string; callback: (t: string) => void; 'expired-callback': () => void }) => number;
+      reset: (id?: number) => void;
+    };
+    onRecaptchaLoad?: () => void;
+  }
+}
+
+function useRecaptcha(enabled: boolean) {
+  const boxRef = React.useRef<HTMLDivElement>(null);
+  const widgetId = React.useRef<number | null>(null);
+  const [token, setToken] = React.useState('');
+
+  React.useEffect(() => {
+    if (!enabled || !RECAPTCHA_SITE_KEY) return;
+    const render = () => {
+      if (boxRef.current && window.grecaptcha && widgetId.current === null) {
+        widgetId.current = window.grecaptcha.render(boxRef.current, {
+          sitekey: RECAPTCHA_SITE_KEY,
+          callback: (t: string) => setToken(t),
+          'expired-callback': () => setToken(''),
+        });
+      }
+    };
+    if (window.grecaptcha) {
+      render();
+      return;
+    }
+    window.onRecaptchaLoad = render;
+    if (!document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  }, [enabled]);
+
+  const reset = () => {
+    if (window.grecaptcha && widgetId.current !== null) window.grecaptcha.reset(widgetId.current);
+    setToken('');
+  };
+  return { boxRef, token, reset };
+}
 
 const encode = (data: Record<string, string>) =>
   Object.entries(data)
@@ -28,6 +80,8 @@ const Submit = () => {
   const topics = React.useMemo(() => getFaqTopics(), []);
   const [formData, setFormData] = React.useState(emptyForm);
   const [status, setStatus] = React.useState<'idle' | 'submitting' | 'sent' | 'failed'>('idle');
+  const captchaEnabled = Boolean(RECAPTCHA_SITE_KEY);
+  const captcha = useRecaptcha(captchaEnabled && status !== 'sent');
 
   const memberName = (id: string) => members.find((m) => m.id === id)?.name ?? '';
   const topicName = (id: string) => topics.find((t) => t.id === id)?.name ?? '';
@@ -45,6 +99,10 @@ const Submit = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (captchaEnabled && !captcha.token) {
+      setStatus('failed');
+      return;
+    }
     setStatus('submitting');
     try {
       const res = await fetch('/', {
@@ -52,6 +110,8 @@ const Submit = () => {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encode({
           'form-name': FORM_NAME,
+          'bot-field': '',
+          ...(captchaEnabled ? { 'g-recaptcha-response': captcha.token } : {}),
           ...formData,
           member: memberName(formData.member),
           topic: topicName(formData.topic),
@@ -61,6 +121,7 @@ const Submit = () => {
       setStatus('sent');
     } catch (err) {
       console.error(err);
+      captcha.reset();
       setStatus('failed');
     }
   };
@@ -108,10 +169,16 @@ const Submit = () => {
             name={FORM_NAME}
             method="POST"
             data-netlify="true"
+            data-netlify-honeypot="bot-field"
             onSubmit={handleSubmit}
             className="space-y-6"
           >
             <input type="hidden" name="form-name" value={FORM_NAME} />
+            <p className="hidden" aria-hidden="true">
+              <label>
+                Leave this field empty: <input name="bot-field" tabIndex={-1} autoComplete="off" />
+              </label>
+            </p>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name *
@@ -121,6 +188,7 @@ const Submit = () => {
                 id="name"
                 name="name"
                 required
+                maxLength={100}
                 className={field}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -207,6 +275,7 @@ const Submit = () => {
                 id="subject"
                 name="subject"
                 required
+                maxLength={150}
                 className={field}
                 value={formData.subject}
                 onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
@@ -222,6 +291,7 @@ const Submit = () => {
                 name="message"
                 rows={6}
                 required
+                maxLength={4000}
                 className={field}
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -247,7 +317,16 @@ const Submit = () => {
               </p>
             </div>
 
-            {status === 'failed' && (
+            {captchaEnabled && (
+              <div>
+                <div ref={captcha.boxRef} />
+                {status === 'failed' && !captcha.token && (
+                  <p className="mt-2 text-sm text-red-700">Please tick the box above to confirm you are not a robot.</p>
+                )}
+              </div>
+            )}
+
+            {status === 'failed' && (!captchaEnabled || captcha.token) && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
                 <p className="mb-2">Sorry, the form could not be sent. You can email us directly instead:</p>
                 <a href={mailtoHref()} className="inline-flex items-center gap-2 font-medium text-barnsley-red hover:underline">
