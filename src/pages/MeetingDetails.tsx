@@ -1,8 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
-import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink } from 'lucide-react';
+import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink, CalendarPlus } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import { getMinute, getUpcomingMeeting } from '../lib/content';
+import { downloadIcsEvent } from '../lib/ics';
 
 export default function MeetingDetails() {
   const { id = '' } = useParams();
@@ -30,6 +31,17 @@ export default function MeetingDetails() {
   const dateIso = minute ? minute.meeting_date : upcoming!.date;
   const location = minute ? minute.location : upcoming!.location;
   const showTime = !minute;
+
+  const handleAddToCalendar = () => {
+    if (!upcoming) return;
+    downloadIcsEvent({
+      id: upcoming.id,
+      title: upcoming.title,
+      date: upcoming.date,
+      location: upcoming.location,
+      description: upcoming.description,
+    });
+  };
 
   // Trim the extracted PDF text to a readable preview.
   const preview = minute?.content_text
@@ -100,6 +112,23 @@ export default function MeetingDetails() {
                       Read the PDF
                       <ExternalLink className="h-4 w-4" />
                     </a>
+                  </div>
+                </div>
+              )}
+
+              {upcoming && (
+                <div className="flex items-start gap-3 md:justify-end">
+                  <CalendarPlus className="h-5 w-5 text-barnsley-red flex-shrink-0" />
+                  <div>
+                    <h2 className="font-medium text-gray-900">Calendar</h2>
+                    <button
+                      type="button"
+                      onClick={handleAddToCalendar}
+                      className="text-barnsley-red hover:text-[#B31329] font-medium inline-flex items-center gap-1"
+                    >
+                      Add to calendar
+                      <CalendarPlus className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               )}
