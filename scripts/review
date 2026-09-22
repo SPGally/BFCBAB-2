@@ -173,7 +173,6 @@ $msg
 
 This PR changes site content, so it is not merged automatically. Paul merges it himself once he has read it.")"
           rest_add_label "$n" approved-hold-for-paul
-          [ -n "$iss" ] && rest_remove_label "$iss" claimed
           rest_comment "$HANDOFF" "$(sign "$(date -u +'%Y-%m-%d %H:%M UTC') — PR #$n approved (content change), holding for Paul's manual merge: $msg")"
           lock_release "$n" reviewing
           echo "APPROVED, HOLDING FOR PAUL: PR #$n touches content paths, not merged:"; echo "$content" | sed 's/^/  /'
