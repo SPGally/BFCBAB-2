@@ -32,6 +32,9 @@ unless the new commits introduced them.
 - `scripts/review decide <N> merge "<summary>"` when policy §3.5 allows. The script refuses
   protected paths (`.github/workflows/`, `scripts/`, `CLAUDE.md`, `netlify.toml`,
   `wrangler.toml`) without a recorded `**Paul decided:**` comment and refuses your own PRs.
+  A PR touching `src/content/`, `src/data/` or `public/images/` is a content change to the
+  live site: the script posts your approval, labels the PR `approved-hold-for-paul`, and does
+  not merge it — Paul merges content PRs himself. Report this the same as a merge (below).
 - `scripts/review decide <N> changes "<numbered list per §4>"` for fixable problems.
 - If Paul must decide (policy §3.5 `paul`): post the analysis and options on the PR with
   `scripts/review decide <N> paul "<options and recommendation>"`. You cannot ask Paul
@@ -41,7 +44,8 @@ unless the new commits introduced them.
 
 ## Return value
 Exactly one line first, then at most five lines of detail:
-`VERDICT: MERGED | CHANGES(<count of must-fix>) | PAUL | BLOCKED(<dependency>)`
+`VERDICT: MERGED | APPROVED-HOLD | CHANGES(<count of must-fix>) | PAUL | BLOCKED(<dependency>)`
+(`APPROVED-HOLD` is the content-path outcome above: approved, not merged, Paul merges it)
 followed by the PR comment URL. Nothing else. The full reasoning is on the PR.
 
 ## Hard limits

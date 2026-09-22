@@ -49,6 +49,10 @@ to their own `.env.agent`.
    `paul-replied` gets a reviewer, oldest first. Handle the verdict per step 4.
 4. **Verdict handling** (same for every PR):
    - `MERGED`: note it; continue.
+   - `APPROVED-HOLD`: a content PR (`src/content/`, `src/data/`, `public/images/`) the
+     reviewer approved but did not merge — Paul merges content PRs himself. Note it in the
+     summary as awaiting Paul's manual merge; do not spawn anything further on it. The queue
+     mark `awaiting-paul-merge` keeps it out of Phase B on later passes.
    - `CHANGES(k)`: spawn a fix-round coder, then a re-review. After the third `CHANGES` on the
      same PR, stop that PR: ask Paul with AskUserQuestion (summarise the disagreement,
      recommend), record the answer with `scripts/review decide N decided "..."` and either
