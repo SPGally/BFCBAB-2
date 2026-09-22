@@ -3,13 +3,39 @@
     "id": "matchday-experience",
     "name": "Matchday Experience",
     "description": "Questions about attending matches and the stadium experience",
-    "questions": []
+    "questions": [
+      {
+        "id": "what-improvements-are-planned-for-the-catering-facilities",
+        "question": "What improvements are planned for the catering facilities?",
+        "answer_html": "<p>The club is actively working on improving the catering facilities at Oakwell. Short-term improvements include:</p><ul><li>Adding more food service points to reduce queues</li><li>Introducing a wider variety of food options</li><li>Implementing a new payment system to speed up service</li></ul><p>Long-term plans include a complete renovation of the main concourse facilities, expected to be completed by the start of next season.</p>",
+        "raised_by": [
+          "John Smith",
+          "Sarah Wilson"
+        ],
+        "minutes_refs": [
+          "2024-11-20"
+        ],
+        "placeholder": true
+      }
+    ]
   },
   {
     "id": "club-operations",
     "name": "Club Operations",
     "description": "Questions about how the club is run and managed",
-    "questions": []
+    "questions": [
+      {
+        "id": "what-is-being-done-to-improve-the-academy-structure",
+        "question": "What is being done to improve the academy structure?",
+        "answer_html": "<p>The club is making significant investments in the academy:</p><ul><li>Upgrading training facilities</li><li>Expanding the scouting network</li><li>Hiring additional coaching staff</li><li>Creating stronger links with local schools and youth teams</li></ul><p>The goal is to develop more homegrown talent and create a sustainable pipeline of players for the first team.</p>",
+        "raised_by": [
+          "David Brown",
+          "Lisa Parker"
+        ],
+        "minutes_refs": [],
+        "placeholder": true
+      }
+    ]
   },
   {
     "id": "fan-engagement",
@@ -17,50 +43,15 @@
     "description": "Questions about how fans can get involved with the club",
     "questions": [
       {
-        "id": "what-is-the-fan-advisory-board",
-        "question": "What is the Fan Advisory Board, and why does the club have one?",
-        "answer_html": "<p>The Fan Advisory Board (FAB) is a group of elected supporters who meet Barnsley FC's senior staff regularly to raise supporters' questions, get answers on the record, and feed into the decisions that affect fans. Each member represents a part of the fan base: season ticket holders, matchday ticket buyers, disabled supporters, women and girls, youth and families, supporters living away, the Supporters Trust, sponsors and hospitality, and diversity and community. The FAB advises and challenges the club; it does not run it or take its decisions.</p>\n<p>The group was set up at the start of 2024. The first meeting on 29 January 2024 outlined the structure, and the <a href=\"https://images.gc.barnsleyfcservices.co.uk/574423e0-9d2c-11ef-a0c6-05831d4f85bb.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">second meeting</a> worked through the draft terms of reference in small groups, settled the name \"Barnsley FC Fan Advisory Board\" and agreed its values and objectives. Members were then voted in at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/573ca9d0-9d2c-11ef-99e5-7141d1af252f.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">May 2024 meeting</a>. The terms of reference are published on this site.</p>\n<p>Boards like this are now part of how professional football is regulated. The Football Governance Act created the Independent Football Regulator (IFR), which runs a licensing scheme for clubs in the top five divisions. To hold its licence a club has to meet conditions on financial sustainability, on who owns and runs it, and on fan engagement. The fan engagement condition means a club must consult its supporters on the matters that concern them most through an elected, independent and representative body, and must protect the club's heritage: its name, badge, colours and home ground cannot change without supporters being consulted.</p>\n<p>The Regulator's final guidance, published in July 2026, calls that body the club's \"Supporter Fan Representatives\", sets three-year terms with a maximum of three terms (which is what Barnsley already had), softens fan sign-off of the club's annual report to \"encouraged\", and expects each club to publish a fan engagement plan and an annual fan consultation report. The FAB's own comparison of the final guidance against the earlier draft is recorded in the <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>, and the club's position that little of substance had changed for Barnsley proved right.</p>\n<p>Because Barnsley's FAB predates the Act, most of what the licence requires was already in place. The club has confirmed there has been no change of ownership that would trigger the Regulator's owners' and directors' tests, that the Regulator has appointed a named club contact, and that it will submit its fan engagement plan once the Regulator issues a template. The Chair and the Supporters Trust representative also sit on an EFL-wide fan advisory group, where other clubs' engagement plans are shared; the general view recorded in August 2026 was that Barnsley's process, with its regular meetings and published minutes, compares well with the wider EFL picture.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-01-29",
-          "2024-02-29",
-          "2024-05-09",
-          "2026-06-09",
-          "2026-08-04"
+        "id": "how-is-the-club-improving-communication-with-supporters",
+        "question": "How is the club improving communication with supporters?",
+        "answer_html": "<p>The club has implemented several new communication channels and initiatives:</p><ul><li>Monthly fan forums with club executives</li><li>Regular updates through the official club website and social media</li><li>A new dedicated fan liaison team</li><li>Quarterly surveys to gather supporter feedback</li></ul><p>The Fan Advisory Board also plays a crucial role in ensuring two-way communication between the club and supporters.</p>",
+        "raised_by": [
+          "Mike Johnson",
+          "Emma Thompson"
         ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "what-did-the-fab-achieve-in-2024-25",
-        "question": "What did the FAB achieve in its first season, 2024/25?",
-        "answer_html": "\n<p>The club's own <a href=\"https://images.gc.barnsleyfcservices.co.uk/75f10790-6e1e-11f0-afaf-13f7c159fe38.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Fan Engagement Plan 2025/26</a> credits six changes to supporter feedback through the FAB in 2024/25. The minutes show how each came about, and record a good deal more that the board raised, pushed or helped shape in its first season. This is that record.</p>\n<h3>The six changes the club reported to the EFL</h3>\n<ul>\n<li><strong>Flexi tickets.</strong> The FAB proposed a flexi ticket at its <a href=\"https://images.gc.barnsleyfcservices.co.uk/573e3070-9d2c-11ef-8591-b3f04a7be303.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">July 2024 meeting</a>, and the club agreed to look at 5-game and 10-game options. When a Saturday-only season ticket was suggested in <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">October 2024</a> the club explained why that model fails elsewhere and confirmed flexi tickets would launch shortly. By <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a> the club acknowledged the flexi ticket had been added because of FAB feedback.</li>\n<li><strong>Information for away fixtures.</strong> A supporter asked through the FAB for the same pre-match information for away games as for home games. The Head of Ticketing agreed in <a href=\"https://images.gc.barnsleyfcservices.co.uk/573e3070-9d2c-11ef-8591-b3f04a7be303.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">July 2024</a> to obtain it from away clubs via the Supporter Liaison Officers, and in <a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2024</a> committed to gathering accessibility information from away clubs after reports of disabled supporters struggling with drop-off points.</li>\n<li><strong>Accessible commentary.</strong> Headset commentary quality was raised at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/573e3070-9d2c-11ef-8591-b3f04a7be303.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">first meeting of the season</a>; by <a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2024</a> the club had switched the feed to the local hospital radio, which the FAB confirmed had resolved it.</li>\n<li><strong>Stoma-friendly toilets.</strong> Following a supporter's approach and a meeting with Colostomy UK, three accessible toilets had been made stoma-friendly by <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">October 2024</a>, with a commitment to roll the change out to the rest.</li>\n<li><strong>Accessibility passports.</strong> Introduced during the season so that supporters with hidden disabilities can show stewards that reasonable adjustments are needed; 13 had been issued by <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">October 2024</a>. The FAB has since asked for a smaller card and for needs to be recorded once rather than explained each visit.</li>\n<li><strong>Independent fan survey.</strong> Run by a supporter group in the last month of the season, with the results shared with the club to act on for 2025/26 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/fdc313a0-503e-11f0-b295-8907a4100178.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 13 May 2025</a>).</li>\n</ul>\n<h3>Other things the FAB did in 2024/25</h3>\n<ul>\n<li><strong>Safe standing.</strong> The club formally consulted the FAB in <a href=\"https://images.gc.barnsleyfcservices.co.uk/8fdc9f60-bd62-11ef-9962-afabe92d70b0.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">November 2024</a> on 500 rail seats in the Ponty End and a matching 500 in the away end. The FAB pressed for clear communication to affected season ticket holders and for sight lines from the disabled area to be protected; the rails went in during April 2025 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>).</li>\n<li><strong>Catering.</strong> The FAB raised price rises, unclear offers, long queues in the East Stand upper and the lack of low-level counters for wheelchair users at its first meetings (<a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 21 August 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>). The club committed to look at staffing and product knowledge with the catering manager, to a QR-code ordering system, to low counters in the second phase of the stadium works, and to a signage refresh on every kiosk for 2025/26 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/fdc313a0-503e-11f0-b295-8907a4100178.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 13 May 2025</a>).</li>\n<li><strong>The fan zone.</strong> The club presented its two fan zone designs to the FAB in <a href=\"https://images.gc.barnsleyfcservices.co.uk/8fdc9f60-bd62-11ef-9962-afabe92d70b0.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">November 2024</a> and the FAB fed in accessibility requirements: step-free access, low counters and contrasting signage were confirmed in <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a>.</li>\n<li><strong>Away travel.</strong> The FAB got the club to explain and publicise its coach subsidies, including the reduced official coaches and the £5-a-head support to supporters' clubs for the Manchester United trip (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 16 October 2024</a>), and questioned coach pricing against independent operators (<a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 21 August 2024</a>).</li>\n<li><strong>Residents and parking.</strong> Complaints from Oakwell residents about matchday parking and unsafe driving on side streets were brought to the club in <a href=\"https://images.gc.barnsleyfcservices.co.uk/5e8a62c0-da6e-11ef-afb5-71ee6c78fa0b.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">December 2024</a> and followed up with the traffic management contractor in <a href=\"https://images.gc.barnsleyfcservices.co.uk/5e927910-da6e-11ef-bbe4-c3aacd113428.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">January 2025</a>.</li>\n<li><strong>The club website and iFollow.</strong> The FAB flagged the poor accessibility of the new EFL-built club website and the loss of full-match replays on iFollow; the Chief Executive took both up with the EFL (<a href=\"https://images.gc.barnsleyfcservices.co.uk/573e3070-9d2c-11ef-8591-b3f04a7be303.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 17 July 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 21 August 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>). The FAB also collected supporters' iFollow faults to pass to the club (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 16 October 2024</a>).</li>\n<li><strong>This website.</strong> The FAB asked for its own page, photos and minutes on the club site in <a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2024</a>, chased the slow publication of minutes in <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2024</a>, and launched fab.barnsleyfc.co.uk in <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a> so that minutes, FAQs and the submission form are in one place.</li>\n<li><strong>Heritage.</strong> The FAB backed a proposal for a memorial to the club's founder, Reverend Tiverton Preedy, supported the People's Visual History memorabilia project (<a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 15 April 2025</a>), and began discussing a memorial garden at Oakwell for supporters to remember loved ones (<a href=\"https://images.gc.barnsleyfcservices.co.uk/5e8a62c0-da6e-11ef-afb5-71ee6c78fa0b.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 17 December 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>).</li>\n<li><strong>Ownership questions.</strong> The FAB gathered supporters' questions about who owns what percentage of the club and put them to the club (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 16 October 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 15 April 2025</a>).</li>\n<li><strong>Family and community.</strong> The FAB gave feedback on the EFL Family Excellence programme, in which the club won the bronze award for 2024/25 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 21 August 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/fdc313a0-503e-11f0-b295-8907a4100178.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 13 May 2025</a>), helped shape ticket promotions such as bring-a-friend and Kids for a Quid fixtures and the New Year's Day Wrexham game (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 16 October 2024</a>), and members laid the club's Remembrance wreath.</li>\n</ul>\n<p>Not everything moved. Catering prices, car park release times and the fan zone were raised repeatedly without the outcome supporters wanted, and several actions took longer than the FAB would have liked. Those threads continue in the 2025/26 and 2026/27 minutes.</p>\n",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-07-17",
-          "2024-08-21",
-          "2024-09-18",
-          "2024-10-16",
-          "2024-11-20",
-          "2024-12-17",
-          "2025-01-16",
-          "2025-03-18",
-          "2025-04-15",
-          "2025-05-13"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "how-are-members-chosen",
-        "question": "How are FAB members chosen, and how long do they serve?",
-        "answer_html": "<p>Members are elected to represent a particular group of supporters rather than appointed by the club. The original board was voted in at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/573ca9d0-9d2c-11ef-99e5-7141d1af252f.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">meeting of 9 May 2024</a>, after the terms of reference had been agreed with the supporters who attended the first two open meetings.</p>\n<p>Terms were set in the terms of reference at two years initially, with provision from 2026 for members to serve up to three terms; the <a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 9 June 2026</a> record the discussion of what happens at the end of a term, and the club's view that serving four or more terms would start to look like an ownership situation. The Regulator's guidance published in July 2026 then fixed the national standard at three-year terms with a maximum of three, which matched what Barnsley already had (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>).</p>\n<p>Vacancies are advertised to supporters, most recently on the BBS fans' forum and through the FAB's own channels. When four seats were advertised in mid-2026 only one application was received, which is how Pete Harrison came to join as the representative for supporters living away. The club asked the FAB to hold wider recruitment until the Regulator's guidance was published so that the structure could follow it. Two seats remain open at the time of writing; if you would like to be considered, use the Submit form and say which group you would represent.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-05-09",
-          "2026-02-12",
-          "2026-06-09",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
+        "minutes_refs": [],
+        "placeholder": true
       }
     ]
   },
@@ -68,185 +59,31 @@
     "id": "ticketing-and-pricing",
     "name": "Ticketing and Pricing",
     "description": "Season tickets, matchday prices, memberships and the ticket office",
-    "questions": [
-      {
-        "id": "membership-and-flexi",
-        "question": "Is there a cheaper way to buy matchday tickets if I cannot commit to a season ticket?",
-        "answer_html": "<p>Two options exist because of supporter feedback through the FAB. The club's £20 membership scheme gives £2 off every home league matchday ticket, along with other benefits (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>). And the flexi ticket, introduced after the FAB asked about it, lets supporters buy a block of games rather than the full season (<a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 15 April 2025</a>).</p>\n<p>Some ideas have been looked at and rejected. A Saturday-only season ticket was raised in <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">October 2024</a>; the club explained it does not work, citing other clubs' unsuccessful attempts, and pointed to flexi tickets instead. A permanently reduced family ticket was raised in <a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">March 2025</a> and the club agreed to look into it. On season tickets, the club introduced a renewal price during the early-bird period for anyone who had held a season ticket in the previous three years, and 4-month and 10-month direct debit options with the club funding the fees on the 4-month plan (<a href=\"https://images.gc.barnsleyfcservices.co.uk/574423e0-9d2c-11ef-a0c6-05831d4f85bb.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 29 February 2024</a>). Season ticket sales for 2026/27 were ahead of the previous year despite a price increase (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 9 June 2026</a>).</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-02-29",
-          "2024-10-16",
-          "2025-03-18",
-          "2025-04-15",
-          "2026-06-09",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "stadium-and-facilities",
     "name": "Stadium and Facilities",
     "description": "Oakwell itself: stands, toilets, lighting, the big screen, PA system and catering",
-    "questions": [
-      {
-        "id": "big-screen",
-        "question": "Is the club getting a bigger scoreboard or video screen?",
-        "answer_html": "<p>A bigger screen has been requested by supporters for, by one estimate, around 20 years, and it has been discussed seriously at the last two meetings. The current screen measures roughly 3 metres by 1.75 metres. The club has costed a like-for-like replacement of about 12 metres by 4 metres at approximately £55,000 to £60,000 including screen, steelwork and software (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>). In <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026</a> the Head of Ticketing and Fan Engagement confirmed the quote under consideration is £55,000 for a screen the full width of the current screen and the adjacent advertising boards, at double the current height. A new screen would have to stay in its present position because of underground cabling and unknown ground conditions.</p>\n<p>Instant replays, as seen at Doncaster, are a separate capability: they need video-mixing software and an operator, so the club's view is that the screen should come first and other functionality follow. Both the Chief Executive and the Head of Ticketing agree a bigger screen would add to the matchday experience and could show images of fans, and the Chief Executive described it as a potential \"signature project\" for the FAB because it would benefit every supporter in the ground.</p>\n<p>On funding, the club has said advertisers will not commit money to a digital asset the club does not yet have, although a larger screen would increase the advertising inventory the club can sell. The club would need to contribute itself alongside any fan or third-party funding. Alan Bloore suggested a fan-led crowdfunder run by the Supporters Trust, and whether funds the Trust already holds should go towards it was debated without agreement; that question has gone back to the Trust. Pete Harrison, who has professional experience with audio-visual suppliers, is obtaining comparison quotes, and the club will check whether the supplier would accept staged payments. A separate meeting is being arranged to weigh the screen against Academy support as the FAB's fundraising priority. No commitment has been made yet.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2025-04-15",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "lighting-around-the-ground",
-        "question": "Why is it so dark outside the West Stand after evening games, and what is happening with the floodlights?",
-        "answer_html": "<p>Two separate things. The floodlights have been replaced: the old towers and halogen lamps were reaching the end of their life, and new LED units mounted on the stands give better light levels, cut energy use and reduce light pollution for neighbours (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 9 June 2026</a>). The new system meets the higher lux standard required at Championship level, in case of promotion, and lighting levels are tested and reported to the EFL in four-metre sections of the pitch because broadcasters can claw back revenue if minimum standards are not met. The old towers also carry telecoms equipment, cabling and security cameras, so removing them is not simple; the club hopes to have them down by summer 2027 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>).</p>\n<p>General lighting around the ground is a different problem. The area outside the West Stand has been unusually dark because the street lights on Grove Street are temporarily out during nearby housing works, and those lights used to spill useful light onto the West Stand approach. Supporters also reported lights out in the West Stand uncovered toilets. The club is installing about £10,000 of additional lighting around the West and East Stands. If you notice a dark or unlit area, tell the FAB and it will be passed on.</p>\n<p>A post-goal light show is not viable, because light shows need advance notice so that supporters sensitive to flashing lights can move to the concourse; a pre-match show is possible in principle. The floodlights were funded from the council's capital grant, alongside the other stadium works described in the answer on the council grant.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-05-09",
-          "2026-06-09",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "pa-system",
-        "question": "Why has the matchday announcer and commentary been hard to hear?",
-        "answer_html": "<p>Supporters in the Corner Stand, the Norman Rimmington South Stand and the West Stand reported at the start of the 2026/27 season that the PA sounded muffled and the commentary was hard to follow. The club confirmed the equipment and set-up are unchanged; what changed is the operator, after the departure of the previous host. The club does not attribute blame to the new operator, who stepped in at short notice, and is working out whether the difference is equipment or technique. The FAB asked whether the announcer could be asked to slow down, which the club agreed to raise.</p>\n<p>By the <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026 meeting</a> supporters in several stands reported a marked improvement, and the club said it would keep monitoring. The staffing changes behind this were set out in <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a>: Callum Cooper hosts the hospitality lounges before kick-off and provides iFollow commentary, a newly recruited stadium announcer handles pitch-side announcements, and all club video and audio streaming is available through the club app.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "safe-standing",
-        "question": "What is the position on safe standing at Oakwell?",
-        "answer_html": "<p>Safe standing has been in place since the 2025/26 season. The club first set out its plans at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/573ca9d0-9d2c-11ef-99e5-7141d1af252f.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">May 2024 meeting</a>: rail seating in block OR1 of the Norman Rimmington South Stand (the Ponty End) and in block NS1 of the Barry Murphy North Stand for visiting supporters, with the Safety Advisory Group having approved the process and the application with the Sports Grounds Safety Authority. Adding more safe standing later would need a fresh application, but the process should be quicker the second time.</p>\n<p>The FAB was formally consulted in <a href=\"https://images.gc.barnsleyfcservices.co.uk/8fdc9f60-bd62-11ef-9962-afabe92d70b0.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">November 2024</a>: 500 rail seats in OR1 from front to back, a reciprocal 500 in the away end, and sight-line work to make sure the view from the disabled area was not compromised. Season ticket holders in the affected seats were told when they bought their tickets that the area was planned for safe standing. The barriers were installed in early April 2025 and tested before being passed as safe (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>). Some confusion among supporters was raised with the club in <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a>; the club's position was that the change had been communicated by email, newsletter and on the ticketing site, and that a message is shown when buying seats in OR1.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-05-09",
-          "2024-11-20",
-          "2025-03-18",
-          "2025-04-15"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "sanitary-products",
-        "question": "Are free sanitary products available in the ladies' toilets?",
-        "answer_html": "<p>Yes, from the Leicester City fixture in September 2026. Barnsley was one of the first clubs to provide free sanitary products, and the FAB raised their absence in <a href=\"https://images.gc.barnsleyfcservices.co.uk/5e8a62c0-da6e-11ef-afb5-71ee6c78fa0b.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">December 2024</a> and again in <a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">June 2026</a>, when a supporter also asked why not every toilet had a sanitary bin. The club walked every toilet with its Head of HR, put up notices and increased bin provision for the 2026/27 season; the FAB suggested bins outside cubicles too, for supporters who cannot get into one at half-time.</p>\n<p>At the <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026 meeting</a> the club agreed in principle to resume stocking products and to sort out supply and restocking with the maintenance team so that they are used for their intended purpose. When Claire Calton, who represents women and girls, reported that none had been seen at two games, the club confirmed it remained committed and checked whether supply had stopped for an operational reason. The minutes record the action as completed, with product in place for the Leicester game. If they run out, tell the FAB.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-12-17",
-          "2026-06-09",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "accessibility",
     "name": "Accessibility and Disabled Supporters",
     "description": "Access, seating, headsets and commentary, passport cards and reasonable adjustments",
-    "questions": [
-      {
-        "id": "audio-for-visually-impaired",
-        "question": "What is available for visually impaired and hard-of-hearing supporters?",
-        "answer_html": "<p>Hospital radio provides live match commentary for visually impaired supporters through headsets, which are collected and returned on the day; if you leave early, headsets can be left at the club shop, and reception is staffed for about 20 minutes after the final whistle (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>). The FAB has pressed the EFL and the club on audio provision more generally, including a letter to the EFL about audio links (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>).</p>\n<p>The next step being explored is Auracast, a broadcast audio technology that lets compatible hearing aids and receivers pick up a live feed anywhere in the stadium. A first quote of about £44,000 for a 16-transmitter system was considered excessive by the club; FAB members pointed to Cambridge United and Crystal Palace, who run comparable systems with one transmitter per stand at a fraction of the cost, and receivers far cheaper than the £329 per unit quoted (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>). Martin Wilson tested a personal receiver's range around the ground, and a session with a supplier was arranged for 17 September 2026 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>). The hospital radio commentary continues whatever the outcome.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2025-03-18",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "access-needs-and-ticket-office",
-        "question": "How do I make the club aware of my access needs, and what has changed at the ticket office?",
-        "answer_html": "<p>The club runs an accessible passport scheme: supporters with hidden disabilities can hold a card that lets stewards know reasonable adjustments are needed, mainly around toilet access. Thirteen passports had been issued by <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">October 2024</a>, and three accessible toilets were made stoma-friendly with more to follow. Supporters have said the current card is too large and carries too much printed information, and the club agreed in <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a> to redesign it as a smaller card at the next print run.</p>\n<p>The FAB has also asked whether access needs could be recorded once against a season ticket rather than explained on every visit. The club said this depends on the adjustment needed but agreed the principle is worth pursuing. Following a recent access audit, the club is looking at a priority queuing option for disabled supporters at the ticket office on matchdays and at clear signage for the lower, accessible counter in the refurbished ticket office, which Martin Wilson had pointed out was not obvious to someone who cannot see it. Lower serving counters at kiosks around the ground, a Level Playing Field recommendation, were included in the second phase of the capital works (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>). The club's access information on the Level Playing Field website was updated in December 2024.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-10-16",
-          "2025-03-18",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "car-parking-and-travel",
     "name": "Car Parking and Travel",
     "description": "Parking, road closures after the game, and getting to and from Oakwell",
-    "questions": [
-      {
-        "id": "car-parks-after-the-game",
-        "question": "Why are we held in the car parks after the final whistle, and will it change?",
-        "answer_html": "<p>This is the question the FAB is asked most often, and the club has answered it in detail several times. Parking and road-closure rules around Oakwell are not set by the club alone. They sit within a safety framework agreed with the Safety Advisory Group, which brings together the police, the ambulance service, the council and other local services, and any change has to go through that group.</p>\n<p>The geography is the constraint. Every exit from the stadium car parks funnels onto Pontefract Road, and many supporters on foot walk up Grove Street, so cars cannot be released until pedestrians have cleared the area nearest the ground. Pedestrian safety comes first. The club's figure for the typical hold is up to about 20 minutes. The Chief Executive has also pointed to the national concern about vehicles being driven into crowds as a reason the closures exist, and disclosed that two of the club's traffic staff were assaulted in 2025 by drivers trying to get through closed sections (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>).</p>\n<p>Oakwell has more parking close to the ground than most clubs, and the closures are the trade-off for that. Residents in the nearby Oldfield area were once offered a paid permit scheme at about £20 a year, which was not taken up. Concerns from residents about supporters parking on side streets were raised through the FAB in <a href=\"https://images.gc.barnsleyfcservices.co.uk/5e8a62c0-da6e-11ef-afb5-71ee6c78fa0b.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">December 2024</a>.</p>\n<p>In <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026</a> the club reported that a review of road closures is under way with the council as part of wider work on hostile-vehicle measures at grounds generally. That may lead to changes, so the current arrangement will not be altered in the meantime. The club's safety team, not the traffic contractor, controls the gates, and there were 17 reported incidents in the first weeks of the 2026/27 season of vehicles moving inside the sterile zone before the closures were lifted. Supporters who have raised specific parking problems have been contacted directly by the Head of Ticketing and Fan Engagement, and he remains the point of contact for car park queries.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-10-16",
-          "2024-12-17",
-          "2025-04-15",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "away-games-and-living-away",
     "name": "Away Games and Supporters Living Away",
     "description": "Away travel, away ticketing, hotel discounts and following the Reds from a distance",
-    "questions": [
-      {
-        "id": "hotel-discounts",
-        "question": "Are there hotel discounts for supporters travelling to Barnsley?",
-        "answer_html": "<p>Yes. The club has a hotel discount arrangement for travelling supporters, listed on the club website under the visiting supporters' information. It has to be booked by phone rather than online. The FAB asked about it in <a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">June 2026</a> and again in <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a>, when board members felt it could be promoted more widely, for example in email newsletters. The commercial contact who ran the scheme at the hotel has since left, and the club was arranging a meeting with the replacement to keep the arrangement going.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-06-09",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "ifollow-abroad",
-        "question": "Can I watch matches on iFollow from abroad?",
-        "answer_html": "<p>League matches are available on video to supporters outside the UK. For fixtures shown live on Sky, supporters inside the UK get audio only. Carabao Cup and FA Cup matches cannot be shown on video outside the UK because of broadcast restrictions, so those are audio commentary only. Access is determined by where your device is, not by using a VPN (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>).</p>\n<p>The FAB has raised iFollow problems before: national streaming faults and the loss of full-match replays in autumn 2024, which the club said were EFL and platform issues rather than Barnsley-specific (<a href=\"https://images.gc.barnsleyfcservices.co.uk/57449910-9d2c-11ef-81ef-6d20e5914953.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 21 August 2024</a>, <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>), and the effect of Sky Sports+ on season pass sales (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae23dfa0-b7cd-11ef-a942-355e2000fd42.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 16 October 2024</a>). Commentary during matches is provided by Callum Cooper and, along with all club video and audio streaming, is available through the club app.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-08-21",
-          "2024-09-18",
-          "2024-10-16",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "coach-travel",
-        "question": "Does the club help with coach travel to away games?",
-        "answer_html": "<p>Yes, in two ways. The club runs official supporters' coaches and, for the biggest games, has reduced the price of those and subsidised the coaches run by supporter groups that travel to most away fixtures; the Manchester United trip in 2024 was the example given (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>). Discounts on coach travel are also among the season ticket holder benefits introduced for 2026/27 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9dc90170-3a40-11f1-b8c4-433962aaa816.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 26 March 2026</a>). If you run a supporters' coach and want to know what is available, the Head of Ticketing and Fan Engagement is the contact.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-09-18",
-          "2026-03-26"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "hospitality-and-sponsorship",
@@ -258,91 +95,19 @@
     "id": "retail-and-kit",
     "name": "Retail and Kit",
     "description": "The club shop, kit releases, training and travel wear",
-    "questions": [
-      {
-        "id": "kit-and-club-shop",
-        "question": "Why is some kit not in the club shop, and who decides what is stocked?",
-        "answer_html": "<p>The club shop is run by the club's retail partner, Fanatics, and stocking decisions are theirs to make commercially on the basis of expected demand. The club does not have direct control but does raise supporter demand with them. When the FAB asked in <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026</a> about the grey travel kit (officially \"travel gear\", not an away training kit), Fanatics initially had no plans to stock it; after the club raised it, Fanatics agreed to stock it and it was expected in the shop imminently. Fanatics now has three years of Barnsley sales data to inform these decisions.</p>\n<p>Release timing is also a common question. The club explained in <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a> that the third kit is put on sale close to when the team will first wear it rather than all three kits being launched together, and that the goalkeeper kit launch was deliberately timed to coincide with a signing's unveiling. Supporters' questions about the away training range being released after the away match kit were passed to the kit team.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "academy-and-football",
     "name": "Academy and Football",
     "description": "The Academy, the first team, pre-season and playing matters",
-    "questions": [
-      {
-        "id": "pre-season",
-        "question": "Why do we play smaller clubs in pre-season, and will there be a tour abroad again?",
-        "answer_html": "<p>Pre-season fixtures are built to get harder through the summer, and Premier League and Championship clubs are usually touring or contractually committed elsewhere, especially in World Cup years when the calendar is squeezed further, so the club has no automatic way to secure a big-name opponent. Home fixtures are also limited because the Oakwell pitch is re-laid every summer and is unavailable for much of pre-season; many clubs in the same position play most of their friendlies away (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>).</p>\n<p>A supporter-facing tour abroad, like the trips during Daniel Stendel's first spell, is a recurring request and the FAB pressed it again in August 2026. The Chief Executive acknowledged the appeal but set out the trade-off: the financial cost, and the difficulty of fitting a tour around recruitment, since an early tour risks missing new signings entirely, as happened in summer 2026. He would not commit to a tour but agreed the club would look at the idea properly before Christmas 2026, in time to plan for a future season rather than decide at the last minute.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-10-16",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "academy-funding",
-        "question": "How much does the club spend on the Academy, and how can supporters help?",
-        "answer_html": "<p>The club shared detailed figures at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026 meeting</a>. Last season the club spent £2.319 million running its Category 2 Academy, covering all age groups up to under-21s, offset by £804,000 of grant aid, so the club itself contributed about £1.51 million. Across Category 2 academies nationally the highest spend was £4.66 million, the average £2.7 million and the lowest £1.6 million, so Barnsley's is broadly in line with the average. Two Academy players were sold in 2026 but the fees came nowhere near covering the annual contribution.</p>\n<p>On what the money produces: 11% of first-team minutes last season went to Academy graduates against a League One average of 7%, with 3.28 Academy-developed players in the average matchday squad. In the early weeks of 2026/27 the figure was 33.9% of first-team minutes, with nine different Academy players used and roughly three-quarters of each bench from the Academy. The club reviews the investment regularly against wages, transfer value, community impact, squad depth and player pathways, and says it would not continue if it were not satisfied it was the right decision.</p>\n<p>The club has asked whether the FAB or the Supporters Trust could support a specific Academy project, with transport, kit (which families fund themselves until players go full-time at about 16) and nutrition mentioned. It will produce a shortlist of five or six opportunities with indicative costs, and the FAB will hold a separate meeting to weigh Academy support against the big screen as its fundraising priority. The club has been candid that it faces constant competing demands on limited money, and that it is for the FAB to decide which one or two priorities it wants to get behind.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-02-12",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "finance-and-governance",
     "name": "Club Finances and Governance",
     "description": "Ownership, the Independent Football Regulator, council funding and how the club is run",
-    "questions": [
-      {
-        "id": "independent-football-regulator",
-        "question": "What is the Independent Football Regulator, and what has it changed for Barnsley?",
-        "answer_html": "<p>The Independent Football Regulator (IFR) was created by the Football Governance Act to license clubs in the top five divisions of English football. A licence depends on the club meeting conditions on financial sustainability, on the suitability of its owners, directors and senior executives, on protecting the club's heritage, and on engaging with supporters.</p>\n<p>The club has kept the FAB informed as the framework has come in. In <a href=\"https://images.gc.barnsleyfcservices.co.uk/9c954720-68c9-11f1-934b-7d122e37eeff.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">June 2026</a> the Chief Executive explained that the Regulator's guidance would set expectations on how boards like the FAB are structured and how often they meet, and asked the FAB to hold wider recruitment until it was published; the Head of Ticketing and Fan Engagement had briefed the Regulator directly on how Barnsley's FAB works. The Regulator said it would not consult individual boards until late in the year but was happy to attend a FAB meeting when invited.</p>\n<p>By <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a> the final guidance was out. The club's assessment, confirmed by the FAB's own line-by-line comparison, was that little of substance had changed: the term \"Fan Advisory Board\" becomes \"Supporter Fan Representatives\" in the guidance; fan sign-off of the club's annual report is encouraged rather than required, with the deadline moved to 15 August; term limits are three years and a maximum of three terms; and the heritage duty has been expanded into a full chapter. The Regulator is heavily engaged in owners' and directors' tests, but none of that applies to Barnsley because there has been no change of ownership. The Regulator has a named contact at the club, the club supplies information as requested, and it expects to submit a fan engagement plan once a template is issued.</p>\n<p>The Regulator is also part of the national discussion on a new financial distribution deal between the Premier League and the EFL. Formal proposals were expected within months and would need a vote, but the club cautioned that there is no guarantee a deal will be reached.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2025-02-11",
-          "2026-02-12",
-          "2026-06-09",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "council-capital-grant",
-        "question": "Where did the money for the new offices, floodlights and ticket office come from, and why not spend it on players?",
-        "answer_html": "<p>These works are paid for from a ring-fenced council capital grant, originally around £2 million, that formed part of the package agreed with Barnsley Council when the club took on its new lease roughly three and a half years ago. It is capital expenditure on the council-owned stadium and cannot legally be redirected into football spending, so it is not money that could have gone on players (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>).</p>\n<p>The Chief Executive has explained why the office refurbishment mattered: the previous space was not fit for purpose for staff, players, sponsors or supporters, and first impressions when bringing players and agents into the building during transfer negotiations affect the club's ability to recruit and to raise commercial revenue.</p>\n<p>The same pot has funded the new floodlights, a new fire alarm system across all stands, offices and hospitality areas, the ticket office refurbishment, a full survey of the stadium above and below ground (mapping pipework and drainage that had never been documented), replacement fire doors, and bringing forward the replacement of ageing boilers and electrical wiring. Local suppliers were used throughout. The grant buys less now than when it was awarded because of construction cost inflation, and the day-to-day cost of maintaining the stadium is roughly £500,000 a year (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>). The FAB has asked the club to explore publishing a summary of the grant-funded works with the council so supporters can see where the money went.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "ownership-and-companies-house",
-        "question": "Who owns Barnsley FC, and why do the Companies House filings look the way they do?",
-        "answer_html": "\n<p>Barnsley Football Club Limited, the UK company that runs the club, is wholly owned by <strong>BFC Investment Company Limited</strong>, a holding company registered in Hong Kong. That is why the UK Companies House record shows a single corporate owner holding all the shares rather than a list of individuals: the individual shareholders own the Hong Kong company, and their percentages appear in the Hong Kong Companies Registry's annual returns, not at Companies House. A supporter raised exactly this question at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026 meeting</a>; because of its technical nature the Chief Executive arranged for the Finance Director, Rob Zuk, to explain it to the supporter directly, with a report back to a future FAB meeting.</p>\n<h3>How the holding company is structured</h3>\n<p>BFC Investment Company has two classes of share. The <strong>'A' shares</strong>, originally 80% of the company, were bought by the investor consortium that purchased the club in December 2017; whoever holds more than half of the A shares can appoint up to four of the company's directors. The <strong>'B' shares</strong>, originally 20%, are held by Oakwell Holdings Limited, the Cryne family's company, and were received as part of the original purchase price rather than bought; the B shareholder appoints one director. So control of the football club follows control of the A shares.</p>\n<h3>How the shareholding has changed</h3>\n<p>Since 2022 the club has been funded by a series of share issues, in which existing shareholders are offered new shares in proportion to their holding and can take them up or not. Neerav Parekh (through his family company, Abhajay Trade and Commerce), Julie Anne Quay (through Jamakepe Investments) and the Cryne family have taken up their allocations; Chien Lee and Pacific Media Group (Paul Conway and Grace Hung's vehicle) have not, so their percentages have shrunk with each issue. The issues recorded in the Hong Kong filings were: about £3.2 million in late 2022; £3.6 million across August and October 2023; £3 million in September 2024; £3 million in January 2025; £967,000 in September 2025; and £3.4 million in October 2025. Supporters who track the filings put the total equity put in by directors since 2022 at roughly £20 million.</p>\n<p>After the October 2025 issue, the last one for which full Hong Kong detail has been published, the shareholding was approximately:</p>\n<table>\n<thead><tr><th>Shareholder</th><th>Share class</th><th>Share of company</th></tr></thead>\n<tbody>\n<tr><td>Neerav Parekh (Abhajay Trade and Commerce)</td><td>A</td><td>66.4%</td></tr>\n<tr><td>Oakwell Holdings Limited (Cryne family)</td><td>B</td><td>22.1%</td></tr>\n<tr><td>Julie Anne Quay (Jamakepe Investments)</td><td>A</td><td>9.1%</td></tr>\n<tr><td>Chien Lee</td><td>A</td><td>1.7%</td></tr>\n<tr><td>Pacific Media Group (Conway and Hung)</td><td>A</td><td>0.7%</td></tr>\n</tbody>\n</table>\n<p>Because Neerav Parekh holds about 85% of the A shares, he has the right to appoint four of the five directors of the holding company, which is effective control of the club. On 13 July 2026 two Companies House filings recorded him as the person with significant control of the UK company, holding 75% or more of the shares directly or indirectly, in place of the holding company itself. No new share issue accompanied that filing and the club said shareholdings had not changed; it is best understood as formally registering the control he already had in substance.</p>\n<h3>Where this information comes from</h3>\n<p>The structure and figures above are compiled by supporters from public filings at UK Companies House and the Hong Kong Companies Registry, and are shared here because they answer a question the FAB is asked often. They are not taken from the FAB minutes, and the FAB has not verified every figure with the club. Ownership questions from supporters have been put to the club through the FAB before, including a set of fan-submitted questions in <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a> and a written list in <a href=\"https://images.gc.barnsleyfcservices.co.uk/9e254a10-099f-11f1-92d2-939f6afef598.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">February 2026</a> on governance, transparency, board expertise and the consortium structure, to which the club provided a written response. The club has also confirmed to the FAB that there has been no change of ownership that would engage the Independent Football Regulator's owners' and directors' tests (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>). This entry will be updated when the Finance Director's report on the Companies House question is minuted.</p>\n",
-        "raised_by": [],
-        "minutes_refs": [
-          "2025-04-15",
-          "2026-02-12",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "community-and-inclusion",
@@ -360,76 +125,12 @@
     "id": "fan-zone",
     "name": "Fan Zone and Pre-match",
     "description": "Fan zone ideas, the Ozone, pre-match music and matchday atmosphere",
-    "questions": [
-      {
-        "id": "fan-zone-status",
-        "question": "Is there going to be a fan zone at Oakwell?",
-        "answer_html": "<p>Not in the form that was planned. A fan zone was the single largest item in the capital programme funded through the council, and in <a href=\"https://images.gc.barnsleyfcservices.co.uk/8fdc9f60-bd62-11ef-9962-afabe92d70b0.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">November 2024</a> the club presented two designs to the FAB, a stacked shipping-container scheme and a tepee-style structure, sited in the corner between the East Stand and the Ponty End, with some car parking lost to it. Planning constraints limited its capacity and a phased test-event opening was envisaged.</p>\n<p>The planning process ran through spring 2025 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 March 2025</a>), objections were received and the matter was headed for a planning hearing (<a href=\"https://images.gc.barnsleyfcservices.co.uk/fdc313a0-503e-11f0-b295-8907a4100178.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 13 May 2025</a>). By <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026</a> the club had re-costed a smaller, more affordable structure but explained that the groundworks, power and security are the main cost, not the structure, and that a roofed year-round fan zone remains expensive. The Chief Executive said the harder question is what actually happens inside a fan zone for two hours on a matchday, and asked staff for a full business case including running costs and expected sales before any decision.</p>\n<p>In <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026</a> the club confirmed the fan zone has been removed from its planning documents and customer charter; the only remaining reference, on an access map, is being removed to avoid confusion. Dominic Wood proposed an alternative: moving turnstiles so that the covered lower East Stand concourse, which already has screens and food and drink, could be used as a pre-match fan area. The club raised an emergency-egress consideration but agreed the idea was worth exploring, and a walk-through with the Head of Ticketing and Fan Engagement was arranged, subject to a safety review. The same concourse idea had been raised in <a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">March 2025</a> and was then thought too exposed; the position has softened now that the original scheme is off the table.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-11-20",
-          "2025-03-18",
-          "2025-05-13",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   },
   {
     "id": "communication",
     "name": "Communication with Supporters",
     "description": "How the club and the FAB keep supporters informed, minutes, forums and iFollow",
-    "questions": [
-      {
-        "id": "how-will-the-club-engage-with-supporters",
-        "question": "How will the club engage with supporters, and what has it committed to in its Fan Engagement Plan?",
-        "answer_html": "\n<p>Every EFL club has to publish a Fan Engagement Plan each season and submit it to the League under <strong>EFL Regulation 128</strong>, which sets minimum standards for how clubs consult their supporters. Barnsley's current plan is the <a href=\"https://images.gc.barnsleyfcservices.co.uk/75f10790-6e1e-11f0-afaf-13f7c159fe38.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">Barnsley FC Fan Engagement Plan 2025/26</a> (PDF, 11 pages), published on the <a href=\"https://www.barnsleyfc.co.uk/fans/\" target=\"_blank\" rel=\"noopener noreferrer\">Fans section of the club website</a>. What follows is a summary of what the club has told the EFL in it.</p>\n<h3>The commitment</h3>\n<p>The club agrees to comply in full with Regulation 128. In the Chief Executive's foreword it sets out a vision of an inclusive, interactive fan experience built on integrity, passion and respect, and commits to \"engaging, listening to your feedback and ultimately acting on it\". It pledges regular communication through FAB meetings, working group sessions, social media, newsletters and fan forums, and to restart the Fan Engagement Group meetings previously held between the club and supporter groups.</p>\n<p>It specifically commits to consult supporters on <strong>heritage items</strong>: anything linked to the club's name, badge and other areas of its history. That commitment now also has legal force under the Independent Football Regulator's licensing conditions (see the entry on the Regulator).</p>\n<h3>How engagement is structured</h3>\n<ul>\n<li><strong>The Fan Advisory Board</strong> meets senior club staff regularly through the season, with an agenda compiled from the club, FAB members and the wider fan base; supporters can feed items in for discussion. The club commits to publishing the minutes and outputs of every FAB meeting so all supporters can see what was discussed.</li>\n<li><strong>Fan forums</strong>: evening events with senior club staff, open to all supporters, with a capacity of 200. The plan schedules two a season.</li>\n<li><strong>Fan Engagement Group meetings</strong> between the club and supporter groups, scheduled twice a season.</li>\n<li><strong>Senior staff attendance</strong>: every meeting is attended by at least one member of senior staff, drawn from the Chief Executive, Finance Director, Club Secretary, Head of Ticketing and Head of Catering, with others as needed. The plan is delivered by the Chief Executive and the Head of Ticketing and Fan Engagement.</li>\n<li><strong>Supporter Liaison Officers</strong> are a further point of contact and meet the Head of Ticketing and Fan Engagement regularly; anything urgent is passed to the club straight away.</li>\n</ul>\n<p>The plan lists the topics the club intends to cover with the FAB: the club's vision and aspirations; its supporter engagement work; equality, diversity, inclusion and accessibility; the home and away matchday experience; ticket policies and procedures; the club's work in the community; stadium facilities; how the club communicates with supporters; and the club's traditions and heritage.</p>\n<h3>What it says changed because of supporters</h3>\n<p>The plan reviews the 2024/25 season and credits supporter feedback for: making the accessible toilets stoma-friendly after meeting a supporter and Colostomy UK; introducing the flexi ticket membership in response to requests for a Saturday-only season ticket; publishing more information about away fixtures before each game; switching accessible commentary to the local hospital radio for a better and more detailed feed; introducing accessibility passports so stewards can make reasonable adjustments; and reviewing the results of an independent supporter survey run at the end of the season.</p>\n<h3>The club's promise to keep you informed</h3>\n<p>The club commits to regular updates on its fan engagement activity, to explaining clearly and promptly any changes to the plan and the reasons for them, and to welcoming feedback on the plan itself. Feedback can be sent to the Supporter Liaison Officers at slo@barnsleyfc.co.uk, to the box office at boxoffice@barnsleyfc.co.uk, to reception@barnsleyfc.co.uk, through the contact form on the club website, or to the FAB at FAB@barnsleyfc.co.uk. The plan also carries a statement of support from the Supporters' Trust.</p>\n<h3>Things to bear in mind</h3>\n<p>The plan was written for 2025/26, so some details have moved on: the FAB membership it lists has changed (see <a href=\"/about-us\">About Us</a> for the current board), and FAB meetings moved from monthly to every six weeks in September 2026 (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>). The club has told the FAB it expects to submit a fan engagement plan to the Independent Football Regulator once the Regulator issues a template, and the FAB has suggested the next plan could draw on the stronger plans other EFL clubs have shared through the EFL-wide fan advisory group (<a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a>). The FAB will link the new plan here when it is published.</p>\n",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "how-to-raise-something",
-        "question": "How do I raise something with the FAB or get a question put to the club?",
-        "answer_html": "<p>Three ways. Use the <a href=\"/submit\">Submit form</a> on this site, choosing the topic and, if you want, the representative for your group. Email the representative directly using the FAB addresses on the <a href=\"/about-us\">About Us</a> page. Or reply to the FAB thread on the BBS fans' forum, which board members read.</p>\n<p>Questions sent in advance are put to the club under a \"Fans' Questions\" item at the next meeting and the answer is recorded in the minutes. The <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 4 August 2026</a> show how this works in practice: supporters' questions on home friendlies, kit, hotel discounts, car parking, the new offices and the fan zone were each answered by the Chief Executive and written up. Where a question needs a technical answer, the club has arranged for the right person to contact the supporter directly and report back to the FAB.</p>\n<p>The FAB cannot deal with individual ticketing or account problems; the club asks that those go to the ticket office or the Head of Ticketing and Fan Engagement directly (<a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 18 September 2024</a>). The FAB can, and does, raise the pattern if several supporters report the same thing.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-09-18",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "how-often-and-minutes",
-        "question": "How often does the FAB meet, and how are the minutes published?",
-        "answer_html": "<p>From September 2026 the FAB meets every six weeks, online on Microsoft Teams, with Thursdays preferred to avoid Tuesday fixtures. Before that it met roughly monthly while the group was established. The change was agreed at the <a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2026 meeting</a> after a mixed discussion: some members wanted to keep monthly meetings to maintain momentum, others pointed out that most clubs' boards meet every two to three months and that recurring items could be batched. Dates are published on the <a href=\"/meetings\">Meetings page</a>.</p>\n<p>Minutes are drafted from a transcript of the meeting, then checked and corrected by the club before they are signed off and published on the club website and here. That sign-off step is why a set of minutes can take a while to appear. The August 2026 minutes were delayed because the meeting was held in a hybrid format and the transcript could not reliably tell speakers apart, so the draft needed substantial correction at a time when club staff were stretched by the transfer window. Since then meetings are held fully as video calls, and every set of minutes carries the date it was approved and the date it was published so supporters can see where any delay sits (<a href=\"https://images.gc.barnsleyfcservices.co.uk/74ab62d0-b04f-11f1-92c1-33d9855aa291.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 8 September 2026</a>).</p>\n<p>Minutes are also a formal record: previous minutes are agreed at the start of each meeting, and where a meeting is not quorate the minutes say so and are taken on a discussion basis (<a href=\"https://images.gc.barnsleyfcservices.co.uk/9e254a10-099f-11f1-92d2-939f6afef598.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">minutes of 12 February 2026</a>).</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2026-02-12",
-          "2026-08-04",
-          "2026-09-08"
-        ],
-        "author": "paul-gallagher"
-      },
-      {
-        "id": "fans-forum",
-        "question": "Is there still a fans' forum with the club, and can the Chairman attend a FAB meeting?",
-        "answer_html": "<p>Yes. The club has said fans' forums continue alongside the FAB; in <a href=\"https://images.gc.barnsleyfcservices.co.uk/ae2fed90-b7cd-11ef-8b79-f79543cff882.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">September 2024</a> it confirmed that other fan engagement events would carry on, including the fans' evening with the club's owners, and that feedback from them would be fed back into the FAB. In <a href=\"https://images.gc.barnsleyfcservices.co.uk/9b135860-2a72-11f0-b316-3d917fca0cba.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">March 2025</a> the Chief Executive said there are normally three forums a year. At the <a href=\"https://images.gc.barnsleyfcservices.co.uk/a65debd0-ac45-11f1-a0bc-9359ad8c111a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">August 2026 meeting</a> the club confirmed an in-person forum is planned this season.</p>\n<p>The FAB has also asked whether the Chairman would join a FAB meeting. The club's answer, given in August 2026, is that an online format is the realistic option should the Chairman be available. Ownership questions gathered from supporters have been put to the club through the FAB before, including in <a href=\"https://images.gc.barnsleyfcservices.co.uk/b390dcb0-3570-11f0-a020-bd0d915a582a.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">April 2025</a>, when a pre-recorded video interview was suggested as an alternative to a live session.</p>",
-        "raised_by": [],
-        "minutes_refs": [
-          "2024-09-18",
-          "2025-03-18",
-          "2025-04-15",
-          "2026-08-04"
-        ],
-        "author": "paul-gallagher"
-      }
-    ]
+    "questions": []
   }
 ]

@@ -59,6 +59,12 @@ export default function FAQDetails() {
 
           <h1 className="text-3xl font-bold mb-6">{faq.question}</h1>
 
+          {faq.placeholder && (
+            <p className="mb-6 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-md p-3">
+              This is an example entry carried over from the original site. Real answers will replace it.
+            </p>
+          )}
+
           <div className="prose max-w-none mb-8" dangerouslySetInnerHTML={{ __html: faq.answer }} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 rounded-lg p-6">
