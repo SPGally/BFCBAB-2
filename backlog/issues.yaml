@@ -158,10 +158,11 @@
   depends: [FAB-001]
   body: |
     ## Context
-    docs/supabase-removal-plan.md §4.3: `/rss.xml` has never worked because the SPA has no API routes.
+    docs/supabase-removal-plan.md §4.3: `/rss.xml` has never worked because the SPA has no API routes. This is also step one of making the site readable by AI crawlers (GPTBot, ClaudeBot, PerplexityBot, xAI), which do not run JavaScript: they need a sitemap to discover pages and, after FAB-008, real HTML to read. Paul's stated goal (22 Sep 2026): news articles and FAQ entries should be findable and quotable by AI models.
     ## Scope
     - `scripts/build-feeds.mjs` run after `vite build`: writes `dist/rss.xml` (20 newest published articles, absolute URLs, image enclosure) and `dist/sitemap.xml` (every route: articles, minutes, FAQ, static pages). `npm run build` becomes `vite build && node scripts/build-feeds.mjs`. It must reuse the front-matter rules from `src/lib/content.ts` (extract the parser to a shared module usable from Node).
-    - `<link rel="alternate" type="application/rss+xml">` in `index.html`; `public/robots.txt` pointing at the sitemap.
+    - `<link rel="alternate" type="application/rss+xml">` in `index.html`.
+    - `public/robots.txt`: `Sitemap:` line, and explicit `Allow: /` for GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-User, anthropic-ai, PerplexityBot, Google-Extended, Applebot-Extended, Bytespider, CCBot and a default `User-agent: *` allow. Comment in the file saying the FAB wants AI crawlers to index it.
     - Note in the content guide that a future `published_at` needs a rebuild after that date (Netlify build hook or a scheduled workflow).
     ## Acceptance tests
     - unit: feed and sitemap parse as XML, item counts match `getNews()`, no relative URLs.
@@ -177,13 +178,17 @@
   depends: [FAB-007]
   body: |
     ## Context
-    docs/supabase-removal-plan.md §4.4. Open Graph tags are set by `react-helmet` in the browser, which crawlers do not run, so a shared news link shows no title or image.
+    docs/supabase-removal-plan.md §4.4. The HTML Netlify serves is an empty shell; content is fetched and rendered in the browser. Google renders JavaScript, but AI crawlers (GPTBot, ClaudeBot, PerplexityBot, xAI) and social link-preview bots do not, so to them every page is blank: no OG image on a shared article, and nothing for an AI model to read or quote. Paul's goal (22 Sep 2026) is that news articles and FAQ entries are readable and quotable by AI models. This issue is the one that unlocks it.
     ## Scope
     - Evaluate `vite-react-ssg` against a post-build prerender step (Playwright rendering each sitemap route from `dist`). Implement the simpler one that keeps `react-router-dom` and Netlify's `_redirects` fallback.
-    - Every route in the sitemap gets a static `index.html` with `<title>`, description and OG/Twitter tags baked in; the SPA hydrates on top. Swap `react-helmet` for `react-helmet-async` if needed.
+    - Every route in the sitemap (FAB-007) gets a static `index.html` with the full page content, `<title>`, `<meta name="description">`, canonical URL and OG/Twitter tags baked in; the SPA hydrates on top. Swap `react-helmet` for `react-helmet-async` if needed.
+    - Content pages must be complete in the static HTML: full article body, full FAQ answer with its minutes links, full minutes entry (title, date, location, PDF link, and the text preview), meeting details.
+    - Nothing interactive may regress. The SPA still hydrates on top of the static HTML, so the minutes and FAQ search, topic filters, pagination, the Submit form (Netlify Forms detection relies on the hidden form staying in the built `index.html`; the reCAPTCHA widget is client-side) and the mailto fallback must all work exactly as before. Guard every `window`/`document` use (e.g. `window.location.origin` in `NewsArticle`) so pre-rendering does not crash. "Upcoming" meetings computed from the current date are re-evaluated on hydration, so a stale build only affects the no-JS view; note this in the content guide.
+    - Add `scripts/check-nojs.mjs`: fetches `dist/` pages of each type through a plain HTTP fetch (no JavaScript) and asserts the expected text is present; wired into `npm run build` so a regression fails CI.
     ## Acceptance tests
-    - `dist/news/<slug>/index.html` contains the article title in `<title>` and `og:title`.
-    - Lighthouse SEO 100 on `/` and one article.
+    - Manual on the deploy preview: minutes search, FAQ search and filters, news pagination, a Submit form test submission and a shared link preview all behave as before.
+    - `curl` of `dist/news/<slug>/index.html`, `dist/faq/<id>/index.html`, `dist/minutes/index.html` and `dist/meetings/<id>/index.html` each contain the page's headline and body text without running JavaScript.
+    - `og:title`, `og:description`, `og:image` present on an article; Lighthouse SEO 100 on `/` and one article.
     ## Files touched
     vite.config.ts, package.json, src/main.tsx, scripts/
 
@@ -352,3 +357,87 @@
     - Lighthouse accessibility 100 on every route in CI.
     ## Files touched
     src/**, lighthouserc.json, .github/workflows/ci.yml
+
+- id: FAB-018
+  title: "Structured data: JSON-LD for FAQ entries, news articles, meetings and the organisation"
+  milestone: M1
+  wave: 3
+  area: site
+  size: S
+  depends: [FAB-008]
+  body: |
+    ## Context
+    Search engines and AI systems use schema.org structured data to extract question-and-answer pairs, article dates and events with confidence. Part of Paul's goal (22 Sep 2026) that the FAQ and news are findable and quotable by AI models.
+    ## Scope
+    - `src/lib/jsonld.ts` builds JSON-LD objects; each page emits one `<script type="application/ld+json">` via the head manager used by FAB-008:
+      - `/faq`: `FAQPage` with every `Question`/`Answer` (answer text with HTML stripped, plus the entry URL).
+      - `/faq/<id>`: the single `Question`/`Answer`, `dateModified` from git or a `updated` field if added.
+      - `/news/<slug>`: `NewsArticle` with `headline`, `datePublished`, `author` (Person with the member's name and role), `image`, `publisher` (Organization "Barnsley FC Fan Advisory Board").
+      - `/meetings/<id>`: `Event` with `startDate`, `location` (VirtualLocation for Teams), `organizer`.
+      - `/minutes` and each minutes entry: `DigitalDocument`/`CreativeWork` with `url` of the PDF and `datePublished`.
+      - Site-wide `Organization` with name, url, logo, `sameAs` (club FAB page, X, Facebook once known) and `contactPoint` (FAB@barnsleyfc.co.uk).
+    - `BreadcrumbList` on detail pages.
+    ## Out of scope
+    Markdown mirrors (FAB-019).
+    ## Acceptance tests
+    - unit: each builder produces valid JSON-LD (validated against a small schema of required fields); the FAQPage count equals the number of published entries.
+    - Google Rich Results Test passes for one FAQ page and one article (manual, recorded in the PR).
+    ## Files touched
+    src/lib/jsonld.ts, src/lib/jsonld.test.ts, src/pages/FAQ.tsx, src/pages/FAQDetails.tsx, src/pages/NewsArticle.tsx, src/pages/MeetingDetails.tsx, src/pages/Minutes.tsx, index.html
+
+- id: FAB-019
+  title: "llms.txt and Markdown mirrors of every FAQ entry, article and minutes entry"
+  milestone: M1
+  wave: 3
+  area: site
+  size: S
+  depends: [FAB-007]
+  body: |
+    ## Context
+    AI crawlers and browsing agents prefer plain text or Markdown to HTML, and the emerging `llms.txt` convention gives them an index of a site. Part of Paul's goal (22 Sep 2026).
+    ## Scope
+    - `scripts/build-llms.mjs`, run in `npm run build` after the feeds: writes `dist/llms.txt` (what the FAB is, one line per key page with its URL and a one-sentence summary, and links to the Markdown mirrors) and `dist/llms-full.txt` (every FAQ entry and article in full, plain text).
+    - Markdown mirrors at stable URLs: `dist/faq/<id>.md`, `dist/news/<slug>.md`, `dist/minutes/<date>.md` (title, date, location, PDF link, extracted text), generated from the same content modules FAB-007 extracts. Each HTML page gets `<link rel="alternate" type="text/markdown" href="...">`.
+    - `public/_headers`: `Content-Type: text/markdown; charset=utf-8` for `/*.md` and `text/plain` for `llms*.txt`.
+    ## Acceptance tests
+    - unit: every published FAQ entry and article has a mirror; `llms.txt` lists them; no relative URLs.
+    - `curl https://.../faq/<id>.md` returns Markdown with the right content type (checked on the deploy preview, recorded in the PR).
+    ## Files touched
+    scripts/build-llms.mjs, package.json, public/_headers, index.html
+
+- id: FAB-020
+  title: "Titles, meta descriptions and canonical URLs on every page"
+  milestone: M1
+  wave: 3
+  area: site
+  size: S
+  depends: [FAB-008]
+  body: |
+    ## Context
+    With pages pre-rendered (FAB-008), each needs a distinct `<title>`, a `<meta name="description">` under 160 characters and a canonical URL so crawlers and AI search modes index the right page with the right summary. Today only news articles set a title.
+    ## Scope
+    - A small `PageMeta` component used by every page: Home, News list, article (summary), FAQ list, FAQ entry (first sentence of the answer), Minutes, Meetings, meeting detail, About Us, Submit, Visual History.
+    - Canonical `<link rel="canonical">` using the site URL from one constant.
+    - Home page `<title>` "Barnsley FC Fan Advisory Board" and a description that says what the FAB is in one sentence.
+    ## Acceptance tests
+    - unit: every route in the sitemap renders a title and description; none exceeds 160 characters; no two pages share a title.
+    ## Files touched
+    src/components/PageMeta.tsx, src/pages/*.tsx, src/lib/site.ts
+
+- id: FAB-021
+  title: "AI-readability check in CI: fetch each page type without JavaScript and assert the content is there"
+  milestone: M1
+  wave: 4
+  area: ci
+  size: S
+  depends: [FAB-008, FAB-018, FAB-019, FAB-020]
+  body: |
+    ## Context
+    Guards the whole AI-readability effort against regressions: a future change that moves content back into client-side rendering must fail CI.
+    ## Scope
+    - `scripts/check-ai-readable.mjs`: after `npm run build`, serve `dist/` locally, fetch one page of each type with plain `fetch` (no browser), and assert: headline and body text present; JSON-LD present and parseable with the expected `@type`; `<title>` and description present; `.md` mirror exists; `robots.txt` allows the AI user agents; `sitemap.xml` lists the page.
+    - Run in `.github/workflows/ci.yml` after the build (protected path: Paul decided in this issue).
+    ## Acceptance tests
+    - CI fails when any assertion fails (proved by a deliberately broken commit in the PR description, then reverted).
+    ## Files touched
+    scripts/check-ai-readable.mjs, package.json, .github/workflows/ci.yml
