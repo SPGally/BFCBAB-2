@@ -18,7 +18,9 @@ interface FAQ {
   placeholder: boolean;
 }
 
-const allTopics: FAQTopic[] = getFaqTopics().map((t) => ({ id: t.id, name: t.name, description: t.description }));
+const allTopics: FAQTopic[] = getFaqTopics()
+  .filter((t) => t.questions.length > 0)
+  .map((t) => ({ id: t.id, name: t.name, description: t.description }));
 const allFaqs: FAQ[] = getFaqTopics().flatMap((t) =>
   t.questions.map((q) => {
     const m = q.author ? getMember(q.author) : undefined;
