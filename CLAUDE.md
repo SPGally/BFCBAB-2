@@ -7,8 +7,8 @@ else is shared.
 ## What this repo is
 The Barnsley FC Fan Advisory Board website, live at fab.barnsleyfc.co.uk: a fully static
 Vite + React + TypeScript + Tailwind single-page app, hosted on Netlify (Git integration on
-`main`; a move to Cloudflare Pages or Azure is milestone M2 and needs the club to change
-DNS). There is no database and no admin UI. All content is files in the repo, read through
+`main`). Paul decided on 22 September 2026 to stay on Netlify: no hosting move, no serverless
+functions. There is no database and no admin UI. All content is files in the repo, read through
 `src/lib/content.ts`: news as Markdown with front matter in `src/content/news/`, minutes,
 upcoming meetings, members and FAQ as JSON in `src/data/`, images in `public/images/`. Every
 content change is a pull request; Netlify redeploys when it merges. Supabase was removed in
@@ -43,8 +43,8 @@ excuse to rely on them.
 - No `--watch` or polling commands against GitHub; the shared token is rate-limited.
 - Run `npm run lint`, `npm run typecheck` and `npm run build` before each commit; `npm test` too once FAB-001 lands.
 - Use `npm ci`, never `npm install`, and never commit `node_modules` or `dist`.
-- Do not edit `netlify.toml`, `wrangler.toml`, `.github/workflows/`, `scripts/` or this file unless the issue is explicitly about them (protected paths: the reviewer needs a Paul decision to merge).
-- Secrets (Cloudflare, Azure or Netlify tokens) never go in git, issues, PRs, or chat.
+- Do not edit `netlify.toml`, `.github/workflows/`, `scripts/` or this file unless the issue is explicitly about them (protected paths: the reviewer needs a Paul decision to merge).
+- Secrets (Netlify tokens, reCAPTCHA secret, social API keys) never go in git, issues, PRs, or chat.
 - Blocked on Paul: label `needs-paul`, recommend, move on.
 
 ## Commands
