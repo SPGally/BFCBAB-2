@@ -15,10 +15,11 @@ interface FAQ {
   answer: string;
   topic_id: string;
   author: { name: string; role: string } | null;
-  placeholder: boolean;
 }
 
-const allTopics: FAQTopic[] = getFaqTopics().map((t) => ({ id: t.id, name: t.name, description: t.description }));
+const allTopics: FAQTopic[] = getFaqTopics()
+  .filter((t) => t.questions.length > 0)
+  .map((t) => ({ id: t.id, name: t.name, description: t.description }));
 const allFaqs: FAQ[] = getFaqTopics().flatMap((t) =>
   t.questions.map((q) => {
     const m = q.author ? getMember(q.author) : undefined;
@@ -28,7 +29,6 @@ const allFaqs: FAQ[] = getFaqTopics().flatMap((t) =>
       answer: q.answer_html,
       topic_id: t.id,
       author: m ? { name: m.name, role: m.role } : null,
-      placeholder: Boolean(q.placeholder),
     };
   })
 );
@@ -144,11 +144,6 @@ export default function FAQ() {
                 <div className="bg-white rounded-b-lg shadow-md divide-y divide-gray-100">
                   {topicFaqs.map(faq => (
                     <div key={faq.id} className="p-6 hover:bg-gray-50 transition-colors">
-                      {faq.placeholder && (
-                        <p className="text-xs uppercase tracking-wide text-amber-700 bg-amber-50 inline-block px-2 py-0.5 rounded mb-2">
-                          Example entry
-                        </p>
-                      )}
                       <Link to={`/faq/${faq.id}`} className="block group">
                         <h3 className="text-lg font-medium text-gray-900 group-hover:text-barnsley-red transition-colors">
                           {faq.question}
