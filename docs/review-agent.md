@@ -70,9 +70,9 @@ whatever the decision; that also releases the lock.
 ### 3.2 Shape check
 - Body has `Fixes #`, `Agent:`, `Handoff:` filled; title is a conventional commit. (CI
   `pr-shape` checks this too; the reviewer confirms.)
-- No secrets (Supabase keys, Cloudflare or Netlify tokens), no `.env` files in the diff.
+- No secrets (Netlify tokens, reCAPTCHA secret, social API keys), no `.env` files in the diff.
 - No edits to the protected paths `.github/workflows/`, `scripts/`, `CLAUDE.md`,
-  `netlify.toml`, `wrangler.toml` (or `.githooks/`) unless the issue is explicitly about
+  `netlify.toml` (or `.githooks/`) unless the issue is explicitly about
   them; `scripts/review decide merge` refuses these without a recorded Paul decision.
 - No committed `node_modules`, `dist`, or `package-lock.json` churn unrelated to the issue.
 

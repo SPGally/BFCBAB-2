@@ -69,8 +69,10 @@ Action (FAB-006) will scrape the club minutes page and open a PR when a new PDF 
 
 ## 5. Hosting
 
-Paul's decision (10 September 2026): stay fully static on Netlify for now, because the
-`fab.barnsleyfc.co.uk` CNAME lives in the club's DNS zone and changing it takes time.
+Paul's decision (10 September 2026, confirmed 22 September 2026): the site stays fully static on
+Netlify. No hosting move and no serverless functions are planned; the M2 milestone was retired and
+issues FAB-011 to FAB-014 closed. Netlify Forms (with reCAPTCHA) handles the Submit page. The
+comparison below is kept for reference only.
 
 When the move happens, the built site is a plain `dist/` folder and will run anywhere.
 The candidates are Cloudflare Pages (the `deploy.yml` workflow already supports it, gated
@@ -92,5 +94,7 @@ FAB-011 records the decision; FAB-012 to FAB-014 do the move.
    real FAQ content.
 2. **M1 Content by PR**: content guide and `/add-news` skill, minutes sync action, RSS
    and sitemap, pre-rendering, upcoming meetings with calendar download.
-3. **M2 Hosting**: decision, deploy workflow, form, DNS cut-over, Netlify decommission.
+3. **M1, continued: AI readability**: sitemap and robots.txt, pre-rendering, structured data,
+   llms.txt and Markdown mirrors, page metadata, a no-JavaScript check in CI (FAB-007, FAB-008,
+   FAB-018 to FAB-021).
 4. **M3 Polish**: bundle split, PDF mirror, delete the Supabase project, Lighthouse pass.

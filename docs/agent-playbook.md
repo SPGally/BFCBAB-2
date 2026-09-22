@@ -118,9 +118,9 @@ Required even for a two-line session.
 
 | Where | Can do | Cannot do |
 |---|---|---|
-| Paul's Macs | Everything, including Netlify/Cloudflare, DNS, club CDN access | |
+| Paul's Macs | Everything, including Netlify, DNS, club CDN access | |
 | Cloud sessions (claude.ai, fresh clone) | Code, content, docs, tests: anything that needs no secrets | Deploys, DNS, anything needing `.env` |
-| CI | Lint, build, deploy to Cloudflare Pages once the token exists | Merge |
+| CI | Lint, build, checks | Merge and deploy (Netlify deploys `main` itself) |
 
 Secrets are never in issues, PRs, or chat. Cloud agents assume they have none.
 
@@ -128,7 +128,7 @@ Secrets are never in issues, PRs, or chat. Cloud agents assume they have none.
 Issues carry a `wave:N` label (1 to 4). Everything in one wave can run in parallel; wave
 N+1 depends on wave N. `scripts/agent next` orders by milestone then wave so agents
 naturally pick non-conflicting work. Milestones: M0 Stabilise, M1 Content by PR, M2
-Cloudflare, M3 Polish. When two agents must touch the same file, the issue says which one
+M2 retired (staying on Netlify), M3 Polish. When two agents must touch the same file, the issue says which one
 owns it.
 
 ## Escalation

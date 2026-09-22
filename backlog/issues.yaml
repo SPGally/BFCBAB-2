@@ -9,8 +9,8 @@
 # script from `depends`).
 #
 # Milestones: M0 "Stabilise" (get the site back up without Supabase), M1 "Content by PR"
-# (all content editable as files in the repo), M2 "Hosting" (decide and move hosting off
-# Netlify when DNS can change), M3 "Polish".
+# (all content editable as files in the repo), M2 retired 22 Sep 2026 (Paul decided to stay on
+# Netlify; no hosting move, no serverless functions), M3 "Polish".
 #
 # Labels derived: area:<area>, wave:<wave>, size:<size>, agent-ready (or paul-only).
 # Issue title on GitHub becomes "<id> <title>", e.g. "FAB-001 Remove Supabase client".
@@ -193,7 +193,7 @@
     vite.config.ts, package.json, src/main.tsx, scripts/
 
 - id: FAB-009
-  title: "Upcoming meetings on the Home page from meetings.json, with an .ics download"
+  title: "Add to calendar (.ics) download for upcoming meetings"
   milestone: M1
   wave: 1
   area: site
@@ -204,7 +204,6 @@
     ## Scope
     - MeetingDetails for an upcoming meeting offers "Add to calendar", an `.ics` built in the browser (DTSTART in UTC, location, description).
     - Document `meetings.json` fields in the content guide (FAB-005 owns the guide; add the section there if it exists, otherwise in this PR).
-    - Ask Paul for the next meeting date and add it as the first entry.
     ## Acceptance tests
     - unit: `.ics` output has DTSTART in UTC and the location; validates in a calendar app.
     ## Files touched
@@ -227,85 +226,6 @@
     - `grep -ri supabase --exclude-dir=node_modules --exclude-dir=.git .` only matches docs/supabase-removal-plan.md and this backlog.
     ## Files touched
     README.md, CLAUDE.md
-
-- id: FAB-011
-  title: "Decide the long-term host: stay on Netlify, Cloudflare Pages, or Azure Static Web Apps"
-  milestone: M2
-  wave: 1
-  area: deploy
-  size: S
-  paul_only: true
-  body: |
-    ## Context
-    docs/supabase-removal-plan.md §5. The site is static and runs anywhere. Netlify works today with Git integration and Netlify Forms; `deploy.yml` already targets Cloudflare Pages when secrets exist; Paul has asked whether the existing Azure subscription could host it.
-    ## Scope
-    - Paul decides, with these facts: Netlify free tier is enough for this traffic and forms (100/month); Cloudflare Pages is free with unlimited bandwidth and matches the SPSync site; Azure Static Web Apps free tier is also enough and keeps billing in one place but needs an Azure Function for the form.
-    - Record the decision in docs/supabase-removal-plan.md §5 with a **Paul decided:** comment on this issue.
-    ## Out of scope
-    Doing the move (FAB-012 to FAB-014).
-    ## Acceptance tests
-    - Decision recorded; FAB-012 rewritten for the chosen host.
-    ## Files touched
-    docs/supabase-removal-plan.md
-
-- id: FAB-012
-  title: "Deploy workflow and static config for the chosen host"
-  milestone: M2
-  wave: 2
-  area: deploy
-  size: S
-  depends: [FAB-011]
-  paul_only: true
-  body: |
-    ## Context
-    Follows FAB-011. For Cloudflare: `deploy.yml` exists, project `fab-barnsleyfc`, needs `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets and `public/_headers` carrying the CSP from `netlify.toml`. For Azure: `Azure/static-web-apps-deploy` action, `staticwebapp.config.json` with `navigationFallback` and the same headers.
-    ## Scope
-    - Paul: create the project/resource and the repository secrets.
-    - Agent: the config file and workflow for the chosen host; confirm every route renders on the preview URL.
-    ## Acceptance tests
-    - Deploy from `main` succeeds; `curl -I <preview>/minutes` returns 200 with the CSP header.
-    ## Files touched
-    .github/workflows/deploy.yml, public/_headers or staticwebapp.config.json
-
-- id: FAB-013
-  title: "Submit form on the new host (Pages Function or Azure Function) emailing the FAB inbox"
-  milestone: M2
-  wave: 3
-  area: deploy
-  size: M
-  depends: [FAB-012]
-  paul_only: true
-  body: |
-    ## Context
-    Netlify Forms stops working when the site leaves Netlify. The replacement is a small serverless function that validates the fields, checks a Turnstile/hCaptcha token, and sends via Resend (or the club's SMTP) to `fab@barnsleyfc.co.uk` and the chosen representative.
-    ## Scope
-    - Function under `functions/api/submit.ts` (Cloudflare) or `api/submit` (Azure); secrets held by the host.
-    - Submit page posts JSON to `/api/submit`; keeps the mailto fallback.
-    - Paul: email provider account and captcha keys.
-    ## Acceptance tests
-    - unit: validation rejects empty and oversized bodies.
-    - Manual: a test submission arrives from the preview URL.
-    ## Files touched
-    functions/ or api/, src/pages/Submit.tsx, index.html (remove the hidden Netlify form)
-
-- id: FAB-014
-  title: "Switch fab.barnsleyfc.co.uk DNS to the new host and decommission Netlify"
-  milestone: M2
-  wave: 4
-  area: deploy
-  size: S
-  depends: [FAB-012, FAB-013]
-  paul_only: true
-  body: |
-    ## Context
-    The `barnsleyfc.co.uk` zone belongs to the club. Netlify keeps serving until the CNAME moves, so nothing breaks in the meantime.
-    ## Scope
-    - Paul: add the custom domain on the new host; send the club the CNAME target and the verification TXT record; wait for it to go green.
-    - After cut-over: remove the Netlify site; delete `netlify.toml`, `netlify-cli` and the `deploy` scripts from `package.json`; update README and CLAUDE.md.
-    ## Acceptance tests
-    - `dig fab.barnsleyfc.co.uk` resolves to the new host; the site serves the latest `main` build.
-    ## Files touched
-    netlify.toml, package.json, README.md, CLAUDE.md
 
 - id: FAB-015
   title: "Split the bundle by route and trim dependencies"
