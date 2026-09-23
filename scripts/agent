@@ -86,7 +86,12 @@ cleanup_own_worktree() {
     */.claude/worktrees/*) ;;
     *) return 0;;
   esac
-  git worktree remove --force "$ROOT" 2>/dev/null || true
+  # The harness holds its own `locked` state on this worktree (lock reason: claude
+  # agent <id> (pid ...)), so a single --force is not enough to remove it; --force
+  # passed twice overrides that lock too. This must only run once the coder process
+  # has otherwise finished its work -- it destroys the coder's own working directory,
+  # so nothing here may run again afterwards.
+  git worktree remove --force --force "$ROOT" 2>/dev/null || true
 }
 case "${1:-}" in
   _machine) shift; machine_of "${1:-}"; exit 0;;   # test hook
