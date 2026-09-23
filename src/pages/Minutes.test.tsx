@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Minutes from './Minutes';
 import { getMinutes } from '../lib/content';
 
@@ -9,9 +10,11 @@ describe('Minutes page search', () => {
     const total = getMinutes().length;
 
     render(
-      <MemoryRouter>
-        <Minutes />
-      </MemoryRouter>
+      <HelmetProvider>
+        <MemoryRouter>
+          <Minutes />
+        </MemoryRouter>
+      </HelmetProvider>
     );
 
     const countText = (expected: string) => (_: string, element: Element | null) =>
@@ -29,9 +32,11 @@ describe('Minutes page search', () => {
 
   it('shows no results for a query that matches nothing', () => {
     render(
-      <MemoryRouter>
-        <Minutes />
-      </MemoryRouter>
+      <HelmetProvider>
+        <MemoryRouter>
+          <Minutes />
+        </MemoryRouter>
+      </HelmetProvider>
     );
 
     const search = screen.getByLabelText('Search minutes');

@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { Newspaper, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getNews } from '../lib/content';
+import Seo from '../components/Seo';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -15,6 +16,11 @@ export default function News() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="News"
+        description="News and updates from the Barnsley FC Fan Advisory Board."
+        path="/news"
+      />
       <h1 className="text-4xl font-bold mb-8">News</h1>
 
       <div className="space-y-8">

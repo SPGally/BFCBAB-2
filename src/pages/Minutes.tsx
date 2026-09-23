@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Search, FileText, MapPin, ExternalLink } from 'lucide-react';
 import { getMinutes, loadMinutesContentText, CLUB_MINUTES_URL } from '../lib/content';
+import Seo from '../components/Seo';
 
 const Minutes = () => {
   const minutes = React.useMemo(() => getMinutes(), []);
@@ -47,6 +48,11 @@ const Minutes = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Meeting Minutes"
+        description="Signed-off minutes from every Barnsley FC Fan Advisory Board meeting, searchable by date, location and content."
+        path="/minutes"
+      />
       <h1 className="text-4xl font-bold mb-4">Meeting Minutes</h1>
       <p className="text-gray-600 mb-8">
         Minutes are published once they have been signed off by the Fan Advisory Board and the club.

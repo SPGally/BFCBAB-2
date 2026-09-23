@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 import { getArticle } from '../lib/content';
+import Seo from '../components/Seo';
 
 export default function NewsArticle() {
   const { id = '' } = useParams();
@@ -28,25 +28,16 @@ export default function NewsArticle() {
   const plainTextContent = article.summary || article.content_html.replace(/<[^>]*>/g, '');
   const description =
     plainTextContent.length > 200 ? plainTextContent.substring(0, 197) + '...' : plainTextContent;
-  const articleUrl = `${window.location.origin}/news/${article.slug}`;
-  const imageUrl = article.image ? `${window.location.origin}${article.image}` : null;
 
   return (
     <>
-      <Helmet>
-        <title>{article.title} - Barnsley FC Fan Advisory Board</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={article.title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={articleUrl} />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
-        <meta property="og:site_name" content="Barnsley FC Fan Advisory Board" />
-        <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
-        <meta name="twitter:title" content={article.title} />
-        <meta name="twitter:description" content={description} />
-        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
-      </Helmet>
+      <Seo
+        title={article.title}
+        description={description}
+        path={`/news/${article.slug}`}
+        image={article.image}
+        type="article"
+      />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link

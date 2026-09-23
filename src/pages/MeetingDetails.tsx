@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink, CalendarPlus } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 import { getMinute, getUpcomingMeeting, loadMinutesContentText } from '../lib/content';
 import { downloadIcsEvent } from '../lib/ics';
+import Seo from '../components/Seo';
 
 export default function MeetingDetails() {
   const { id = '' } = useParams();
@@ -63,11 +63,13 @@ export default function MeetingDetails() {
     ? contentText.split('\n').filter((l) => l.trim()).slice(0, 40)
     : [];
 
+  const description = minute
+    ? `Minutes from the ${format(parseISO(dateIso), 'd MMMM yyyy')} Barnsley FC Fan Advisory Board meeting at ${location}.`
+    : `Upcoming Barnsley FC Fan Advisory Board meeting on ${format(parseISO(dateIso), 'd MMMM yyyy')} at ${location}.`;
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Helmet>
-        <title>{title} - Barnsley FC Fan Advisory Board</title>
-      </Helmet>
+      <Seo title={title} description={description} path={`/meetings/${id}`} />
       <Link
         to="/meetings"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8"

@@ -1,3 +1,4 @@
+import Seo from '../components/Seo';
 
 const VisualHistory = () => {
   const images = [
@@ -14,6 +15,11 @@ const VisualHistory = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Visual History"
+        description="A visual history of Barnsley FC fans and the Fan Advisory Board."
+        path="/visual-history"
+      />
       {/* Header Image */}
       <div className="relative mb-8">
         <img
