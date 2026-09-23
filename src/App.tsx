@@ -1,47 +1,68 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import type { RouteRecord } from 'vite-react-ssg';
+import Layout from './Layout';
 import Home from './pages/Home';
-import AboutUs from './pages/AboutUs';
-import Minutes from './pages/Minutes';
-import Submit from './pages/Submit';
-import NewsArticle from './pages/NewsArticle';
-import News from './pages/News';
-import Meetings from './pages/Meetings';
-import MeetingDetails from './pages/MeetingDetails';
-import FAQ from './pages/FAQ';
-import FAQDetails from './pages/FAQDetails';
-import SubmitButton from './components/SubmitButton';
-import ErrorBoundary from './components/ErrorBoundary';
-import VisualHistory from './pages/VisualHistory';
+import { getFaqTopics, getMinutes, getNews, getUpcomingMeetings } from './lib/content';
 
-function App() {
-  return (
-    <Router>
-      <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navbar />
-        <main className="flex-grow">
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about-us" element={<AboutUs />} />
-              <Route path="/minutes" element={<Minutes />} />
-              <Route path="/meetings" element={<Meetings />} />
-              <Route path="/meetings/:id" element={<MeetingDetails />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:id" element={<NewsArticle />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/faq/:id" element={<FAQDetails />} />
-              <Route path="/submit" element={<Submit />} />
-              <Route path="/visual-history" element={<VisualHistory />} />
-            </Routes>
-          </ErrorBoundary>
-          <SubmitButton />
-        </main>
-        <Footer />
-      </div>
-    </Router>
-  );
+// Every meeting id that /meetings/:id can resolve, past (minutes) and upcoming, regardless
+// of date, so a static page is generated for every one of them.
+function allMeetingIds(): string[] {
+  const minuteIds = getMinutes().map((m) => m.id);
+  const upcomingIds = getUpcomingMeetings(new Date(0)).map((m) => m.id);
+  return [...new Set([...minuteIds, ...upcomingIds])];
 }
 
-export default App;
+export const routes: RouteRecord[] = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: 'about-us',
+        lazy: () => import('./pages/AboutUs').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'minutes',
+        lazy: () => import('./pages/Minutes').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'meetings',
+        lazy: () => import('./pages/Meetings').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'meetings/:id',
+        lazy: () => import('./pages/MeetingDetails').then((m) => ({ Component: m.default })),
+        // vite-react-ssg expects getStaticPaths to return full paths from the root,
+        // including the route's own static segments (see its README's `nest/:b` example).
+        getStaticPaths: () => allMeetingIds().map((id) => `meetings/${id}`),
+      },
+      {
+        path: 'news',
+        lazy: () => import('./pages/News').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'news/:id',
+        lazy: () => import('./pages/NewsArticle').then((m) => ({ Component: m.default })),
+        getStaticPaths: () => getNews().map((a) => `news/${a.slug}`),
+      },
+      {
+        path: 'faq',
+        lazy: () => import('./pages/FAQ').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'faq/:id',
+        lazy: () => import('./pages/FAQDetails').then((m) => ({ Component: m.default })),
+        getStaticPaths: () =>
+          getFaqTopics().flatMap((topic) => topic.questions.map((q) => `faq/${q.id}`)),
+      },
+      {
+        path: 'submit',
+        lazy: () => import('./pages/Submit').then((m) => ({ Component: m.default })),
+      },
+      {
+        path: 'visual-history',
+        lazy: () => import('./pages/VisualHistory').then((m) => ({ Component: m.default })),
+      },
+    ],
+  },
+];

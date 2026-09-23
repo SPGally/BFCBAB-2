@@ -1,8 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink, CalendarPlus } from 'lucide-react';
-import { Helmet } from 'react-helmet';
-import { getMinute, getUpcomingMeeting } from '../lib/content';
+import { getMinute, getUpcomingMeeting, loadMinutesContentText } from '../lib/content';
 import { downloadIcsEvent } from '../lib/ics';
 import {
   buildBreadcrumbListJsonLd,
@@ -10,11 +10,26 @@ import {
   buildPastMeetingEventJsonLd,
   buildUpcomingMeetingEventJsonLd,
 } from '../lib/jsonld';
+import Seo from '../components/Seo';
 
 export default function MeetingDetails() {
   const { id = '' } = useParams();
   const minute = getMinute(id);
   const upcoming = minute ? undefined : getUpcomingMeeting(id);
+  // content_text ships as its own chunk (see loadMinutesContentText); only fetch it for a
+  // page that actually has a minute to preview.
+  const [contentText, setContentText] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!minute) return;
+    let cancelled = false;
+    loadMinutesContentText().then((text) => {
+      if (!cancelled) setContentText(text[minute.id] ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [minute]);
 
   if (!minute && !upcoming) {
     return (
@@ -50,8 +65,8 @@ export default function MeetingDetails() {
   };
 
   // Trim the extracted PDF text to a readable preview.
-  const preview = minute?.content_text
-    ? minute.content_text.split('\n').filter((l) => l.trim()).slice(0, 40)
+  const preview = contentText
+    ? contentText.split('\n').filter((l) => l.trim()).slice(0, 40)
     : [];
 
   const eventJsonLd = minute ? buildPastMeetingEventJsonLd(minute) : buildUpcomingMeetingEventJsonLd(upcoming!);
@@ -59,17 +74,17 @@ export default function MeetingDetails() {
     { name: 'Meetings', path: '/meetings' },
     { name: title, path: `/meetings/${id}` },
   ]);
+  const meetingJsonLd = minute
+    ? [eventJsonLd, breadcrumbJsonLd, buildMinuteDocumentJsonLd(minute)]
+    : [eventJsonLd, breadcrumbJsonLd];
+
+  const description = minute
+    ? `Minutes from the ${format(parseISO(dateIso), 'd MMMM yyyy')} Barnsley FC Fan Advisory Board meeting at ${location}.`
+    : `Upcoming Barnsley FC Fan Advisory Board meeting on ${format(parseISO(dateIso), 'd MMMM yyyy')} at ${location}.`;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Helmet>
-        <title>{title} - Barnsley FC Fan Advisory Board</title>
-        <script type="application/ld+json">{JSON.stringify(eventJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-        {minute && (
-          <script type="application/ld+json">{JSON.stringify(buildMinuteDocumentJsonLd(minute))}</script>
-        )}
-      </Helmet>
+      <Seo title={title} description={description} path={`/meetings/${id}`} jsonLd={meetingJsonLd} />
       <Link
         to="/meetings"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8"

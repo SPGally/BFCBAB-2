@@ -1,9 +1,9 @@
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
-import { Helmet } from 'react-helmet';
 import { getFaq, getMember, getMinute } from '../lib/content';
 import { ChevronLeft, User, Calendar, Tag } from 'lucide-react';
 import { buildBreadcrumbListJsonLd, buildFaqQuestionJsonLd } from '../lib/jsonld';
+import Seo from '../components/Seo';
 
 export default function FAQDetails() {
   const { id = '' } = useParams();
@@ -48,12 +48,18 @@ export default function FAQDetails() {
     { name: faq.question, path: `/faq/${id}` },
   ]);
 
+  const plainAnswer = faq.answer.replace(/<[^>]*>/g, '').trim();
+  const description =
+    plainAnswer.length > 200 ? `${plainAnswer.substring(0, 197)}...` : plainAnswer;
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
-        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
-      </Helmet>
+      <Seo
+        title={faq.question}
+        description={description}
+        path={`/faq/${id}`}
+        jsonLd={[faqJsonLd, breadcrumbJsonLd]}
+      />
       <Link
         to="/faq"
         className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-8"

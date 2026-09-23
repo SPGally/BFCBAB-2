@@ -3,6 +3,7 @@ import { getNews, getUpcomingMeetings } from '../lib/content';
 import { format, parseISO } from 'date-fns';
 import { Newspaper, Calendar, ChevronRight, Clock, MapPin, Users, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const Home = () => {
   const news = React.useMemo(() => getNews().slice(0, 7), []);
@@ -13,6 +14,12 @@ const Home = () => {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Barnsley FC Fan Advisory Board"
+        description="News, meetings, minutes and FAQs from the Barnsley FC Fan Advisory Board — the fans' voice on club decisions."
+        path="/"
+        appendSiteName={false}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* News Section */}
         <section className="lg:col-span-2" aria-labelledby="news-heading">

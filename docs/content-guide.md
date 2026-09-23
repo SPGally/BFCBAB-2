@@ -106,6 +106,15 @@ in the future and sorts ascending; remove or leave an entry once it has passed â
 meeting isn't hidden automatically, it just won't be filtered out, so tidy it up when you add
 that meeting's minutes.
 
+Every route, including `/` and `/meetings`, is pre-rendered to static HTML at build time
+(FAB-008), so the "upcoming" filter runs once against the build's clock and is baked into
+that static HTML. The live SPA re-evaluates it against the visitor's clock the moment it
+hydrates (typically well under a second), so a meeting that has just passed only shows as
+"upcoming" in the no-JS view (a crawler, or a page loaded with JavaScript disabled) between
+the meeting's start time and the next deploy â€” the hydrated page corrects itself
+immediately. This is not worth working around: redeploy after a meeting if it matters, or
+just let hydration fix it.
+
 **Fields:**
 
 | Field | Required | Notes |

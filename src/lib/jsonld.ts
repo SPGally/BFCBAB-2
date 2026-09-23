@@ -1,6 +1,7 @@
 // Builders for schema.org JSON-LD, embedded as <script type="application/ld+json">
-// via react-helmet on each page. Content only — no runtime fetch, everything here is
-// derived from src/lib/content.ts and src/data/*.json.
+// via the Seo component's jsonLd prop (src/components/Seo.tsx) on each page. Content
+// only — no runtime fetch, everything here is derived from src/lib/content.ts and
+// src/data/*.json.
 import type { Article, FaqQuestion, FaqTopic, Member, Minute, UpcomingMeeting } from './content';
 
 export const SITE_URL = 'https://fab.barnsleyfc.co.uk';

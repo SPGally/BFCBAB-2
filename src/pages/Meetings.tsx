@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Calendar, ChevronRight, FileText, MapPin } from 'lucide-react';
 import { getUpcomingMeetings, getPastMeetings } from '../lib/content';
+import Seo from '../components/Seo';
 
 export default function Meetings() {
   const upcomingMeetings = React.useMemo(() => getUpcomingMeetings(), []);
@@ -10,6 +11,11 @@ export default function Meetings() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Meetings"
+        description="Upcoming and past Barnsley FC Fan Advisory Board meetings, with dates, locations and agendas."
+        path="/meetings"
+      />
       <h1 className="text-4xl font-bold mb-8">Meetings</h1>
 
       {/* Upcoming Meetings */}
