@@ -4,6 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 import { getArticle } from '../lib/content';
 import { buildBreadcrumbListJsonLd, buildNewsArticleJsonLd } from '../lib/jsonld';
 import Seo from '../components/Seo';
+import ResponsiveImage from '../components/ResponsiveImage';
 
 export default function NewsArticle() {
   const { id = '' } = useParams();
@@ -59,7 +60,13 @@ export default function NewsArticle() {
         <article className="bg-white rounded-lg shadow-md overflow-hidden">
           {article.image && (
             <div className="relative aspect-video">
-              <img src={article.image} alt="" className="w-full h-full object-cover" />
+              <ResponsiveImage
+                src={article.image}
+                alt=""
+                sizes="(min-width: 1024px) 896px, 100vw"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
             </div>
           )}
           <div className="p-8">

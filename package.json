@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite-react-ssg build && node scripts/build-feeds.mjs && node scripts/build-llms.mjs && node scripts/check-nojs.mjs",
+    "build": "node scripts/optimize-news-images.mjs && vite-react-ssg build && node scripts/build-feeds.mjs && node scripts/build-llms.mjs && node scripts/check-nojs.mjs",
+    "images:optimize": "node scripts/optimize-news-images.mjs",
     "check-ai-readable": "node scripts/check-ai-readable.mjs",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
@@ -44,6 +45,7 @@
     "pdf-parse": "^2.4.5",
     "playwright": "^1.63.0",
     "postcss": "^8.4.35",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
