@@ -15,4 +15,11 @@ export default defineConfig({
     port: 5173,
   },
   base: '/',
+  ssgOptions: {
+    script: 'async',
+    // `/foo` -> `/foo/index.html`, matching Netlify's pretty-URL + `_redirects` fallback.
+    dirStyle: 'nested',
+    beastiesOptions: false,
+    formatting: 'none',
+  },
 });

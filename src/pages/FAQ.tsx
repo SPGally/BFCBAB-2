@@ -2,6 +2,7 @@ import React from 'react';
 import { getFaqTopics, getMember } from '../lib/content';
 import { ChevronDown, ChevronUp, Search, Tag, User, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 interface FAQTopic {
   id: string;
@@ -81,6 +82,11 @@ export default function FAQ() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Frequently Asked Questions"
+        description="Answers from the Barnsley FC Fan Advisory Board to questions fans have raised, with links back to the meeting minutes they come from."
+        path="/faq"
+      />
       <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
 
       <div className="mb-8 space-y-4">

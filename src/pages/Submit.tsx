@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle2, Mail } from 'lucide-react';
 import { getMembers, getFaqTopics } from '../lib/content';
+import Seo from '../components/Seo';
 
 // The form is handled by Netlify Forms: the hidden copy of it in index.html lets Netlify
 // detect the fields at build time, and this component posts the same fields back to "/"
@@ -131,6 +132,11 @@ const Submit = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="Submit Your Ideas"
+        description="Send your ideas, suggestions and issues to the Barnsley FC Fan Advisory Board."
+        path="/submit"
+      />
       <h1 className="text-4xl font-bold mb-6">Submit Your Ideas</h1>
 
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8">

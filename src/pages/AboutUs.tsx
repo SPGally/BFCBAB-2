@@ -1,12 +1,18 @@
 import { getMembers } from '../lib/content';
 import { Mail, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '../components/Seo';
 
 const AboutUs = () => {
   const members = getMembers();
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Seo
+        title="About Us"
+        description="The Barnsley FC Fan Advisory Board is a bridge between supporters and the club's leadership. Meet the board and find out how we represent fans."
+        path="/about-us"
+      />
       {/* Introduction Section */}
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-6">About the Fan Advisory Board</h1>
