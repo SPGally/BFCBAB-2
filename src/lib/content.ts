@@ -150,7 +150,8 @@ export interface Article {
 
 // Front matter is a small subset of YAML: one `key: value` per line, where value is a
 // JSON string, true/false/null, or a bare token. Enough for what the content guide allows.
-function parseFrontMatter(raw: string): { data: Record<string, unknown>; body: string } {
+// Exported for testing.
+export function parseFrontMatter(raw: string): { data: Record<string, unknown>; body: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) return { data: {}, body: raw };
   const data: Record<string, unknown> = {};

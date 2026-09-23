@@ -34,7 +34,7 @@ nested structures, no multi-line values):
 | `author` | no | A member `id` from `src/data/members.json` (e.g. `paul-gallagher`), or `null`. Renders the member's name/photo as byline. |
 | `image` | no | Path under `/public`, e.g. `"/images/news/2026-09-23-my-article.jpg"`, or `null`. Featured image on the list and article page. |
 | `pinned` | no | `true`/`false`. Pinned articles sort first regardless of date. |
-| `draft` | no | `true`/`false`. Draft articles never appear on the public site; use this to commit work in progress. |
+| `draft` | no | `true`/`false`. Draft articles never appear on the public site; use this to commit work in progress. A draft does not render anywhere, including its own URL — temporarily set `draft: false` to check it in `npm run dev`, then set it back before committing. |
 | `legacy_id` | no | Only set on articles migrated from the old database; leave unset for new articles. |
 
 The body after the second `---` is **HTML, not Markdown** — the site renders it directly as
@@ -110,9 +110,9 @@ that meeting's minutes.
 
 | Field | Required | Notes |
 |---|---|---|
-| `id` | yes | Stable slug, conventionally the ISO date, e.g. `"2026-10-29"`. Must be unique. |
+| `id` | yes | Stable slug, conventionally the ISO date, e.g. `"2026-10-29"`. Must be unique. Also used as the ICS `UID` prefix for "Add to calendar", so it must stay stable once published. |
 | `title` | yes | e.g. `"Fan Advisory Board Meeting"`. |
-| `date` | yes | ISO date-time with offset, e.g. `"2026-10-29T18:00:00+00:00"`. |
+| `date` | yes | ISO date-time with offset, e.g. `"2026-10-29T18:00:00+00:00"`. The offset matters: the "Add to calendar" `.ics` file is built from this value and always exports `DTSTART`/`DTEND` in UTC, so an incorrect offset produces an event at the wrong time in the supporter's calendar app. |
 | `location` | yes | e.g. `"Online via Microsoft Teams"` or `"Oakwell"`. |
 | `description` | no | One or two sentences, or `null`. |
 | `agenda_html` | no | Optional HTML agenda, or `null`. |
@@ -129,6 +129,13 @@ that meeting's minutes.
   "agenda_html": null
 }
 ```
+
+### Add to calendar
+
+`MeetingDetails` offers an "Add to calendar" button for upcoming meetings, built by
+`src/lib/ics.ts` (`buildIcsEvent` / `downloadIcsEvent`). It generates a minimal RFC 5545
+`.ics` file entirely in the browser — no server, no third-party calendar API — defaulting
+the event duration to 60 minutes.
 
 ## Members
 
@@ -162,7 +169,7 @@ that meeting's minutes.
 }
 ```
 
-**Image:** JPEG, 600x600 (matches the existing files in `public/images/members/`), named
+**Image:** JPEG, 600px wide, square preferred (most existing files are 600x600), named
 `<id>.jpg`, e.g. `public/images/members/jane-example.jpg`.
 
 ## FAQ
@@ -210,12 +217,13 @@ Before opening the pull request:
 1. `npm run lint`
 2. `npm run typecheck`
 3. `npm run build`
-4. `npm run dev` and check the page in the browser: the new/changed item renders, links work,
+4. `npm test`
+5. `npm run dev` and check the page in the browser: the new/changed item renders, links work,
    images load at the right size, and (for news) the article isn't accidentally excluded by a
    future `published_at` or `draft: true`.
-5. Valid JSON — `npm run build` will fail loudly on a syntax error, but a linter or
+6. Valid JSON — `npm run build` will fail loudly on a syntax error, but a linter or
    `python3 -m json.tool src/data/<file>.json > /dev/null` catches it faster.
-6. Open the PR with `scripts/agent pr` (or by hand, following the PR template): `Fixes #N`
+7. Open the PR with `scripts/agent pr` (or by hand, following the PR template): `Fixes #N`
    if there's an issue, `Agent:` line, what changed, how verified, out of scope, handoff.
    Content PRs (`src/content/`, `src/data/`, `public/images/`) are approved but left open for
    Paul to merge — do not expect or ask for an auto-merge.

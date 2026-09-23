@@ -49,7 +49,7 @@ this skill follows. There is no admin UI; every article is a pull request, and (
    `-Z 1600` scales so the longest edge is 1600px; if the source is portrait, check the
    result is still a reasonable width for a hero image and re-crop if not. If no image was
    given, leave `image: null` and skip this step — do not invent or fetch one.
-5. Run the checks: `npm run lint`, `npm run typecheck`, `npm run build`. Optionally
+5. Run the checks: `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`. Optionally
    `npm run dev` and check the article renders at `/news/<slug>`.
 6. Open the PR with `scripts/agent pr @path/to/body.md` (write the body to a file first),
    following the template: `Fixes #N` if there's a tracked issue, `Agent:` line, what

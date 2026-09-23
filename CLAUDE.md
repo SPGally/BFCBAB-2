@@ -54,7 +54,7 @@ scripts/setup-hooks.sh           # first thing on any clone
 npm ci                           # set up (Node 20+)
 npm run dev                      # local site on http://localhost:5173
 npm run lint                     # eslint, clean on main; keep it that way
-npm run typecheck                # tsc --noEmit, clean on main (warn-only in the pre-commit hook until FAB-002)
+npm run typecheck                # tsc --noEmit, clean on main; blocking in the pre-commit hook
 npm run build                    # vite build -> dist/
 npm test                         # vitest run (no runner installed yet: FAB-001 sets it up and adds the first tests)
 scripts/agent mine | resume NNN | next | claim NNN | pr [body|@file|-] | handoff "msg" | comment NNN <text|@file|-> | release NNN
@@ -68,11 +68,10 @@ scripts/agent mine | resume NNN | next | claim NNN | pr [body|@file|-] | handoff
 ```
 
 The hooks in `.githooks/` are plain bash: `pre-commit` refuses commits on main and, when
-source is staged, runs eslint on the staged files (blocking) and `npm run typecheck` on the
-project (warning only until FAB-002 makes it blocking); `commit-msg` enforces Conventional
-Commits; `pre-push` refuses pushes to main. `scripts/setup-hooks.sh` sets `core.hooksPath`;
-there is no other install step. Lint and typecheck are clean on `main`; a PR that makes
-either red is sent back.
+source is staged, runs eslint on the staged files and `npm run typecheck` on the project,
+both blocking; `commit-msg` enforces Conventional Commits; `pre-push` refuses pushes to
+main. `scripts/setup-hooks.sh` sets `core.hooksPath`; there is no other install step. Lint
+and typecheck are clean on `main`; a PR that makes either red is sent back.
 
 ## Where things are
 `docs/agent-playbook.md` (how agents work this repo), `docs/review-agent.md` (review
