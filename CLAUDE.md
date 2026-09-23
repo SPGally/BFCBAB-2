@@ -79,4 +79,5 @@ either red is sent back.
 policy), `docs/supabase-removal-plan.md` (what is being removed and in what order),
 `backlog/issues.yaml` (the backlog source; `scripts/bootstrap-github.sh` turns it into
 issues, Paul runs that). Site source: `src/`, content: `src/content/` and `src/data/`, static assets: `public/`.
-`docs/content-guide.md` (FAB-005) will describe every content file's fields.
+`docs/content-guide.md` describes every content file's fields, with a copy-paste example and
+image rules for each; `.claude/skills/add-news/SKILL.md` adds a news article end to end.
