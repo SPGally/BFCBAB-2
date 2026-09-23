@@ -1,7 +1,9 @@
 // Static content layer. Everything here is read from files committed to the repo
 // (src/data/*.json and src/content/news/*.md), so the site has no runtime database.
 // To change content, edit the file and open a pull request; Netlify redeploys on merge.
-import minutesData from '../data/minutes.json';
+// `content_text` (the bulk of minutes.json) is split out of this import by the
+// `minutes-split` Vite plugin (vite.config.ts); see loadMinutesContentText below.
+import minutesMeta from 'virtual:minutes-meta';
 import meetingsData from '../data/meetings.json';
 import membersData from '../data/members.json';
 import faqData from '../data/faq.json';
@@ -20,7 +22,11 @@ export interface Minute {
   club_label?: string;
   /** Optional HTML agenda for the meeting. */
   agenda_html?: string | null;
-  /** Plain text extracted from the PDF, used for search. */
+  /**
+   * Plain text extracted from the PDF, used for search. Always `null` on the objects
+   * returned by getMinutes()/getMinute() — it is split into its own lazily-loaded chunk;
+   * call loadMinutesContentText() to fetch it (see Minutes.tsx, MeetingDetails.tsx).
+   */
   content_text: string | null;
 }
 
@@ -36,9 +42,23 @@ export interface UpcomingMeeting {
   agenda_html?: string | null;
 }
 
-const minutes: Minute[] = (minutesData as Minute[])
-  .slice()
+const minutes: Minute[] = minutesMeta
+  .map((m) => ({ ...m, content_text: null }) as Minute)
   .sort((a, b) => b.meeting_date.localeCompare(a.meeting_date));
+
+/**
+ * Lazily fetches `{ [minuteId]: content_text }` for every minute, as its own chunk
+ * (`virtual:minutes-content`, generated from src/data/minutes.json). Cached after the
+ * first call. Used for full-text minutes search and the meeting preview, so neither is
+ * downloaded until it's actually needed.
+ */
+let minutesContentPromise: Promise<Record<string, string>> | null = null;
+export function loadMinutesContentText(): Promise<Record<string, string>> {
+  if (!minutesContentPromise) {
+    minutesContentPromise = import('virtual:minutes-content').then((mod) => mod.default);
+  }
+  return minutesContentPromise;
+}
 
 const upcoming: UpcomingMeeting[] = (meetingsData as UpcomingMeeting[])
   .slice()
