@@ -305,7 +305,7 @@ const Submit = () => {
             </div>
 
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-600">
-              <h3 className="font-semibold mb-2">Privacy Notice:</h3>
+              <h2 className="font-semibold mb-2">Privacy Notice:</h2>
               <p className="mb-4">
                 The information you provide in this form will be used solely for the purposes of the Fan Advisory Board.
                 By submitting this form, you consent to the collection, storage, and use of your data in accordance with
@@ -319,7 +319,7 @@ const Submit = () => {
               </ul>
               <p>
                 You have the right to access, amend, or delete your personal data at any time. For more information
-                or to make a request, please contact <a href={`mailto:${FAB_EMAIL}`} className="text-barnsley-red hover:underline">{FAB_EMAIL}</a>
+                or to make a request, please contact <a href={`mailto:${FAB_EMAIL}`} className="text-barnsley-red underline">{FAB_EMAIL}</a>
               </p>
             </div>
 
