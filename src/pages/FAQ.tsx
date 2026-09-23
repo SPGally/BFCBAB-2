@@ -1,7 +1,11 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { getFaqTopics, getMember } from '../lib/content';
 import { ChevronDown, ChevronUp, Search, Tag, User, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { buildFaqPageJsonLd } from '../lib/jsonld';
+
+const faqPageJsonLd = buildFaqPageJsonLd(getFaqTopics());
 
 interface FAQTopic {
   id: string;
@@ -81,6 +85,9 @@ export default function FAQ() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(faqPageJsonLd)}</script>
+      </Helmet>
       <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
 
       <div className="mb-8 space-y-4">

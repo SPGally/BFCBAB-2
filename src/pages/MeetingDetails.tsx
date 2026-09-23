@@ -4,6 +4,12 @@ import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink, CalendarP
 import { Helmet } from 'react-helmet';
 import { getMinute, getUpcomingMeeting } from '../lib/content';
 import { downloadIcsEvent } from '../lib/ics';
+import {
+  buildBreadcrumbListJsonLd,
+  buildMinuteDocumentJsonLd,
+  buildPastMeetingEventJsonLd,
+  buildUpcomingMeetingEventJsonLd,
+} from '../lib/jsonld';
 
 export default function MeetingDetails() {
   const { id = '' } = useParams();
@@ -48,10 +54,21 @@ export default function MeetingDetails() {
     ? minute.content_text.split('\n').filter((l) => l.trim()).slice(0, 40)
     : [];
 
+  const eventJsonLd = minute ? buildPastMeetingEventJsonLd(minute) : buildUpcomingMeetingEventJsonLd(upcoming!);
+  const breadcrumbJsonLd = buildBreadcrumbListJsonLd([
+    { name: 'Meetings', path: '/meetings' },
+    { name: title, path: `/meetings/${id}` },
+  ]);
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Helmet>
         <title>{title} - Barnsley FC Fan Advisory Board</title>
+        <script type="application/ld+json">{JSON.stringify(eventJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+        {minute && (
+          <script type="application/ld+json">{JSON.stringify(buildMinuteDocumentJsonLd(minute))}</script>
+        )}
       </Helmet>
       <Link
         to="/meetings"

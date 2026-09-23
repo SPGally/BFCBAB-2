@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { format, parseISO } from 'date-fns';
 import { Search, FileText, MapPin, ExternalLink } from 'lucide-react';
 import { getMinutes, CLUB_MINUTES_URL } from '../lib/content';
+import { buildMinutesListJsonLd } from '../lib/jsonld';
 
 const Minutes = () => {
   const minutes = React.useMemo(() => getMinutes(), []);
+  const minutesListJsonLd = React.useMemo(() => buildMinutesListJsonLd(minutes), [minutes]);
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredMinutes = React.useMemo(() => {
@@ -33,6 +36,9 @@ const Minutes = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(minutesListJsonLd)}</script>
+      </Helmet>
       <h1 className="text-4xl font-bold mb-4">Meeting Minutes</h1>
       <p className="text-gray-600 mb-8">
         Minutes are published once they have been signed off by the Fan Advisory Board and the club.

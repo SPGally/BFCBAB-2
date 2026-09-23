@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet';
 import { getArticle } from '../lib/content';
+import { buildBreadcrumbListJsonLd, buildNewsArticleJsonLd } from '../lib/jsonld';
 
 export default function NewsArticle() {
   const { id = '' } = useParams();
@@ -30,6 +31,11 @@ export default function NewsArticle() {
     plainTextContent.length > 200 ? plainTextContent.substring(0, 197) + '...' : plainTextContent;
   const articleUrl = `${window.location.origin}/news/${article.slug}`;
   const imageUrl = article.image ? `${window.location.origin}${article.image}` : null;
+  const articleJsonLd = buildNewsArticleJsonLd(article, article.authorMember);
+  const breadcrumbJsonLd = buildBreadcrumbListJsonLd([
+    { name: 'News', path: '/news' },
+    { name: article.title, path: `/news/${article.slug}` },
+  ]);
 
   return (
     <>
@@ -46,6 +52,8 @@ export default function NewsArticle() {
         <meta name="twitter:title" content={article.title} />
         <meta name="twitter:description" content={description} />
         {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+        <script type="application/ld+json">{JSON.stringify(articleJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       </Helmet>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
