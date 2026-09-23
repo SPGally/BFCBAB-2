@@ -93,6 +93,7 @@ export default function MeetingDetails() {
         title={seoTitle}
         description={description}
         path={`/meetings/${id}`}
+        markdownPath={minute ? `/minutes/${minute.id}.md` : undefined}
         jsonLd={meetingJsonLd}
       />
       <Link

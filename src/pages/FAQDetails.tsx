@@ -58,6 +58,7 @@ export default function FAQDetails() {
         title={faq.question}
         description={description}
         path={`/faq/${id}`}
+        markdownPath={`/faq/${id}.md`}
         jsonLd={[faqJsonLd, breadcrumbJsonLd]}
       />
       <Link

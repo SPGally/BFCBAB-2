@@ -10,6 +10,11 @@ interface SeoProps {
   type?: 'website' | 'article';
   /** Set false when `title` is already the full page title (e.g. the home page). */
   appendSiteName?: boolean;
+  /**
+   * Path from the site root to this page's Markdown mirror (FAB-019), e.g.
+   * "/faq/some-id.md". Set on pages that have one (FAQ entries, news articles, minutes).
+   */
+  markdownPath?: string;
   /** JSON-LD structured data object(s) to embed as <script type="application/ld+json">
    * tags, baked into the pre-rendered HTML alongside the other head tags. */
   jsonLd?: object | object[];
@@ -24,6 +29,7 @@ export default function Seo({
   image,
   type = 'website',
   appendSiteName = true,
+  markdownPath,
   jsonLd,
 }: SeoProps) {
   const url = `${SITE_URL}${path}`;
@@ -36,6 +42,9 @@ export default function Seo({
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
+      {markdownPath && (
+        <link rel="alternate" type="text/markdown" href={`${SITE_URL}${markdownPath}`} />
+      )}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />

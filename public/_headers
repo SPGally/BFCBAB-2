@@ -1,0 +1,12 @@
+# Content types for the Markdown mirrors and llms.txt/llms-full.txt (FAB-019), served
+# alongside the pre-rendered HTML. Netlify applies these in addition to the security headers
+# in netlify.toml, which only cover /*.js, /*.css, /*.html and /* (no overlap with the paths
+# below).
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8

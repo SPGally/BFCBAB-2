@@ -43,6 +43,7 @@ export default function NewsArticle() {
         path={`/news/${article.slug}`}
         image={article.image}
         type="article"
+        markdownPath={`/news/${article.slug}.md`}
         jsonLd={[articleJsonLd, breadcrumbJsonLd]}
       />
 
