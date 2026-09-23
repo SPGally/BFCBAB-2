@@ -11,6 +11,21 @@
     <!-- Every route sets its own <title>/meta description/OG tags via <Seo> (src/components/Seo.tsx,
          built on react-helmet-async), rendered server-side by vite-react-ssg and baked into
          the static HTML for that route (FAB-008). No default <title> here to avoid a duplicate. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Barnsley FC Fan Advisory Board",
+        "url": "https://fab.barnsleyfc.co.uk",
+        "logo": "https://images.gc.barnsleyfcservices.co.uk/fit-in/170x170/3b17caf0-1393-11ef-9954-698e48ed286c.png",
+        "sameAs": ["https://www.barnsleyfc.co.uk/fans/fan-advisory-board"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "FAB@barnsleyfc.co.uk",
+          "contactType": "customer support"
+        }
+      }
+    </script>
   </head>
   <body>
     <!-- Hidden copy of the Submit form so Netlify Forms detects the fields at build time. -->

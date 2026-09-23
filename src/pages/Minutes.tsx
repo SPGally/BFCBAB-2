@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Search, FileText, MapPin, ExternalLink } from 'lucide-react';
 import { getMinutes, loadMinutesContentText, CLUB_MINUTES_URL } from '../lib/content';
+import { buildMinutesListJsonLd } from '../lib/jsonld';
 import Seo from '../components/Seo';
 
 const Minutes = () => {
   const minutes = React.useMemo(() => getMinutes(), []);
+  const minutesListJsonLd = React.useMemo(() => buildMinutesListJsonLd(minutes), [minutes]);
   const [searchQuery, setSearchQuery] = React.useState('');
   // content_text ships as its own chunk (see loadMinutesContentText); only fetch it once
   // the visitor actually starts searching.
@@ -52,6 +54,7 @@ const Minutes = () => {
         title="Meeting Minutes"
         description="Signed-off minutes from every Barnsley FC Fan Advisory Board meeting, searchable by date, location and content."
         path="/minutes"
+        jsonLd={minutesListJsonLd}
       />
       <h1 className="text-4xl font-bold mb-4">Meeting Minutes</h1>
       <p className="text-gray-600 mb-8">
