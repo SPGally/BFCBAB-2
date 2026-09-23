@@ -2,6 +2,7 @@ import { getMembers } from '../lib/content';
 import { Mail, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
+import ResponsiveImage from '../components/ResponsiveImage';
 
 const AboutUs = () => {
   const members = getMembers();
@@ -58,13 +59,15 @@ const AboutUs = () => {
       {/* Existing Board Members Section */}
       <h2 className="text-3xl font-bold mb-8">Meet Your Representatives</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {members.map((member) => (
+        {members.map((member, index) => (
           <div key={member.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             {member.image && (
-              <img
+              <ResponsiveImage
                 src={member.image}
                 alt={member.name}
+                sizes="(min-width: 1024px) 384px, (min-width: 768px) 50vw, 100vw"
                 className="w-full h-80 md:h-96 lg:h-[450px] object-cover"
+                loading={index === 0 ? 'eager' : 'lazy'}
               />
             )}
             <div className="p-6">

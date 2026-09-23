@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/optimize-news-images.mjs && vite-react-ssg build && node scripts/build-feeds.mjs && node scripts/build-llms.mjs && node scripts/check-nojs.mjs",
-    "images:optimize": "node scripts/optimize-news-images.mjs",
+    "build": "node scripts/optimize-images.mjs && vite-react-ssg build && node scripts/build-feeds.mjs && node scripts/build-llms.mjs && node scripts/check-nojs.mjs",
+    "images:optimize": "node scripts/optimize-images.mjs",
     "check-ai-readable": "node scripts/check-ai-readable.mjs",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",

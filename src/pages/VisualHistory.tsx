@@ -1,4 +1,5 @@
 import Seo from '../components/Seo';
+import ResponsiveImage from '../components/ResponsiveImage';
 
 const VisualHistory = () => {
   const images = [
@@ -22,10 +23,12 @@ const VisualHistory = () => {
       />
       {/* Header Image */}
       <div className="relative mb-8">
-        <img
+        <ResponsiveImage
           src="/images/bfc-fans-visual-history-header.jpg"
           alt="Barnsley FC: The People's Visual History"
+          sizes="(min-width: 1280px) 1200px, 100vw"
           className="w-full h-auto max-h-[600px] object-contain"
+          loading="eager"
         />
       </div>
 
@@ -112,10 +115,12 @@ const VisualHistory = () => {
         <div className="space-y-8 mt-12">
           {images.map((image, index) => (
             <div key={index} className="w-full">
-              <img
+              <ResponsiveImage
                 src={image}
                 alt={`Barnsley FC fans and memorabilia, submission ${index + 1}`}
+                sizes="(min-width: 1280px) 1200px, 100vw"
                 className="w-full h-auto shadow-md hover:shadow-xl transition-shadow"
+                loading="lazy"
               />
             </div>
           ))}
