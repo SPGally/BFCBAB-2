@@ -37,6 +37,7 @@ export default function NewsArticle() {
         path={`/news/${article.slug}`}
         image={article.image}
         type="article"
+        markdownPath={`/news/${article.slug}.md`}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
