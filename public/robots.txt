@@ -1,0 +1,41 @@
+# The Fan Advisory Board wants AI crawlers to index this site: news articles and FAQ
+# answers should be findable and quotable by AI models, not just search engines. See
+# scripts/build-feeds.mjs / dist/sitemap.xml for the routes and dist/rss.xml for the feed.
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://fab.barnsleyfc.co.uk/sitemap.xml
