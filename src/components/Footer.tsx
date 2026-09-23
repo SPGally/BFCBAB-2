@@ -8,9 +8,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <img
-              src="https://www.barnsleyfc.co.uk/images/common/barnsley-fc-logo.png"
-              alt="Barnsley FC Logo"
-              className="h-12 mb-4"
+              src="/images/BFC-FanAdvisoryBoard.png"
+              alt="Barnsley FC Fan Advisory Board"
+              className="h-12 mb-4 bg-white rounded p-1.5"
             />
             <p className="text-sm text-gray-300">
               Official Fan Advisory Board of Barnsley Football Club
