@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { ChevronLeft } from 'lucide-react';
 import { getArticle } from '../lib/content';
+import { buildBreadcrumbListJsonLd, buildNewsArticleJsonLd } from '../lib/jsonld';
 import Seo from '../components/Seo';
 
 export default function NewsArticle() {
@@ -28,6 +29,11 @@ export default function NewsArticle() {
   const plainTextContent = article.summary || article.content_html.replace(/<[^>]*>/g, '');
   const description =
     plainTextContent.length > 160 ? plainTextContent.substring(0, 157) + '...' : plainTextContent;
+  const articleJsonLd = buildNewsArticleJsonLd(article, article.authorMember);
+  const breadcrumbJsonLd = buildBreadcrumbListJsonLd([
+    { name: 'News', path: '/news' },
+    { name: article.title, path: `/news/${article.slug}` },
+  ]);
 
   return (
     <>
@@ -37,6 +43,7 @@ export default function NewsArticle() {
         path={`/news/${article.slug}`}
         image={article.image}
         type="article"
+        jsonLd={[articleJsonLd, breadcrumbJsonLd]}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

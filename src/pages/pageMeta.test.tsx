@@ -30,6 +30,14 @@ function canonicalUrl(): string {
  * read the effect it produced rather than the Helmet context (which is only populated during
  * server rendering). */
 async function renderRoute(path: string, routePath: string, element: React.ReactElement) {
+  // react-helmet-async only ever adds/updates these; it never removes a stale one from a
+  // previous test's render (and `cleanup()` doesn't touch `document.head`/`document.title`).
+  // Reset them here so a route that fails to set its own title/meta/canonical is caught,
+  // rather than silently inheriting the previous test's values and passing anyway.
+  document.title = '';
+  document.querySelector('meta[name="description"]')?.remove();
+  document.querySelector('link[rel="canonical"]')?.remove();
+
   render(
     <HelmetProvider>
       <MemoryRouter initialEntries={[path]}>
