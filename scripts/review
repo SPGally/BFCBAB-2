@@ -7,7 +7,8 @@
 #                                        at the PR head (prints the banner); refuses if another machine holds it
 #   scripts/review claim <N> | release <N>   take / drop the reviewing lock without a worktree
 #   scripts/review done <N>              remove that worktree and release the lock
-#   scripts/review decide <N> merge|changes|paul|decided "<message>"
+#   scripts/review decide <N> merge|changes|paul|decided <message|@file|->
+#       message is expanded via read_body: @path reads a file, - reads stdin, anything else is literal text
 #       merge   : refuses own PRs; refuses protected paths unless a "**Paul decided:**" comment exists on the PR;
 #                 a PR touching src/content/, src/data/ or public/images/ is approved and labelled
 #                 approved-hold-for-paul instead of merged — Paul merges content PRs himself
@@ -68,7 +69,13 @@ mark_for() {
   if [ -n "$lock" ] && [ "$lock_stale" != 1 ]; then
     echo "$lock"
   elif echo "$labels" | grep -q approved-hold-for-paul; then
-    echo awaiting-paul-merge
+    # New commits pushed after the approval comment invalidate the hold: surface the PR as
+    # ready again instead of leaving it silently waiting for a merge that reviews stale code.
+    if [ -n "$last_review" ] && [[ "$last_commit" > "$last_review" ]]; then
+      echo ready
+    else
+      echo awaiting-paul-merge
+    fi
   elif echo "$labels" | grep -q needs-paul; then
     if [ "${paul_after:-0}" -gt 0 ]; then echo paul-replied; else echo waiting-paul; fi
   elif echo "$labels" | grep -q changes-requested && [ -n "$last_review" ] && [[ "$last_commit" < "$last_review" ]]; then
@@ -86,11 +93,12 @@ case "${1:-}" in
            ((try (.body|capture("Agent: (?<a>[^\n]+)")|.a) catch "?")),
            ((try (.body|capture("(Fixes|Closes|Resolves) #(?<i>[0-9]+)")|.i) catch ""))] | join("")' \
     | sort | while IFS="$US" read -r created n title labels branch agent iss; do
-        # commits/comments are only fetched for PRs already labelled changes-requested,
-        # where we need them to tell "pushed since review" from "still waiting on author".
-        # Every other PR (the common case) needs zero extra REST calls to mark as ready.
+        # commits/comments are only fetched for PRs already labelled changes-requested or
+        # approved-hold-for-paul, where we need them to tell "pushed since review" from
+        # "still waiting". Every other PR (the common case) needs zero extra REST calls to
+        # mark as ready.
         last_commit="-"; last_review=""
-        if echo "$labels" | grep -q changes-requested; then
+        if echo "$labels" | grep -qE 'changes-requested|approved-hold-for-paul'; then
           last_commit=$(rest_get "pulls/$n/commits" -q '(.[-1].commit.committer.date // .[-1].commit.author.date) // "-"')
           last_review=$(rest_get "issues/$n/comments" \
             | jq -r --arg sigre "$REVIEWER_SIG_RE" '([.[] | select(.body | test($sigre))] | last | .created_at) // ""')
@@ -149,7 +157,7 @@ case "${1:-}" in
     lock_release "$n" reviewing
     ;;
   decide)
-    n="${2:?PR number}"; kind="${3:?merge|changes|paul|decided}"; msg="${4:?message}"
+    n="${2:?PR number}"; kind="${3:?merge|changes|paul|decided}"; msg=$(read_body "${4:?message, @file or -}") || exit 1
     iss=$(issue_of "$n")
     author=$(agent_of "$n")
     echo ">> Decision '$kind' on PR #$n — work by ${author:-unknown}${iss:+, issue #$iss}"

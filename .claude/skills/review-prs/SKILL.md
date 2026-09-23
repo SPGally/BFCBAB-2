@@ -25,7 +25,11 @@ scripts let the variable override the file.
    changed file; form the decision.
 4. **Decide** with `scripts/review decide <N> merge|changes|paul|decided "<message>"`
    (normally `merge` or `changes`). The message must follow policy §4: numbered, file and
-   line, why, what fixed looks like, exact failing output. Then `scripts/review done <N>`.
+   line, why, what fixed looks like, exact failing output. If the PR touches `src/content/`,
+   `src/data/` or `public/images/`, `decide merge` does not merge it: it posts the approval,
+   labels the PR `approved-hold-for-paul` (the queue then marks it `awaiting-paul-merge`),
+   and leaves it open for Paul to merge himself (policy §3.5) — treat this the same as a
+   normal `merge` outcome, just without the merge itself. Then `scripts/review done <N>`.
    **If the outcome is a Paul decision** (policy §3.5 and §3.6): post the analysis and
    options on the PR, then STOP and ask Paul with the AskUserQuestion tool, options as
    choices with the recommended one first. Wait for the answer. Record it with

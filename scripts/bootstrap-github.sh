@@ -32,6 +32,7 @@ mklabel paul-only         "b60205" "Requires secrets, DNS, Netlify/Cloudflare or
 mklabel blocked           "000000" "Waiting on a dependency"
 mklabel handoff           "5319e7" "Pinned status log"
 mklabel changes-requested "fbca04" "Reviewer requested changes; push commits to re-queue"
+mklabel approved-hold-for-paul "0e8a16" "Content-path PR: reviewer approved, Paul merges it himself"
 mklabel direct-push       "e11d21" "Opened by guard-main when main was pushed directly"
 mklabel bug               "d73a4a" "Behaviour contradicts the docs or the obvious intent"
 mklabel improvement       "a2eeef" "Works as designed, could be better"
