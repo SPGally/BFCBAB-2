@@ -10,7 +10,7 @@ const Footer = () => {
             <img
               src="/images/BFC-FanAdvisoryBoard.png"
               alt="Barnsley FC Fan Advisory Board"
-              className="h-12 mb-4"
+              className="h-12 mb-4 bg-white rounded p-1.5"
             />
             <p className="text-sm text-gray-300">
               Official Fan Advisory Board of Barnsley Football Club
