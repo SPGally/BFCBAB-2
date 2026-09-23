@@ -5,6 +5,7 @@ import minutesData from '../data/minutes.json';
 import meetingsData from '../data/meetings.json';
 import membersData from '../data/members.json';
 import faqData from '../data/faq.json';
+import { parseFrontMatter } from './frontmatter';
 
 // ---------- Minutes and meetings ----------
 
@@ -148,31 +149,9 @@ export interface Article {
   content_html: string;
 }
 
-// Front matter is a small subset of YAML: one `key: value` per line, where value is a
-// JSON string, true/false/null, or a bare token. Enough for what the content guide allows.
-// Exported for testing.
-export function parseFrontMatter(raw: string): { data: Record<string, unknown>; body: string } {
-  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!match) return { data: {}, body: raw };
-  const data: Record<string, unknown> = {};
-  for (const line of match[1].split(/\r?\n/)) {
-    const idx = line.indexOf(':');
-    if (idx < 0) continue;
-    const key = line.slice(0, idx).trim();
-    const value = line.slice(idx + 1).trim();
-    if (value === 'true') data[key] = true;
-    else if (value === 'false') data[key] = false;
-    else if (value === 'null' || value === '') data[key] = null;
-    else if (value.startsWith('"')) {
-      try {
-        data[key] = JSON.parse(value);
-      } catch {
-        data[key] = value;
-      }
-    } else data[key] = value;
-  }
-  return { data, body: match[2] };
-}
+// Re-exported so existing imports (and tests) that pull parseFrontMatter from here keep
+// working; the implementation lives in ./frontmatter so the Node build script can reuse it.
+export { parseFrontMatter } from './frontmatter';
 
 const newsFiles = import.meta.glob('../content/news/*.md', {
   query: '?raw',
