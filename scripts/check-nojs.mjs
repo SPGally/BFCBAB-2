@@ -95,7 +95,13 @@ async function main() {
   const base = `http://127.0.0.1:${port}`;
 
   const checks = [
-    { path: '/', expect: ['Barnsley FC Fan Advisory Board'] },
+    // The site name alone isn't enough here: it's in the navbar/footer markup on every
+    // page, including the SPA fallback shell dist/index.html doubles as (dirStyle:
+    // 'nested' + Netlify's fallback rule both resolve unknown paths to it), so that alone
+    // would pass even if the home page's dynamic content failed to pre-render. Assert the
+    // latest news headline too — it only appears once Home has actually pre-rendered its
+    // "Latest News" section.
+    { path: '/', expect: ['Barnsley FC Fan Advisory Board', firstArticle.title] },
     { path: `/news/${firstArticle.slug}`, expect: [firstArticle.title] },
     { path: `/faq/${firstFaq.id}`, expect: [firstFaq.question] },
     { path: `/minutes`, expect: [firstMinute.title] },

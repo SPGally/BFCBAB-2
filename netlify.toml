@@ -6,8 +6,7 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
-  status = 200
-  force = true # Ensure SPA routing works even for paths that might match static files
+  status = 200 # No `force`: a real static file (e.g. a pre-rendered route) wins over this fallback
 
 # Security headers
 [[headers]]
