@@ -50,7 +50,7 @@ export default function FAQDetails() {
 
   const plainAnswer = faq.answer.replace(/<[^>]*>/g, '').trim();
   const description =
-    plainAnswer.length > 200 ? `${plainAnswer.substring(0, 197)}...` : plainAnswer;
+    plainAnswer.length > 160 ? `${plainAnswer.substring(0, 157)}...` : plainAnswer;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
