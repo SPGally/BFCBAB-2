@@ -30,9 +30,8 @@ export function minutesSplitPlugin(): Plugin {
     },
     load(id) {
       if (id === RESOLVED_META_ID) {
-        const meta = readMinutes().map((entry) => {
-          const rest = { ...entry };
-          delete rest.content_text;
+        const meta = readMinutes().map(({ content_text, ...rest }) => {
+          void content_text;
           return rest;
         });
         return `export default ${JSON.stringify(meta)};`;

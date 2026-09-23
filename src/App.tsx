@@ -4,9 +4,11 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import SubmitButton from './components/SubmitButton';
 import ErrorBoundary from './components/ErrorBoundary';
+import Home from './pages/Home';
 
-// Each page is its own chunk, fetched only when the visitor navigates there.
-const Home = lazy(() => import('./pages/Home'));
+// Each page (other than the landing route, which is loaded eagerly to avoid
+// a Suspense fallback and layout shift on "/") is its own chunk, fetched only
+// when the visitor navigates there.
 const AboutUs = lazy(() => import('./pages/AboutUs'));
 const Minutes = lazy(() => import('./pages/Minutes'));
 const Submit = lazy(() => import('./pages/Submit'));
