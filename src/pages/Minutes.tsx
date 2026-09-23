@@ -2,12 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Search, FileText, MapPin, ExternalLink } from 'lucide-react';
-import { getMinutes, CLUB_MINUTES_URL } from '../lib/content';
+import { getMinutes, loadMinutesContentText, CLUB_MINUTES_URL } from '../lib/content';
 import Seo from '../components/Seo';
 
 const Minutes = () => {
   const minutes = React.useMemo(() => getMinutes(), []);
   const [searchQuery, setSearchQuery] = React.useState('');
+  // content_text ships as its own chunk (see loadMinutesContentText); only fetch it once
+  // the visitor actually starts searching.
+  const [contentText, setContentText] = React.useState<Record<string, string> | null>(null);
+
+  React.useEffect(() => {
+    if (!searchQuery.trim() || contentText) return;
+    let cancelled = false;
+    loadMinutesContentText().then((text) => {
+      if (!cancelled) setContentText(text);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [searchQuery, contentText]);
 
   const filteredMinutes = React.useMemo(() => {
     const searchLower = searchQuery.trim().toLowerCase();
@@ -18,10 +32,10 @@ const Minutes = () => {
         .toLowerCase()
         .includes(searchLower);
       const locationMatch = minute.location.toLowerCase().includes(searchLower);
-      const contentMatch = minute.content_text?.toLowerCase().includes(searchLower) ?? false;
+      const contentMatch = contentText?.[minute.id]?.toLowerCase().includes(searchLower) ?? false;
       return titleMatch || dateMatch || locationMatch || contentMatch;
     });
-  }, [minutes, searchQuery]);
+  }, [minutes, searchQuery, contentText]);
 
   const snippet = (text: string | null, query: string) => {
     if (!text) return null;
@@ -98,11 +112,12 @@ const Minutes = () => {
                           {minute.location}
                         </p>
                       )}
-                      {searchQuery.trim() && snippet(minute.content_text, searchQuery.trim()) && (
-                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                          {snippet(minute.content_text, searchQuery.trim())}
-                        </p>
-                      )}
+                      {searchQuery.trim() &&
+                        snippet(contentText?.[minute.id] ?? null, searchQuery.trim()) && (
+                          <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                            {snippet(contentText?.[minute.id] ?? null, searchQuery.trim())}
+                          </p>
+                        )}
                     </div>
                   </div>
                   <a

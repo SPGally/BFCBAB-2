@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Calendar, ChevronLeft, MapPin, FileText, Clock, ExternalLink, CalendarPlus } from 'lucide-react';
-import { getMinute, getUpcomingMeeting } from '../lib/content';
+import { getMinute, getUpcomingMeeting, loadMinutesContentText } from '../lib/content';
 import { downloadIcsEvent } from '../lib/ics';
 import Seo from '../components/Seo';
 
@@ -9,6 +10,20 @@ export default function MeetingDetails() {
   const { id = '' } = useParams();
   const minute = getMinute(id);
   const upcoming = minute ? undefined : getUpcomingMeeting(id);
+  // content_text ships as its own chunk (see loadMinutesContentText); only fetch it for a
+  // page that actually has a minute to preview.
+  const [contentText, setContentText] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!minute) return;
+    let cancelled = false;
+    loadMinutesContentText().then((text) => {
+      if (!cancelled) setContentText(text[minute.id] ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [minute]);
 
   if (!minute && !upcoming) {
     return (
@@ -44,8 +59,8 @@ export default function MeetingDetails() {
   };
 
   // Trim the extracted PDF text to a readable preview.
-  const preview = minute?.content_text
-    ? minute.content_text.split('\n').filter((l) => l.trim()).slice(0, 40)
+  const preview = contentText
+    ? contentText.split('\n').filter((l) => l.trim()).slice(0, 40)
     : [];
 
   const description = minute
