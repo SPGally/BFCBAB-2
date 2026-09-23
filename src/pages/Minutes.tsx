@@ -83,7 +83,7 @@ const Minutes = () => {
             aria-label="Search minutes"
           />
         </div>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-500" role="status" aria-live="polite">
           {filteredMinutes.length} of {minutes.length} sets of minutes
         </p>
       </div>

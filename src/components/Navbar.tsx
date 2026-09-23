@@ -36,53 +36,49 @@ const Navbar = () => {
                 />
               </Link>
               <div className="hidden md:block ml-10">
-                <div className="flex items-baseline space-x-4" role="menubar">
-                  <Link 
-                    to="/" 
+                {/* Plain links, not an ARIA `menu` widget: there's no roving-tabindex/arrow-key
+                    handling here, so `role="menubar"`/`"menuitem"` would promise keyboard
+                    behaviour this markup doesn't provide. */}
+                <div className="flex items-baseline space-x-4">
+                  <Link
+                    to="/"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     Home
                   </Link>
-                  <Link 
-                    to="/about-us" 
+                  <Link
+                    to="/about-us"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     About Us
                   </Link>
-                  <Link 
-                    to="/news" 
+                  <Link
+                    to="/news"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     News
                   </Link>
-                  <Link 
-                    to="/meetings" 
+                  <Link
+                    to="/meetings"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     Meetings
                   </Link>
-                  <Link 
-                    to="/minutes" 
+                  <Link
+                    to="/minutes"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     Minutes
                   </Link>
-                  <Link 
-                    to="/faq" 
+                  <Link
+                    to="/faq"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     FAQ
                   </Link>
-                  <Link 
-                    to="/visual-history" 
+                  <Link
+                    to="/visual-history"
                     className="px-3 py-2 text-sm font-medium text-gray-900 hover:text-barnsley-red transition-colors uppercase"
-                    role="menuitem"
                   >
                     People's Visual History
                   </Link>
@@ -95,16 +91,18 @@ const Navbar = () => {
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="inline-flex items-center justify-center p-2 rounded-md text-gray-900 hover:text-barnsley-red focus:outline-none"
-                aria-expanded="false"
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+                aria-label={isOpen ? 'Close main menu' : 'Open main menu'}
               >
-                <Menu className="h-6 w-6" />
+                <Menu className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
           </div>
         </div>
 
         {/* Mobile menu */}
-        <div className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white border-t border-gray-200`}>
+        <div id="mobile-menu" className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white border-t border-gray-200`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {/* Mobile utility links */}
             <div className="border-b border-gray-200 pb-2 mb-2">

@@ -100,6 +100,7 @@ export default function FAQ() {
           <input
             type="search"
             placeholder="Search FAQs..."
+            aria-label="Search FAQs"
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-barnsley-red focus:border-barnsley-red"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -112,17 +113,21 @@ export default function FAQ() {
             <button
               key={topic.id}
               onClick={() => toggleTopicFilter(topic.id)}
+              aria-pressed={selectedTopics.has(topic.id)}
               className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                 selectedTopics.has(topic.id)
                   ? 'bg-barnsley-red text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              <Tag className="h-4 w-4" />
+              <Tag className="h-4 w-4" aria-hidden="true" />
               {topic.name}
             </button>
           ))}
         </div>
+        <p className="text-sm text-gray-500" role="status" aria-live="polite">
+          {filteredFaqs.length} of {faqs.length} questions
+        </p>
       </div>
 
       {/* FAQ sections by topic */}
@@ -135,23 +140,26 @@ export default function FAQ() {
             <div key={topic.id}>
               <button
                 onClick={() => toggleTopic(topic.id)}
+                aria-expanded={expandedTopics.has(topic.id)}
+                aria-controls={`faq-topic-${topic.id}`}
                 className="w-full flex items-center justify-between bg-barnsley-red text-white p-6 rounded-t-lg hover:bg-[#B31329] transition-colors"
               >
                 <div>
                   <h2 className="text-2xl font-bold">{topic.name}</h2>
+                  {/* Full-opacity white: text-white/90 on the red header fails WCAG contrast. */}
                   {topic.description && (
-                    <p className="text-white/90 mt-2">{topic.description}</p>
+                    <p className="text-white mt-2">{topic.description}</p>
                   )}
                 </div>
                 {expandedTopics.has(topic.id) ? (
-                  <ChevronUp className="h-6 w-6" />
+                  <ChevronUp className="h-6 w-6" aria-hidden="true" />
                 ) : (
-                  <ChevronDown className="h-6 w-6" />
+                  <ChevronDown className="h-6 w-6" aria-hidden="true" />
                 )}
               </button>
 
               {expandedTopics.has(topic.id) && (
-                <div className="bg-white rounded-b-lg shadow-md divide-y divide-gray-100">
+                <div id={`faq-topic-${topic.id}`} className="bg-white rounded-b-lg shadow-md divide-y divide-gray-100">
                   {topicFaqs.map(faq => (
                     <div key={faq.id} className="p-6 hover:bg-gray-50 transition-colors">
                       <Link to={`/faq/${faq.id}`} className="block group">
