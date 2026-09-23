@@ -38,6 +38,8 @@ jobs:
             `src/data/minutes.json` did not previously have, so the first sync PR will also
             show a one-line "no newline at end of file" change alongside the new entries.
           branch: chore/sync-minutes
-          add-paths: src/data/minutes.json
+          add-paths: |
+            src/data/minutes.json
+            public/minutes/**
           labels: area:content
           delete-branch: true

@@ -101,7 +101,7 @@ const Minutes = () => {
                   </div>
                   <div className="flex flex-col items-start sm:items-end gap-1">
                     <a
-                      href={minute.local_path}
+                      href={minute.local_path ?? minute.file_path}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-2 bg-barnsley-red text-white py-2 px-4 rounded-md hover:bg-[#B31329] transition-colors whitespace-nowrap"
