@@ -112,6 +112,9 @@ describe('meeting Event builders', () => {
     expect(jsonld.organizer.name).toBe('Barnsley FC Fan Advisory Board');
     if (/teams|online|video call/i.test(meeting.location)) {
       expect(jsonld.location['@type']).toBe('VirtualLocation');
+      // No real Teams/Zoom join link exists in the meeting data, so VirtualLocation
+      // must not advertise the site homepage (or anything else) as one.
+      expect('url' in jsonld.location ? jsonld.location.url : undefined).toBeUndefined();
     }
   });
 

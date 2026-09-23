@@ -7,6 +7,9 @@ export const SITE_URL = 'https://fab.barnsleyfc.co.uk';
 
 export const ORGANIZATION_NAME = 'Barnsley FC Fan Advisory Board';
 
+export const LOGO_URL =
+  'https://images.gc.barnsleyfcservices.co.uk/fit-in/170x170/3b17caf0-1393-11ef-9954-698e48ed286c.png';
+
 /** Strip HTML tags and collapse whitespace, for schema.org text fields that want plain text. */
 export function stripHtml(html: string): string {
   return html
@@ -41,12 +44,8 @@ export function buildOrganizationJsonLd(): OrganizationJsonLd {
     '@type': 'Organization',
     name: ORGANIZATION_NAME,
     url: SITE_URL,
-    logo: 'https://images.gc.barnsleyfcservices.co.uk/fit-in/170x170/3b17caf0-1393-11ef-9954-698e48ed286c.png',
-    sameAs: [
-      'https://www.barnsleyfc.co.uk/fans/fan-advisory-board',
-      'https://x.com/BarnsleyFC',
-      'https://www.facebook.com/officialbarnsleyfc',
-    ],
+    logo: LOGO_URL,
+    sameAs: ['https://www.barnsleyfc.co.uk/fans/fan-advisory-board'],
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'FAB@barnsleyfc.co.uk',
@@ -131,7 +130,7 @@ export function buildNewsArticleJsonLd(article: Article, authorMember: Member | 
       name: ORGANIZATION_NAME,
       logo: {
         '@type': 'ImageObject',
-        url: 'https://images.gc.barnsleyfcservices.co.uk/fit-in/170x170/3b17caf0-1393-11ef-9954-698e48ed286c.png',
+        url: LOGO_URL,
       },
     },
   };
@@ -179,7 +178,7 @@ function eventJsonLd(
       : 'https://schema.org/OfflineEventAttendanceMode',
     eventStatus: 'https://schema.org/EventScheduled',
     location: virtual
-      ? { '@type': 'VirtualLocation', name: location, url: SITE_URL }
+      ? { '@type': 'VirtualLocation', name: location }
       : { '@type': 'Place', name: location },
     organizer: { '@type': 'Organization', name: ORGANIZATION_NAME, url: SITE_URL },
   };
