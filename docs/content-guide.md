@@ -79,7 +79,8 @@ the file doesn't matter.
 | `title` | yes | e.g. `"FAB Meeting Minutes - 8 September 2026"`. |
 | `meeting_date` | yes | ISO date, same as `id` in practice. |
 | `location` | yes | e.g. `"Video call (Microsoft Teams)"`. |
-| `file_path` | yes | The public PDF URL. Minutes PDFs are hot-linked from the club CDN (`images.gc.barnsleyfcservices.co.uk`) and should mirror the official list at https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes — do not upload PDFs into this repo. |
+| `file_path` | yes | The original club PDF URL, hot-linked from the club CDN (`images.gc.barnsleyfcservices.co.uk`) and mirroring the official list at https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes. Kept on the site as a "view on club website" link. |
+| `local_path` | yes | The local mirror, e.g. `"/minutes/2026-09-08.pdf"`, served from `public/minutes/<id>.pdf`. This is the PDF the Minutes page links to by default, so the archive survives the club moving or removing a PDF. `scripts/sync-minutes.mjs` downloads and writes this file for you — don't hand-copy PDFs into `public/minutes/`. |
 | `club_label` | no | The label the club website shows for this document, e.g. `"08.09.26"`. Helps cross-reference against the official list. |
 | `agenda_html` | no | Optional HTML agenda, or `null`. |
 | `content_text` | yes | Plain text extracted from the PDF, used for on-site search. `null` if not extracted. Copy the PDF's text (a PDF-to-text tool or manual copy-paste is fine); don't skip this or search will miss the minutes. |
@@ -93,6 +94,7 @@ the file doesn't matter.
   "meeting_date": "2026-10-06",
   "location": "Oakwell",
   "file_path": "https://images.gc.barnsleyfcservices.co.uk/<club-cdn-id>.pdf",
+  "local_path": "/minutes/2026-10-06.pdf",
   "club_label": "06.10.26",
   "agenda_html": null,
   "content_text": "Barnsley FC Fan Advisory Board — Meeting Minutes\nDate: Tuesday 6 October 2026\n..."

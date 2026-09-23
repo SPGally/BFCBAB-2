@@ -14,8 +14,10 @@ export interface Minute {
   title: string;
   meeting_date: string;
   location: string;
-  /** Public PDF URL. Currently hot-linked from the club CDN. */
+  /** The original club-hosted PDF URL, hot-linked from the club CDN. Kept as a source link. */
   file_path: string;
+  /** Local mirror of the PDF under public/minutes/, served from this site. */
+  local_path: string;
   /** The label the club website shows for this document. */
   club_label?: string;
   /** Optional HTML agenda for the meeting. */
