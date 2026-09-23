@@ -36,7 +36,9 @@ comments, the handoff.
   real "What changed / How verified / Out of scope / Handoff" content, write it to a file
   and pass it as `scripts/agent pr @path/to/body.md` (or `-` for stdin); this is the only
   sanctioned path. Never fall back to `gh pr edit --body-file` or `gh api -f body=@file`.
-- `scripts/agent handoff "<one line>"`. Return `PR: #<number>`.
+- `scripts/agent handoff "<one line>"`. This is your last command in the worktree: if it is
+  a `.claude/worktrees/agent-*` checkout, `handoff` removes it for you, so do not run
+  anything else in this checkout afterwards. Return `PR: #<number>`.
 
 ## Mode B: fix PR N, round r
 - `scripts/agent resume N` (takes the PR's `fixing:<Machine>` work lock, switches to the PR
@@ -50,7 +52,8 @@ comments, the handoff.
   (write the summary to a file first; the helper reads it, signs it, and releases the
   `fixing` lock so the reviewer's queue shows the PR as ready). Never pass `@file` to `gh`
   yourself and never call `gh pr comment`/`gh api` for comments.
-  `scripts/agent handoff "<one line>"`.
+  `scripts/agent handoff "<one line>"` (this removes the worktree, same as in Mode A; it is
+  your last command here).
 - Return `FIXED: #N round r`. If an item contradicts the docs or the issue, do not comply
   silently: `scripts/agent comment N "<conflict>"`, label `needs-paul`, return `PAUL: <one line>`.
 

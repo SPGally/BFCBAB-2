@@ -9,7 +9,13 @@
 #                                   as `comment`) supplies the real "What changed / How
 #                                   verified / Out of scope / Handoff" content, replacing the
 #                                   template's placeholder sections after Fixes#/Agent:
-#   scripts/agent handoff "<msg>"   comment on the pinned handoff issue
+#   scripts/agent handoff "<msg>"   comment on the pinned handoff issue; if run from a
+#                                   `.claude/worktrees/agent-*` checkout (the /work orchestrator's
+#                                   per-coder isolation), also removes that worktree, so a later
+#                                   `scripts/agent resume` on the same branch never finds it still
+#                                   checked out there (no-op everywhere else, incl. the primary
+#                                   checkout and `scripts/agent worktree`-created ../fab-<name>
+#                                   checkouts, which are removed with `worktree-rm` instead)
 #   scripts/agent issue "<title>" <body|@file|-> --kind bug|improvement [--area X] [--size S|M|L] [--label L]...
 #                                   file a labelled, agent-ready issue over REST; prints its number
 #   scripts/agent comment <N> <text|@file|->   post a signed comment on issue/PR N (the ONLY way
@@ -61,6 +67,31 @@ refuse_shared_checkout() {
     echo "(Paul's own use only: set FAB_ALLOW_SHARED_CHECKOUT=1 to override.)"
     return 1
   fi
+}
+# cleanup_own_worktree: mirrors `scripts/review done <N>` for coders. The `/work` orchestrator
+# spawns every coder with isolation: "worktree" in `.claude/worktrees/agent-<id>`; once a coder
+# is ending its session (`handoff`, the last command of both Mode A and Mode B, per CLAUDE.md),
+# that worktree has no further use and its branch checkout blocks a later `scripts/agent
+# resume` on the same PR (which refuses when the branch is checked out elsewhere). Removing it
+# here, from inside itself by its own absolute path (never `-C`/`cd` to another worktree -- a
+# worktree-isolated agent's git operations must target its own worktree only), means no later
+# session has to find and remove it by hand. A no-op everywhere else: the primary checkout, a
+# `scripts/agent worktree`-created ../fab-<name> checkout (removed explicitly with
+# `worktree-rm`), and a worktree that is not underneath `.claude/worktrees/` are all left
+# alone. This is necessarily the last thing `scripts/agent` does in a session: nothing may run
+# from this checkout afterwards.
+cleanup_own_worktree() {
+  is_primary_checkout && return 0
+  case "$ROOT" in
+    */.claude/worktrees/*) ;;
+    *) return 0;;
+  esac
+  # The harness holds its own `locked` state on this worktree (lock reason: claude
+  # agent <id> (pid ...)), so a single --force is not enough to remove it; --force
+  # passed twice overrides that lock too. This must only run once the coder process
+  # has otherwise finished its work -- it destroys the coder's own working directory,
+  # so nothing here may run again afterwards.
+  git worktree remove --force --force "$ROOT" 2>/dev/null || true
 }
 case "${1:-}" in
   _machine) shift; machine_of "${1:-}"; exit 0;;   # test hook
@@ -244,6 +275,11 @@ case "${1:-}" in
     [ -n "$HANDOFF" ] || { echo "no .github/HANDOFF_ISSUE; run scripts/bootstrap-github.sh"; exit 1; }
     msg=$(read_body "$msg") || exit 1
     rest_comment "$HANDOFF" "$(sign "$(date -u +'%Y-%m-%d %H:%M UTC') — $msg")"
+    # `handoff` is the last command of every coder session (Mode A and Mode B alike, per
+    # CLAUDE.md); this is the one point that is always reached, so self-cleanup lives here
+    # rather than in `pr`/`comment`, which the coder still needs the worktree to run the
+    # following command from.
+    cleanup_own_worktree
     ;;
   issue)
     title="${2:?title}"; body=$(read_body "${3:?body, @file or -}") || exit 1; shift 3
