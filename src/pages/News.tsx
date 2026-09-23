@@ -4,6 +4,7 @@ import { Newspaper, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getNews } from '../lib/content';
 import Seo from '../components/Seo';
+import ResponsiveImage from '../components/ResponsiveImage';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -30,9 +31,10 @@ export default function News() {
               {article.image ? (
                 <div className="md:w-64 h-48 md:h-auto">
                   <Link to={`/news/${article.slug}`}>
-                    <img
+                    <ResponsiveImage
                       src={article.image}
                       alt=""
+                      sizes="(min-width: 768px) 256px, 100vw"
                       className="w-full h-full object-cover"
                       aria-hidden="true"
                     />

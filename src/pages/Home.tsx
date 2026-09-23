@@ -4,6 +4,7 @@ import { format, parseISO } from 'date-fns';
 import { Newspaper, Calendar, ChevronRight, Clock, MapPin, Users, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
+import ResponsiveImage from '../components/ResponsiveImage';
 
 const Home = () => {
   const news = React.useMemo(() => getNews().slice(0, 7), []);
@@ -42,16 +43,19 @@ const Home = () => {
                   <Link to={`/news/${heroArticle.slug}`} className="block">
                     {heroArticle.image ? (
                       <div className="relative aspect-video group">
-                        <img
+                        <ResponsiveImage
                           src={heroArticle.image}
                           alt=""
+                          sizes="(min-width: 1024px) 800px, 100vw"
                           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                           aria-hidden="true"
+                          loading="eager"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
+                            const container = target.closest('.group') as HTMLElement;
                             target.style.display = 'none';
-                            target.parentElement!.classList.add('bg-gray-100', 'flex', 'items-center', 'justify-center');
-                            target.parentElement!.innerHTML = '<div class="text-gray-400"><svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg></div>';
+                            container.classList.add('bg-gray-100', 'flex', 'items-center', 'justify-center');
+                            container.innerHTML = '<div class="text-gray-400"><svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg></div>';
                           }}
                         />
                       </div>
@@ -97,16 +101,18 @@ const Home = () => {
                       <Link to={`/news/${item.slug}`} className="w-32 flex-shrink-0">
                         {item.image ? (
                           <div className="w-full h-full group">
-                            <img
+                            <ResponsiveImage
                               src={item.image}
                               alt=""
+                              sizes="128px"
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                               aria-hidden="true"
                               onError={(e) => {
                                 const target = e.target as HTMLImageElement;
+                                const container = target.closest('.group') as HTMLElement;
                                 target.style.display = 'none';
-                                target.parentElement!.classList.add('bg-gray-100', 'flex', 'items-center', 'justify-center');
-                                target.parentElement!.innerHTML = '<div class="text-gray-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg></div>';
+                                container.classList.add('bg-gray-100', 'flex', 'items-center', 'justify-center');
+                                container.innerHTML = '<div class="text-gray-400"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2z"></path></svg></div>';
                               }}
                             />
                           </div>

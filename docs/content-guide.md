@@ -63,7 +63,12 @@ draft: false
 match the article's filename minus the extension, e.g.
 `public/images/news/2026-09-23-fab-welcomes-two-new-board-members.jpg`. Resize with `sips`
 (macOS, already installed) or any image tool before committing; do not commit an
-unresized source photo.
+unresized source photo. After adding or replacing a news image, run `npm run
+images:optimize` (`scripts/optimize-news-images.mjs`) and commit the AVIF/WebP variants it
+writes alongside the JPEG (`<name>-400w.webp`, `<name>-800w.avif`, etc.) — `<ResponsiveImage>`
+(`src/components/ResponsiveImage.tsx`) assumes they exist. `npm run build` regenerates any
+missing variants too, so a forgotten `images:optimize` only costs a slower first build, not
+a broken image.
 
 ## Minutes
 
