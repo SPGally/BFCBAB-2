@@ -10,12 +10,9 @@ fi
 # tooling-only commits skip them; CI runs the full `npm run lint` and `npm run build` on
 # every PR anyway).
 #
-# The existing source does not pass `npm run lint` or `npm run typecheck` today; backlog
-# issue FAB-003 cleans it up. Until then:
-#   - eslint runs on the STAGED source files only, and blocks: new or edited files must be
-#     clean even while old ones are not.
-#   - `npm run typecheck` runs on the whole project and only warns.
-# Once FAB-003 lands, switch the eslint step to `npm run lint` and make typecheck blocking.
+# Lint and typecheck are clean on main, so both block:
+#   - eslint runs on the STAGED source files only.
+#   - `npm run typecheck` runs on the whole project and blocks.
 staged=$(git diff --cached --name-only --diff-filter=ACMR)
 src_staged=$(printf '%s\n' "$staged" | grep -E '\.(ts|tsx|js|jsx|mjs|cjs)$' || true)
 if printf '%s\n' "$staged" | grep -Eq '\.(ts|tsx|js|jsx|mjs|cjs|css)$|^package(-lock)?\.json$|^tsconfig.*\.json$|^vite\.config|^eslint\.config'; then
@@ -28,9 +25,7 @@ if printf '%s\n' "$staged" | grep -Eq '\.(ts|tsx|js|jsx|mjs|cjs|css)$|^package(-
     # shellcheck disable=SC2086
     npx --no-install eslint $src_staged || { echo "BLOCKED: eslint failed on staged files. Fix the errors and retry." >&2; exit 1; }
   fi
-  echo "pre-commit: npm run typecheck (warn-only until FAB-003)"
-  npm run --silent typecheck >/dev/null 2>&1 || {
-    echo "WARNING: npm run typecheck failed (tolerated until FAB-003; do not introduce new errors). Run it yourself to see the list." >&2
-  }
+  echo "pre-commit: npm run typecheck"
+  npm run --silent typecheck || { echo "BLOCKED: npm run typecheck failed. Fix the errors and retry." >&2; exit 1; }
 fi
 exit 0
