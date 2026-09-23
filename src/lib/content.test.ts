@@ -65,12 +65,15 @@ describe('getMinute', () => {
 
 describe('getUpcomingMeetings', () => {
   it('filters out meetings before the given time', () => {
-    const now = new Date('2026-01-01T00:00:00Z');
-    const all = getUpcomingMeetings(new Date('2000-01-01T00:00:00Z'));
-    const upcoming = getUpcomingMeetings(now);
-    expect(upcoming.length).toBeLessThanOrEqual(all.length);
+    const all = getUpcomingMeetings(new Date(0));
+    expect(all.length).toBeGreaterThan(1);
+    const sorted = [...all].sort((a, b) => a.date.localeCompare(b.date));
+    const cutoff = new Date(new Date(sorted[0].date).getTime() + 1);
+
+    const upcoming = getUpcomingMeetings(cutoff);
+    expect(upcoming.length).toBe(all.length - 1);
     for (const meeting of upcoming) {
-      expect(new Date(meeting.date).getTime()).toBeGreaterThanOrEqual(now.getTime());
+      expect(new Date(meeting.date).getTime()).toBeGreaterThanOrEqual(cutoff.getTime());
     }
   });
 });
@@ -78,12 +81,10 @@ describe('getUpcomingMeetings', () => {
 describe('getNews', () => {
   it('puts pinned articles first', () => {
     const news = getNews(new Date('2100-01-01T00:00:00Z'));
-    const firstUnpinnedIndex = news.findIndex((a) => !a.pinned);
-    if (firstUnpinnedIndex >= 0) {
-      for (let i = 0; i < firstUnpinnedIndex; i++) {
-        expect(news[i].pinned).toBe(true);
-      }
-    }
+    const pinnedCount = news.filter((a) => a.pinned).length;
+    expect(pinnedCount).toBeGreaterThan(0);
+    expect(news.slice(0, pinnedCount).every((a) => a.pinned)).toBe(true);
+    expect(news.slice(pinnedCount).every((a) => !a.pinned)).toBe(true);
   });
 
   it('excludes draft articles', () => {
@@ -120,9 +121,8 @@ describe('getArticle', () => {
   it('resolves an article by legacy_id', () => {
     const news = getNews(new Date('2100-01-01T00:00:00Z'));
     const withLegacyId = news.find((a) => a.legacy_id);
-    if (withLegacyId) {
-      expect(getArticle(withLegacyId.legacy_id!)?.slug).toBe(withLegacyId.slug);
-    }
+    expect(withLegacyId).toBeDefined();
+    expect(getArticle(withLegacyId!.legacy_id!)?.slug).toBe(withLegacyId!.slug);
   });
 
   it('returns undefined for an unknown slug', () => {
