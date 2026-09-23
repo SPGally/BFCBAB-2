@@ -29,7 +29,7 @@ nested structures, no multi-line values):
 |---|---|---|
 | `title` | yes | Quoted string. |
 | `slug` | no | Quoted string. Defaults to the filename with its date prefix stripped. Must be unique; it's the article's URL, `/news/<slug>`. |
-| `published_at` | yes | ISO 8601 date-time, e.g. `"2026-09-23T09:00:00Z"`. Articles with a future `published_at`, or `draft: true`, are excluded from the public list. |
+| `published_at` | yes | ISO 8601 date-time, e.g. `"2026-09-23T09:00:00Z"`. Articles with a future `published_at`, or `draft: true`, are excluded from the public list. **The site is static:** an article scheduled for a future `published_at` won't actually appear until the site is rebuilt after that time passes (a Netlify build hook on a schedule, or a scheduled GitHub Actions workflow that triggers a Netlify deploy — neither exists yet, so for now, re-run a deploy once the date has passed). This also affects `dist/rss.xml` and `dist/sitemap.xml` (built by `scripts/build-feeds.mjs`), which only list articles published as of the build. |
 | `summary` | yes | Quoted string, one or two sentences. Shown on the news list and as the share preview. |
 | `author` | no | A member `id` from `src/data/members.json` (e.g. `paul-gallagher`), or `null`. Renders the member's name/photo as byline. |
 | `image` | no | Path under `/public`, e.g. `"/images/news/2026-09-23-my-article.jpg"`, or `null`. Featured image on the list and article page. |
