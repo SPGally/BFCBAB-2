@@ -1,0 +1,43 @@
+name: Sync minutes
+
+# Checks the club's published minutes list weekly (and on demand) for PDFs not yet in
+# src/data/minutes.json, and opens a PR when it finds any. See scripts/sync-minutes.mjs.
+on:
+  schedule:
+    - cron: '0 8 * * 1' # Monday 08:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: node scripts/sync-minutes.mjs
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore(minutes): sync new minutes from the club website'
+          title: 'chore(minutes): sync new minutes from the club website'
+          body: |
+            Automated: `scripts/sync-minutes.mjs` found PDF(s) on the club's minutes page
+            that were not yet in `src/data/minutes.json` and added them.
+
+            Refs #10
+
+            Agent: FAB CI sync-minutes
+
+            Handoff: check the extracted date, location and text render correctly on the
+            Minutes page before merging. `saveMinutes` writes a trailing newline, which
+            `src/data/minutes.json` did not previously have, so the first sync PR will also
+            show a one-line "no newline at end of file" change alongside the new entries.
+          branch: chore/sync-minutes
+          add-paths: src/data/minutes.json
+          labels: area:content
+          delete-branch: true
