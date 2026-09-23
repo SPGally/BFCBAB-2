@@ -2,7 +2,10 @@ import React from 'react';
 import { getFaqTopics, getMember } from '../lib/content';
 import { ChevronDown, ChevronUp, Search, Tag, User, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { buildFaqPageJsonLd } from '../lib/jsonld';
 import Seo from '../components/Seo';
+
+const faqPageJsonLd = buildFaqPageJsonLd(getFaqTopics());
 
 interface FAQTopic {
   id: string;
@@ -86,6 +89,7 @@ export default function FAQ() {
         title="Frequently Asked Questions"
         description="Answers from the Barnsley FC Fan Advisory Board to questions fans have raised, with links back to the meeting minutes they come from."
         path="/faq"
+        jsonLd={faqPageJsonLd}
       />
       <h1 className="text-4xl font-bold mb-8">Frequently Asked Questions</h1>
 

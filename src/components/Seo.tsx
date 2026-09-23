@@ -10,6 +10,9 @@ interface SeoProps {
   type?: 'website' | 'article';
   /** Set false when `title` is already the full page title (e.g. the home page). */
   appendSiteName?: boolean;
+  /** JSON-LD structured data object(s) to embed as <script type="application/ld+json">
+   * tags, baked into the pre-rendered HTML alongside the other head tags. */
+  jsonLd?: object | object[];
 }
 
 /** Sets the per-page <title>, description, canonical URL and OG/Twitter tags, baked into
@@ -21,10 +24,12 @@ export default function Seo({
   image,
   type = 'website',
   appendSiteName = true,
+  jsonLd,
 }: SeoProps) {
   const url = `${SITE_URL}${path}`;
   const imageUrl = image ? `${SITE_URL}${image}` : null;
   const fullTitle = appendSiteName ? `${title} - ${SITE_NAME}` : title;
+  const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
   return (
     <Head>
@@ -41,6 +46,11 @@ export default function Seo({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+      {jsonLdBlocks.map((block, i) => (
+        <script key={i} type="application/ld+json">
+          {JSON.stringify(block)}
+        </script>
+      ))}
     </Head>
   );
 }
