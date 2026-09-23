@@ -12,8 +12,9 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = resolve(new URL('.', import.meta.url).pathname, '..');
+const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const MINUTES_PATH = resolve(ROOT, 'src/data/minutes.json');
 export const CLUB_MINUTES_URL =
   'https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes';
@@ -147,7 +148,8 @@ async function fetchListing() {
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage();
-    await page.goto(CLUB_MINUTES_URL, { waitUntil: 'networkidle', timeout: 60000 });
+    await page.goto(CLUB_MINUTES_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+    await page.waitForSelector('a[href*="images.gc.barnsleyfcservices.co.uk"]', { timeout: 30000 });
     const links = await page.$$eval('a', (as) =>
       as
         .filter((a) => a.href.includes('images.gc.barnsleyfcservices.co.uk'))
@@ -172,9 +174,14 @@ async function extractPdfText(href) {
   const res = await fetch(href);
   if (!res.ok) throw new Error(`failed to download ${href}: ${res.status}`);
   const buffer = Buffer.from(await res.arrayBuffer());
-  const pdfParse = (await import('pdf-parse')).default;
-  const parsed = await pdfParse(buffer);
-  return parsed.text.trim();
+  const { PDFParse } = await import('pdf-parse');
+  const parser = new PDFParse({ data: buffer });
+  try {
+    const { text } = await parser.getText();
+    return text.trim();
+  } finally {
+    await parser.destroy();
+  }
 }
 
 async function main() {

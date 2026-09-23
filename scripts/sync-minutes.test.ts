@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   buildEntry,
@@ -6,6 +8,10 @@ import {
   parseHeader,
   titleForDate,
 } from './sync-minutes.mjs';
+
+const existingMinutes = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, '../src/data/minutes.json'), 'utf8'),
+);
 
 // First-page text fixtures, one per header style currently seen across the club's PDFs.
 const FIXTURES = {
@@ -154,5 +160,14 @@ describe('buildEntry', () => {
       pdfText: 'no usable date anywhere in this text',
     });
     expect(entry).toBeNull();
+  });
+
+  it('produces an object with exactly the keys src/data/minutes.json entries have', () => {
+    const entry = buildEntry({
+      href: 'https://images.gc.barnsleyfcservices.co.uk/example.pdf',
+      clubLabel: '08.08.26',
+      pdfText: FIXTURES.meetingHeld,
+    });
+    expect(Object.keys(entry!).sort()).toEqual(Object.keys(existingMinutes[0]).sort());
   });
 });
