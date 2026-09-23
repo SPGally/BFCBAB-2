@@ -29,7 +29,7 @@ export default function NewsArticle() {
 
   const plainTextContent = article.summary || article.content_html.replace(/<[^>]*>/g, '');
   const description =
-    plainTextContent.length > 200 ? plainTextContent.substring(0, 197) + '...' : plainTextContent;
+    plainTextContent.length > 160 ? plainTextContent.substring(0, 157) + '...' : plainTextContent;
   const articleJsonLd = buildNewsArticleJsonLd(article, article.authorMember);
   const breadcrumbJsonLd = buildBreadcrumbListJsonLd([
     { name: 'News', path: '/news' },
@@ -44,6 +44,7 @@ export default function NewsArticle() {
         path={`/news/${article.slug}`}
         image={article.image}
         type="article"
+        markdownPath={`/news/${article.slug}.md`}
         jsonLd={[articleJsonLd, breadcrumbJsonLd]}
       />
 
