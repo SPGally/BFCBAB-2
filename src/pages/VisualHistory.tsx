@@ -72,7 +72,13 @@ const VisualHistory = () => {
                 <img
                   src="/images/parliament-logo.png"
                   alt="Parliament - Project Sponsor"
-                  className="h-16 w-auto"
+                  width={1128}
+                  height={191}
+                  // `h-16 w-auto` fixed the height and let Tailwind's preflight `max-width:
+                  // 100%` cap the width on narrow viewports, squashing the aspect ratio
+                  // (axe/Lighthouse `image-aspect-ratio`). `max-h-16 h-auto w-auto` scales
+                  // the whole image down together instead.
+                  className="max-h-16 h-auto w-auto"
                 />
               </a>
             </div>
@@ -96,7 +102,7 @@ const VisualHistory = () => {
 
           <p className="text-lg mb-6">
             Please get in touch via email{' '}
-            <a href="mailto:fab@barnsleyfc.co.uk" className="text-barnsley-red hover:text-[#B31329]">
+            <a href="mailto:fab@barnsleyfc.co.uk" className="text-barnsley-red hover:text-[#B31329] underline">
               fab@barnsleyfc.co.uk
             </a>
           </p>
@@ -108,7 +114,7 @@ const VisualHistory = () => {
             <div key={index} className="w-full">
               <img
                 src={image}
-                alt={`Visual History Image ${index + 1}`}
+                alt={`Barnsley FC fans and memorabilia, submission ${index + 1}`}
                 className="w-full h-auto shadow-md hover:shadow-xl transition-shadow"
               />
             </div>

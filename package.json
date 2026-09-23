@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "node scripts/optimize-news-images.mjs && vite-react-ssg build && node scripts/build-feeds.mjs && node scripts/build-llms.mjs && node scripts/check-nojs.mjs",
     "images:optimize": "node scripts/optimize-news-images.mjs",
+    "check-ai-readable": "node scripts/check-ai-readable.mjs",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "test": "vitest run",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@lhci/cli": "^0.15.1",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.10",
     "@testing-library/jest-dom": "^6.9.1",
@@ -34,6 +36,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "eslint": "^9.9.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",

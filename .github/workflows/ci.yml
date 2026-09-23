@@ -25,5 +25,22 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - run: npm run check-ai-readable
       - uses: actions/upload-artifact@v4
         with: { name: dist, path: dist }
+
+  lighthouse:
+    name: Lighthouse (mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      # lighthouserc.json's URL list is the fixed top-level routes plus one instance of
+      # each dynamic route (news article, FAQ answer, meeting); it asserts accessibility
+      # 100 and best-practices >= 90 as errors (build fails), performance >= 90 as a
+      # warning only (image-heavy pages are below budget pending a separate image
+      # optimisation pass, not tracked as part of FAB-017).
+      - run: npx lhci autorun

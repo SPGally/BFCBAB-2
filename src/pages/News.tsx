@@ -30,7 +30,7 @@ export default function News() {
             <div className="flex flex-col md:flex-row">
               {article.image ? (
                 <div className="md:w-64 h-48 md:h-auto">
-                  <Link to={`/news/${article.slug}`}>
+                  <Link to={`/news/${article.slug}`} aria-label={article.title}>
                     <ResponsiveImage
                       src={article.image}
                       alt=""

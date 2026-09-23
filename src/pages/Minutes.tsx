@@ -83,7 +83,7 @@ const Minutes = () => {
             aria-label="Search minutes"
           />
         </div>
-        <p className="mt-2 text-sm text-gray-500">
+        <p className="mt-2 text-sm text-gray-500" role="status" aria-live="polite">
           {filteredMinutes.length} of {minutes.length} sets of minutes
         </p>
       </div>
@@ -123,15 +123,25 @@ const Minutes = () => {
                         )}
                     </div>
                   </div>
-                  <a
-                    href={minute.file_path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-barnsley-red text-white py-2 px-4 rounded-md hover:bg-[#B31329] transition-colors whitespace-nowrap"
-                  >
-                    Read PDF
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
+                  <div className="flex flex-col items-start sm:items-end gap-1">
+                    <a
+                      href={minute.local_path ?? minute.file_path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-barnsley-red text-white py-2 px-4 rounded-md hover:bg-[#B31329] transition-colors whitespace-nowrap"
+                    >
+                      Read PDF
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                    <a
+                      href={minute.file_path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-gray-500 hover:text-barnsley-red underline whitespace-nowrap"
+                    >
+                      View on club website
+                    </a>
+                  </div>
                 </div>
               </li>
             ))}

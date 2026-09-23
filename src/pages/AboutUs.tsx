@@ -38,7 +38,7 @@ const AboutUs = () => {
             </p>
 
             <div className="bg-gray-50 rounded-lg p-6 my-8">
-              <h3 className="text-xl font-semibold mb-4">Have Your Say</h3>
+              <h2 className="text-xl font-semibold mb-4">Have Your Say</h2>
               <p className="mb-4">
                 We want to hear from you! If you have concerns, ideas, or suggestions about any aspect of supporting 
                 Barnsley FC, we're here to listen and act on your behalf.
@@ -68,7 +68,7 @@ const AboutUs = () => {
               />
             )}
             <div className="p-6">
-              <h2 className="text-xl font-semibold mb-2">{member.name}</h2>
+              <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
               <p className="text-barnsley-red font-medium mb-2">{member.role}</p>
               {member.email && (
                 <a 

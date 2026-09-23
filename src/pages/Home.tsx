@@ -14,7 +14,9 @@ const Home = () => {
   const otherArticles = news.slice(1);
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    // `Layout` already provides the page's one `<main>` landmark, so this is a `div`: a
+    // nested `<main>` fails axe's landmark-main-is-top-level rule.
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Seo
         title="Barnsley FC Fan Advisory Board"
         description="News, meetings, minutes and FAQs from the Barnsley FC Fan Advisory Board — the fans' voice on club decisions."
@@ -40,7 +42,7 @@ const Home = () => {
               {/* Hero Article */}
               {heroArticle && (
                 <article className="bg-white rounded-lg shadow-md overflow-hidden">
-                  <Link to={`/news/${heroArticle.slug}`} className="block">
+                  <Link to={`/news/${heroArticle.slug}`} className="block" aria-label={heroArticle.title}>
                     {heroArticle.image ? (
                       <div className="relative aspect-video group">
                         <ResponsiveImage
@@ -98,7 +100,11 @@ const Home = () => {
                 {otherArticles.map((item) => (
                   <article key={item.slug} className="bg-white rounded-lg shadow-md overflow-hidden">
                     <div className="flex h-full">
-                      <Link to={`/news/${item.slug}`} className="w-32 flex-shrink-0">
+                      <Link
+                        to={`/news/${item.slug}`}
+                        className="w-32 flex-shrink-0"
+                        aria-label={item.title}
+                      >
                         {item.image ? (
                           <div className="w-full h-full group">
                             <ResponsiveImage
@@ -252,7 +258,7 @@ const Home = () => {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 };
 

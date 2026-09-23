@@ -7,17 +7,31 @@
 // Playwright rather than fetching the raw HTML. For every PDF link not already present (by
 // file_path) in minutes.json, we download the PDF, extract its first-page text with
 // pdf-parse, read the meeting date and location from the header (falling back to the club's
-// own "DD.MM.YY" label when the header cannot be parsed), and append a new entry. Idempotent:
-// running it again with nothing new on the club site changes nothing.
+// own "DD.MM.YY" label when the header cannot be parsed), mirror the PDF to
+// public/minutes/<yyyy-mm-dd>.pdf, and append a new entry with both the club URL (file_path)
+// and the local mirror (local_path). Any existing entry missing its local mirror is backfilled
+// the same way. Idempotent: running it again with nothing new and nothing missing locally
+// changes nothing.
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(fileURLToPath(new URL('.', import.meta.url)), '..');
 const MINUTES_PATH = resolve(ROOT, 'src/data/minutes.json');
+const MINUTES_DIR = resolve(ROOT, 'public/minutes');
 export const CLUB_MINUTES_URL =
   'https://www.barnsleyfc.co.uk/fans/fan-advisory-board/fab-meeting-minutes';
+
+/** "2026-09-08" -> "/minutes/2026-09-08.pdf", the public URL of the local mirror. */
+export function localPathForDate(date) {
+  return `/minutes/${date}.pdf`;
+}
+
+/** "2026-09-08" -> absolute path of the local mirror on disk. */
+function localDiskPathForDate(date) {
+  return resolve(MINUTES_DIR, `${date}.pdf`);
+}
 
 const MONTHS = {
   jan: 1, january: 1,
@@ -129,6 +143,7 @@ export function buildEntry({ href, clubLabel, pdfText }) {
     meeting_date: date,
     location: header?.location ?? 'Not recorded',
     file_path: href,
+    local_path: localPathForDate(date),
     club_label: clubLabel ?? null,
     content_text: pdfText ?? null,
   };
@@ -170,10 +185,13 @@ async function fetchListing() {
   }
 }
 
-async function extractPdfText(href) {
+async function downloadPdf(href) {
   const res = await fetch(href);
   if (!res.ok) throw new Error(`failed to download ${href}: ${res.status}`);
-  const buffer = Buffer.from(await res.arrayBuffer());
+  return Buffer.from(await res.arrayBuffer());
+}
+
+async function extractPdfText(buffer) {
   const { PDFParse } = await import('pdf-parse');
   const parser = new PDFParse({ data: buffer });
   try {
@@ -184,6 +202,11 @@ async function extractPdfText(href) {
   }
 }
 
+function saveLocalCopy(date, buffer) {
+  mkdirSync(MINUTES_DIR, { recursive: true });
+  writeFileSync(localDiskPathForDate(date), buffer);
+}
+
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const existing = loadMinutes();
@@ -192,15 +215,11 @@ async function main() {
   const listing = await fetchListing();
   const toAdd = listing.filter((link) => !known.has(link.href));
 
-  if (toAdd.length === 0) {
-    console.log('sync-minutes: nothing new, minutes.json is up to date');
-    return;
-  }
-
   const added = [];
   for (const link of toAdd) {
     console.log(`sync-minutes: downloading ${link.href}`);
-    const pdfText = await extractPdfText(link.href);
+    const buffer = await downloadPdf(link.href);
+    const pdfText = await extractPdfText(buffer);
     const entry = buildEntry({ href: link.href, clubLabel: link.clubLabel, pdfText });
     if (!entry) {
       console.warn(`sync-minutes: could not determine a meeting date for ${link.href}, skipping`);
@@ -210,16 +229,34 @@ async function main() {
       console.warn(`sync-minutes: ${entry.id} already exists, skipping ${link.href}`);
       continue;
     }
+    if (!dryRun) saveLocalCopy(entry.id, buffer);
     added.push(entry);
   }
 
-  if (added.length === 0) {
+  // Backfill a local mirror for any existing entry that does not have one on disk yet
+  // (e.g. entries added before this script mirrored PDFs locally).
+  const backfilled = [];
+  for (const entry of existing) {
+    if (entry.local_path && existsSync(localDiskPathForDate(entry.id))) continue;
+    console.log(`sync-minutes: backfilling local copy for ${entry.id}`);
+    const buffer = await downloadPdf(entry.file_path);
+    if (!dryRun) saveLocalCopy(entry.id, buffer);
+    entry.local_path = localPathForDate(entry.id);
+    backfilled.push(entry.id);
+  }
+
+  if (added.length === 0 && backfilled.length === 0) {
     console.log('sync-minutes: nothing new, minutes.json is up to date');
     return;
   }
 
-  console.log(`sync-minutes: adding ${added.length} entr${added.length === 1 ? 'y' : 'ies'}`);
-  for (const entry of added) console.log(`  - ${entry.id} (${entry.file_path})`);
+  if (added.length > 0) {
+    console.log(`sync-minutes: adding ${added.length} entr${added.length === 1 ? 'y' : 'ies'}`);
+    for (const entry of added) console.log(`  - ${entry.id} (${entry.file_path})`);
+  }
+  if (backfilled.length > 0) {
+    console.log(`sync-minutes: backfilled ${backfilled.length} local cop${backfilled.length === 1 ? 'y' : 'ies'}`);
+  }
 
   if (dryRun) {
     console.log('sync-minutes: --dry-run, not writing minutes.json');
