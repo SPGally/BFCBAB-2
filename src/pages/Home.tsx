@@ -235,10 +235,12 @@ const Home = () => {
           {/* Visual History Advertisement */}
           <div className="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
             <div className="relative">
-              <img
+              <ResponsiveImage
                 src="/images/bfc-fans-visual-history-1.jpg"
                 alt="Barnsley FC: The People's Visual History"
+                sizes="(min-width: 1024px) 380px, 100vw"
                 className="w-full h-auto"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
