@@ -1,6 +1,5 @@
 import type { RouteRecord } from 'vite-react-ssg';
 import Layout from './Layout';
-import Home from './pages/Home';
 import { getFaqTopics, getMinutes, getNews, getUpcomingMeetings } from './lib/content';
 
 // Every meeting id that /meetings/:id can resolve, past (minutes) and upcoming, regardless
@@ -16,7 +15,10 @@ export const routes: RouteRecord[] = [
     path: '/',
     element: <Layout />,
     children: [
-      { index: true, element: <Home /> },
+      {
+        index: true,
+        lazy: () => import('./pages/Home').then((m) => ({ Component: m.default })),
+      },
       {
         path: 'about-us',
         lazy: () => import('./pages/AboutUs').then((m) => ({ Component: m.default })),
