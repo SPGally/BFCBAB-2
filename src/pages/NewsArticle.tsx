@@ -27,7 +27,7 @@ export default function NewsArticle() {
 
   const plainTextContent = article.summary || article.content_html.replace(/<[^>]*>/g, '');
   const description =
-    plainTextContent.length > 200 ? plainTextContent.substring(0, 197) + '...' : plainTextContent;
+    plainTextContent.length > 160 ? plainTextContent.substring(0, 157) + '...' : plainTextContent;
 
   return (
     <>
