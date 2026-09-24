@@ -64,11 +64,13 @@ match the article's filename minus the extension, e.g.
 `public/images/news/2026-09-23-fab-welcomes-two-new-board-members.jpg`. Resize with `sips`
 (macOS, already installed) or any image tool before committing; do not commit an
 unresized source photo. After adding or replacing a news image, run `npm run
-images:optimize` (`scripts/optimize-news-images.mjs`) and commit the AVIF/WebP variants it
+images:optimize` (`scripts/optimize-images.mjs`) and commit the AVIF/WebP variants it
 writes alongside the JPEG (`<name>-400w.webp`, `<name>-800w.avif`, etc.) — `<ResponsiveImage>`
 (`src/components/ResponsiveImage.tsx`) assumes they exist. `npm run build` regenerates any
 missing variants too, so a forgotten `images:optimize` only costs a slower first build, not
-a broken image.
+a broken image. The same script also generates variants for `public/images/members/*.jpg`
+(board member photos) and the top-level `public/images/*.jpg` visual-history gallery — both
+render through `<ResponsiveImage>` too, so the same commit-the-variants rule applies there.
 
 ## Minutes
 
@@ -186,7 +188,9 @@ the event duration to 60 minutes.
 ```
 
 **Image:** JPEG, 600px wide, square preferred (most existing files are 600x600), named
-`<id>.jpg`, e.g. `public/images/members/jane-example.jpg`.
+`<id>.jpg`, e.g. `public/images/members/jane-example.jpg`. Run `npm run images:optimize`
+after adding or replacing one and commit the AVIF/WebP variants it writes (see the News
+articles section above).
 
 ## FAQ
 
