@@ -3,7 +3,7 @@ title: "Remembering a True Oakwell Legend – Barry Murphy (1940–2026)"
 slug: remembering-barry-murphy
 published_at: "2026-10-24T09:00:00Z"
 summary: "The Fan Advisory Board has learned with immense sadness of the passing of Barry Murphy, aged 86. Barnsley's all-time record appearance maker, with 569 games over 16 years, he leaves a legacy that will live forever at Oakwell."
-author: "paul-gallagher"
+author: "dominic-wood"
 image: "/images/news/2026-10-24-remembering-barry-murphy.jpg"
 pinned: false
 draft: false
