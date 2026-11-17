@@ -5,7 +5,7 @@ published_at: "2026-03-31T12:23:16.114Z"
 summary: "The Barnsley FC Fan Advisory Board is launching its very own podcast — and our first episode, covering everything discussed at our March 2026 meeting, is coming very soon."
 author: "paul-gallagher"
 image: "/images/news/2026-03-31-we-re-launching-a-podcast.jpg"
-pinned: true
+pinned: false
 draft: false
 legacy_id: 0cae26dd-fdbf-4bcc-b9b1-7656bfbf24ff
 ---

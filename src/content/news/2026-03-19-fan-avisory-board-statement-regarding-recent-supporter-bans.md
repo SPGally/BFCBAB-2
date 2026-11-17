@@ -5,7 +5,7 @@ published_at: "2026-03-19T23:55:47.247Z"
 summary: "The Fan Advisory Board has responded to concerns after supporters received disciplinary letters following the tennis ball protest at the Exeter City match on 7 March. The FAB clarifies that these communications are part of the club's standard process when a potential breach of Ground Regulations is identified — they do not automatically mean a permanent ban. Supporters will be invited to a meeting to give their account before any final decision. While the FAB reminds fans that throwing objects onto the pitch is a breach of regulations, it is offering to act as a neutral representative in discussions between the club and affected supporters to ensure the process is fair. Anyone with concerns is encouraged to contact the FAB directly."
 author: "paul-gallagher"
 image: "/images/news/2026-03-19-fan-avisory-board-statement-regarding-recent-supporter-bans.jpg"
-pinned: true
+pinned: false
 draft: false
 legacy_id: b5f413eb-a9cc-4702-9610-daed8824d65d
 ---
