@@ -3,7 +3,7 @@ title: "Fan Advisory Board statement on the Tykes Union protest"
 slug: fan-advisory-board-statement-tykes-union-protest
 published_at: "2026-11-17T09:00:00Z"
 summary: "The Fan Advisory Board is disappointed that Tykes Union has decided to go ahead with its protest on 20 November after talks that the FAB believed were making progress. The FAB shares supporters' frustrations and respects the right to peaceful protest, but believes constructive engagement with the club offers a better route to change. It will be at the Supporters' Trust meeting on 18 November to hear supporters' concerns and take their questions to the club."
-author: "paul-gallagher"
+author: "dominic-wood"
 image: "/images/news/2026-11-17-fan-advisory-board-statement-tykes-union-protest.jpg"
 pinned: true
 draft: false
