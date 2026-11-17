@@ -5,7 +5,7 @@ published_at: "2026-02-15T15:44:54.236Z"
 summary: "Since the Fan Advisory Board was established at the start of the 2024/25 season, a small group of dedicated volunteers have given their time, energy and expertise to get this board off the ground. As we now look to fill three vacant positions, we want to take a moment to properly recognise the people who helped build the foundations of the FAB."
 author: "paul-gallagher"
 image: "/images/news/2026-02-15-thank-you-to-our-founding-board-members.jpg"
-pinned: true
+pinned: false
 draft: false
 legacy_id: 8b5cd777-b991-4273-a55c-6c2b10a6e095
 ---
